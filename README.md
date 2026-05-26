@@ -1,0 +1,2 @@
+# CashScratchGo
+CashScratchGo
