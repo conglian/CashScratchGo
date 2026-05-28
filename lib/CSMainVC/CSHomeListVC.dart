@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:math';
 import 'dart:ui';
 import 'package:cashscratchgo/CSBasic/CSTabBar.dart';
+import 'package:cashscratchgo/CSDialog/CSGuideDialog.dart';
 import 'package:cashscratchgo/CSTool/cs_GradientNumber.dart';
 import 'package:cashscratchgo/CSTool/cs_extension_help.dart';
 import 'package:cashscratchgo/CSTool/cs_img.dart';
@@ -11,6 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import '../CSDialog/CSDialog.dart';
 import '../CSDialog/CSGuideManager.dart';
 import '../CSTool/cs_LocalProvider.dart';
 import 'CSScratchCardVC.dart';
@@ -313,7 +315,7 @@ class _CSNavBarWidgetState extends State<CSNavBarWidget> with SingleTickerProvid
                     )),
                     Spacer(),
                     ParticleButton(child: CSImg(name: 'cs_setting_icon', width: 32, height: 32), onTap: (){
-
+                       context.tipShow(CSWheelNotDialog());
                     }),
                     SizedBox(width: 16.w)
                   ],

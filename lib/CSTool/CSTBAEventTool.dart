@@ -52,13 +52,13 @@ class CSRequestHelpers {
   CSRequestHelpers._internal();
 
   static String cloak_Url =
-      "https://actress.piggywalletspinfunpro.com/rueful/gloomy";
-
-  // static String tba_event_Url =
-  //     "https://test-appian.piggywalletspinfunpro.com/sextet/tiresome/youth";
+      "";
 
   static String tba_event_Url =
-      "https://appian.piggywalletspinfunpro.com/thrust/herschel/kochab";
+      "";
+
+  // static String tba_event_Url =
+  //     "";
 
   final Map<String, String> normalHeader = {
     'Content-Type': 'application/json',

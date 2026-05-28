@@ -133,7 +133,7 @@ class CSLocalProvider extends ChangeNotifier {
   // 当前第几题
   int cs_quiz_num_index = 0;
   int cs_quzi_row = 0;
-  int cs_wheel_number = 2;
+  int cs_wheel_number = 0;
   int cs_pig_level = 0;
   double cs_pig_level_index = 0.0;
   int cs_quiz_all_num = 0;
@@ -355,7 +355,7 @@ class CSLocalProvider extends ChangeNotifier {
     cs_ad_show_number = prefs.getInt('cs_ad_show_number') ?? 0;
     cs_key_number = prefs.getInt('cs_key_number') ?? 0;
     cs_quzi_row = prefs.getInt('cs_quzi_row') ?? 0;
-    cs_wheel_number = prefs.getInt('cs_wheel_number') ?? 3;
+    cs_wheel_number = prefs.getInt('cs_wheel_number') ?? 0;
     quiz_console = prefs.getInt('quiz_console') ?? 5;
     new_ad_console = prefs.getInt('new_ad_console') ?? 1;
     cs_bg_music = prefs.getBool('cs_bg_music') ?? true;
@@ -439,7 +439,6 @@ class CSLocalProvider extends ChangeNotifier {
     //   Map<String, dynamic> json_tx = jsonDecode(jsonTXString);
     //   txEntity = SJTXModel.fromJson(json_tx);
     // }
-    notifyListeners(); // 加载完成后通知UI更新
   }
 
   // 通用bool
@@ -447,6 +446,7 @@ class CSLocalProvider extends ChangeNotifier {
     final prefs = await SharedPreferences.getInstance();
     final result = await prefs.setBool(key, value);
     await init();
+    notifyListeners(); // 加载完成后通知UI更新
     return result;
   }
 
@@ -455,6 +455,7 @@ class CSLocalProvider extends ChangeNotifier {
     final prefs = await SharedPreferences.getInstance();
     final result = await prefs.setInt(key, value);
     await init();
+    notifyListeners(); // 加载完成后通知UI更新
     return result;
   }
 
@@ -486,6 +487,7 @@ class CSLocalProvider extends ChangeNotifier {
         // CSNoticeHelp().startSJForegroundService();
     }
     await init();
+    notifyListeners(); // 加载完成后通知UI更新
     return result;
   }
 
@@ -494,6 +496,7 @@ class CSLocalProvider extends ChangeNotifier {
     final prefs = await SharedPreferences.getInstance();
     final result = await prefs.setString(key, value);
     await init();
+    notifyListeners(); // 加载完成后通知UI更新
     return result;
   }
 

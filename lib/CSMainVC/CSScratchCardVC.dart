@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:math';
 import 'dart:ui';
+import 'package:cashscratchgo/CSTool/CSLocalImageScratchCard.dart';
 import 'package:cashscratchgo/CSTool/cs_GradientText.dart';
 import 'package:cashscratchgo/CSTool/cs_extension_help.dart';
 import 'package:cashscratchgo/CSTool/cs_img.dart';
@@ -9,6 +10,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 
 import '../CSBasic/CSTabBar.dart';
+import '../CSDialog/CSGuideDialog.dart';
 import '../CSTool/cs_GradientNumber.dart';
 import '../CSTool/cs_LocalProvider.dart';
 import '../CSTool/cs_stroke_text.dart';
@@ -23,6 +25,8 @@ class CSScratchCardVC extends StatefulWidget {
 }
 
 class _CSScratchCardVCState extends State<CSScratchCardVC> with SingleTickerProviderStateMixin {
+
+  bool _show_animation = false;
 
   @override
   void initState() {
@@ -71,26 +75,65 @@ class _CSScratchCardVCState extends State<CSScratchCardVC> with SingleTickerProv
         child: Column(
           children: [
             SizedBox(height: 11),
-            Container(
+            SizedBox(
               width: 328.w,
               height: 240,
-              decoration: BoxDecoration(
-                image: CSDImg('cs_card_bg')
-              ),
-              child: Row(
-                children: [
-                  SizedBox(width: 10,),
-                  Column(
-                    mainAxisAlignment: .spaceAround,
-                    children: [
-                      CSStrokeText(text: '\$50.22', size: 20, color: '#FFE733'.color(), weight: FontWeight.w900, skWidth: 1, skColor: '#C50000'.color()),
-                      CSStrokeText(text: '\$60.22', size: 20, color: '#FFE733'.color(), weight: FontWeight.w900, skWidth: 1, skColor: '#C50000'.color()),
-                      CSStrokeText(text: '\$57.22', size: 20, color: '#FFE733'.color(), weight: FontWeight.w900, skWidth: 1, skColor: '#C50000'.color()),
-                    ],
-                  )
-                ],
-              ),
+              child: CSLocalImageScratchCard(coverImagePath:'cs_card_top_${widget.type}'.image(), contentW: 328.w, contentH: 240, child: Container(
+                width: 328.w,
+                height: 240,
+                decoration: BoxDecoration(
+                    image: CSDImg('cs_card_bg_${widget.type}')
+                ),
+                child: Row(
+                  children: [
+                    SizedBox(width: 10,),
+                    Column(
+                      mainAxisAlignment: .spaceAround,
+                      children: [
+                        CSStrokeText(text: '\$40.22', size: 20, color: '#FFE733'.color(), weight: FontWeight.w900, skWidth: 1, skColor: '#C50000'.color()),
+                        CSStrokeText(text: '\$60.22', size: 20, color: '#FFE733'.color(), weight: FontWeight.w900, skWidth: 1, skColor: '#C50000'.color()),
+                        CSStrokeText(text: '\$57.22', size: 20, color: '#FFE733'.color(), weight: FontWeight.w900, skWidth: 1, skColor: '#C50000'.color()),
+                      ],
+                    ),
+                    SizedBox(width: 20.h,),
+                    SizedBox(
+                      width: 222.w,
+                      height: 240,
+                      child: GridView.builder(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 3, // 一行5个
+                          mainAxisSpacing: 0, // 垂直间距
+                          crossAxisSpacing: 4, // 水平间距
+                          childAspectRatio: 88.w / 88, // 宽高比
+                        ),
+                        itemCount: 9,
+                        padding: EdgeInsets.only(top: 10.h, left: 0.w), // 移除默认的padding// 最多显示10个
+                        itemBuilder: (context, index) {
+                          return SizedBox(
+                              width: 88.w,
+                              height: 88,
+                              child: Stack(
+                                  children: [
+                                    Positioned(top: 10.h,left: 0.w,child: Row(
+                                      children: [
+                                        CSImg(name: 'cs_card1_icon_4', width: 64, height: 64,),
+                                      ],
+                                    )),
+                                  ]
+                              )
+                          );
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+              ),onScratchEnd: (){
+                _show_animation = true;
+              },),
             )
+            
           ],
         ),
       );
@@ -157,7 +200,19 @@ class _CSScratchCardVCState extends State<CSScratchCardVC> with SingleTickerProv
           Row(
             children: [
               SizedBox(width: 16.w),
-              ParticleButton(child: CSImg(name: 'cs_luckyspin_unicon', width: 52, height: 52), onTap: (){
+              ParticleButton(child: Container(
+                width: 52,
+                height: 52,
+                decoration: BoxDecoration(
+                    image: CSDImg('cs_luckyspin_unicon')
+                ),
+                child: Column(
+                  children: [
+                    Spacer(),
+                    Padding(padding: EdgeInsetsGeometry.only(left: 4),child: CSStrokeText(text: 'WHEEL', size: 10, color: '#FFFAB6'.color(), weight: FontWeight.w700, skWidth: 1, skColor: '#983300'.color()))
+                  ],
+                ),
+              ), onTap: (){
                 Navigator.pop(context);
                 CashTabController.switchTo(1);
               }),
@@ -372,7 +427,8 @@ class _CSCardNavBarWidgetState extends State<CSCardNavBarWidget> with SingleTick
                   children: [
                     SizedBox(width: 16.w),
                     ParticleButton(child: CSImg(name: 'cs_home_icon', width: 36, height: 36), onTap: (){
-                      Navigator.pop(context);
+                      // Navigator.pop(context);
+                      context.tipShow2(CSGuideNew6Dialog());
                     }),
                     SizedBox(width: 8.w),
                     ParticleButton(

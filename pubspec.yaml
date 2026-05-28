@@ -57,6 +57,7 @@ dependencies:
   intl: ^0.20.2
   connectivity_plus: ^4.0.1
   flutter_staggered_grid_view: ^0.7.0
+  audioplayers: ^6.5.0
 
 
   thinkup_sdk:

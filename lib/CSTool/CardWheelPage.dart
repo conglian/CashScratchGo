@@ -56,9 +56,9 @@ class _CardWheelPageState extends State<CardWheelPage>
   }
 
   void _submitWheelIndex() {
-    // WheelStartNotificationService.stream.listen((value) {
-    //   startRotation(value);
-    // });
+    WheelStartCSNotificationService.stream.listen((value) {
+      startRotation(value);
+    });
   }
 
   @override
@@ -125,8 +125,8 @@ class _CardWheelPageState extends State<CardWheelPage>
                 Transform.rotate(
                   angle: _rotationAngle * (pi / 180), // 将角度转换为弧度
                   child: Container(
-                    width: 340.w,
-                    height: 340.w,
+                    width: 328.w,
+                    height: 328.w,
                     decoration: BoxDecoration(
                       image: CSDImg(widget.imagePath)
                     ),
@@ -134,23 +134,23 @@ class _CardWheelPageState extends State<CardWheelPage>
                       builder: (context, provider, child) {
                         return Column(
                           children: [
-                            SizedBox(height: 50.h),
-                            // CSStrokeText(text: '${0.dolasType()}${CSNumberHelpers().getPrizeWithDolasNSize(provider.CS_dolas_number).first}-${CSNumberHelpers().getPrizeWithDolasNSize(provider.CS_dolas_number).last}', size: 14, color: '#FFFFFF'.color(), weight: FontWeight.w900, skWidth: 2, skColor: '#038719'.color()),
-                            Spacer(),
-                            Transform(
-                              alignment: Alignment.center, // 旋转的中心点
-                              transform: Matrix4.rotationZ(3.14159265), // 180度 = π 弧度
-                              child: CSStrokeText(
-                                text: '100',
-                                // text: '${0.dolasType()}${CSNumberHelpers().getPrizeWithDolasNSize(provider.CS_dolas_number).first}-${CSNumberHelpers().getPrizeWithDolasNSize(provider.CS_dolas_number).last}',
-                                size: 14,
-                                color: '#FFFFFF'.color(),
-                                weight: FontWeight.w900,
-                                skWidth: 2,
-                                skColor: '#038719'.color(),
-                              ),
-                            ),
-                            SizedBox(height: 48.h),
+                            // SizedBox(height: 50.h),
+                            // // CSStrokeText(text: '${0.dolasType()}${CSNumberHelpers().getPrizeWithDolasNSize(provider.CS_dolas_number).first}-${CSNumberHelpers().getPrizeWithDolasNSize(provider.CS_dolas_number).last}', size: 14, color: '#FFFFFF'.color(), weight: FontWeight.w900, skWidth: 2, skColor: '#038719'.color()),
+                            // Spacer(),
+                            // Transform(
+                            //   alignment: Alignment.center, // 旋转的中心点
+                            //   transform: Matrix4.rotationZ(3.14159265), // 180度 = π 弧度
+                            //   child: CSStrokeText(
+                            //     text: '100',
+                            //     // text: '${0.dolasType()}${CSNumberHelpers().getPrizeWithDolasNSize(provider.CS_dolas_number).first}-${CSNumberHelpers().getPrizeWithDolasNSize(provider.CS_dolas_number).last}',
+                            //     size: 14,
+                            //     color: '#FFFFFF'.color(),
+                            //     weight: FontWeight.w900,
+                            //     skWidth: 2,
+                            //     skColor: '#038719'.color(),
+                            //   ),
+                            // ),
+                            // SizedBox(height: 48.h),
                           ],
                         );
                       },

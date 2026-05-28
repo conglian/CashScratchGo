@@ -70,13 +70,13 @@ class _CashBottomExampleState extends State<CashBottomExample> {
               PersistentBottomNavBarItem(
                 icon: Image.asset('cs_wheel_n'.image()),
                 inactiveIcon: Image.asset('cs_wheel_s'.image()),
-                title: 'CARDS',
+                title: 'LUCKY SPIN',
                 activeColorPrimary: Colors.transparent,
                 inactiveColorPrimary: Colors.transparent,
               ),
               PersistentBottomNavBarItem(
-                icon: Image.asset('cs_card_n'.image()),
-                inactiveIcon: Image.asset('cs_card_s'.image()),
+                icon: Image.asset('cs_tabbar_cash_n'.image()),
+                inactiveIcon: Image.asset('cs_tabbar_cash_s'.image()),
                 title: 'LUCKY SPIN',
                 activeColorPrimary: Colors.transparent,
                 inactiveColorPrimary: Colors.transparent,

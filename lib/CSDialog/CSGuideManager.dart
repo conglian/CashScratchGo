@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../CSMainVC/CSScratchCardVC.dart';
 import 'CSGuideDialog.dart';
 
 class CSGuideManager {
@@ -36,7 +37,7 @@ class CSGuideManager {
   }
 
   // 外部调用显示引导
-  static Future<void> showStep(BuildContext contexts) async {
+  static Future<void> showStep(BuildContext contexts,{double award = 0.0}) async {
     final state = await getState();
     int step = state.currentStep;
     switch (step) {
@@ -44,12 +45,55 @@ class CSGuideManager {
         contexts.tipShow2(CSGuideNew1Dialog());
         break;
       case 1:
+        Navigator.push(
+          contexts,
+          MaterialPageRoute(
+            builder: (_) => CSScratchCardVC(type: 0),
+          ),
+        );
+        contexts.tipShow2(CSGuideNew2Dialog());
         break;
       case 2:
+        bool isRootPage = ModalRoute.of(contexts)?.isFirst ?? false;
+        if (isRootPage) {
+          Navigator.push(
+            contexts,
+            MaterialPageRoute(
+              builder: (_) => CSScratchCardVC(type: 0),
+            ),
+          );
+          contexts.tipShow2(CSBigwinDialog(award: award, isGuide: true));
+        } else {
+          contexts.tipShow2(CSBigwinDialog(award: award, isGuide: true));
+        }
         break;
       case 3:
+        bool isRootPage = ModalRoute.of(contexts)?.isFirst ?? false;
+        if (isRootPage) {
+          Navigator.push(
+            contexts,
+            MaterialPageRoute(
+              builder: (_) => CSScratchCardVC(type: 0),
+            ),
+          );
+          contexts.tipShow2(CSGuideNew4Dialog());
+        } else {
+          contexts.tipShow2(CSGuideNew4Dialog());
+        }
         break;
       case 4:
+        bool isRootPage = ModalRoute.of(contexts)?.isFirst ?? false;
+        if (isRootPage) {
+          Navigator.push(
+            contexts,
+            MaterialPageRoute(
+              builder: (_) => CSScratchCardVC(type: 0),
+            ),
+          );
+          contexts.tipShow2(CSGuideNew5Dialog());
+        } else {
+          contexts.tipShow2(CSGuideNew5Dialog());
+        }
         break;
       case 5:
         break;
@@ -71,7 +115,7 @@ class CSGuideManager {
   }
 
   /// 下一步
-  static Future<void> nextStep(BuildContext context) async {
+  static Future<void> nextStep(BuildContext contexts, {double award = 0.0}) async {
     final prefs = await SharedPreferences.getInstance();
     int step = prefs.getInt(_stepKey) ?? 0;
 
@@ -82,7 +126,7 @@ class CSGuideManager {
     } else {
       await prefs.setInt(_stepKey, step);
     }
-    await showStep(context);
+    await showStep(contexts, award: award);
   }
 
   /// 完成引导
