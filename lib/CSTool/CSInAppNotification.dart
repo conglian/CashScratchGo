@@ -1,19 +1,20 @@
 import 'dart:async';
 import 'dart:math';
+import 'package:cashscratchgo/CSTool/CSNumberHelpers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
 import '../CSBasic/CSTabBar.dart';
 import 'CSTBAEventTool.dart';
-import 'cs_extension_help.dart';
+import 'CS_extension_help.dart';
 import 'cs_img.dart';
 import 'cs_text.dart';
 
-
-class CSInAppNotification {
-  static final CSInAppNotification _instance = CSInAppNotification._internal();
-  factory CSInAppNotification() => _instance;
-  CSInAppNotification._internal();
+class PSInAppNotification {
+  static final PSInAppNotification _instance = PSInAppNotification._internal();
+  factory PSInAppNotification() => _instance;
+  PSInAppNotification._internal();
 
   OverlayEntry? _overlayEntry;
   Timer? _timer;
@@ -21,16 +22,30 @@ class CSInAppNotification {
   final Random _random = Random();
 
   // 可随机金额列表
-  final List<int> _amounts = [100, 120, 150, 200];
+  final List<int> _amounts = [1000, 1200, 1500, 2000];
 
   // 文案模板列表，使用 {amount} 占位符
   final List<Map<String, String>> _messages = [
-    {'title': '🎉 PayPal Payout Success', 'content': 'Mary received ${0.dolasType()} {amount} via PayPal successfully 💰'},
-    {'title': '💸 Cash Out Completed', 'content': 'James just cashed out ${0.dolasType()} {amount} to PayPal ✅'},
-    {'title': '🎯 Another Winner Paid', 'content': 'Linda received ${0.dolasType()} {amount} in her PayPal account'},
-    {'title': '💰 Big Payout Alert', 'content': 'Robert successfully withdrew ${0.dolasType()} {amount} via PayPal'},
-    {'title': '🎉 Withdrawal Sent', 'content': 'Sarah just received ${0.dolasType()} {amount} through PayPal'},
-    {'title': '💸 PayPal Transfer Done', 'content': 'Michael cashed out ${0.dolasType()} {amount} successfully'},
+    {'title': '🎉 PayPal Payout Success', 'content': 'Mary received \${amount} via PayPal successfully 💰'},
+    {'title': '💸 Cash Out Completed', 'content': 'James just cashed out \${amount} to PayPal ✅'},
+    {'title': '🎯 Another Winner Paid', 'content': 'Linda received \${amount} in her PayPal account'},
+    {'title': '💰 Big Payout Alert', 'content': 'Robert successfully withdrew \${amount} via PayPal'},
+    {'title': '🎉 Withdrawal Sent', 'content': 'Sarah just received \${amount} {amount} through PayPal'},
+    {'title': '💸 PayPal Transfer Done', 'content': 'Michael cashed out \${amount} {amount} successfully'},
+    {'title': '🎯 Cash Out Success', 'content': 'Emily received \${amount} via PayPal'},
+    {'title': '💰 Winner Notification', 'content': 'David just withdrew \${amount}  to PayPal'},
+    {'title': '🎉 Payout Completed', 'content': 'Jessica received \${amount}  in her PayPal wallet'},
+    {'title': '💸 Real Cash Paid', 'content': 'Chris successfully cashed out \${amount}  via PayPal'},
+    {'title': '🎯 PayPal Reward Sent', 'content': 'Amanda received \${amount} successfully'},
+    {'title': '💰 Cash Out Confirmed', 'content': 'Daniel just received \${amount}  via PayPal'},
+    {'title': '🎉 Lucky Player Paid', 'content': 'Laura cashed out \${amount}  successfully'},
+    {'title': '💸 Withdrawal Success', 'content': 'Kevin received \${amount}  through PayPal'},
+    {'title': '🎯 Another PayPal Payout', 'content': 'Nicole just withdrew \${amount}'},
+    {'title': '💰 Big Win Delivered', 'content': 'Brian received \${amount}  via PayPal 🎰'},
+    {'title': '🎉 Cash Out Alert', 'content': 'Rachel successfully received \${amount}'},
+    {'title': '💸 Reward Sent', 'content': 'Jason cashed out \${amount} 0 via PayPal'},
+    {'title': '🎯 Payout Completed', 'content': 'Olivia received \${amount}  successfully'},
+    {'title': '💰 PayPal Cash Out', 'content': 'Andrew just received \${amount} in PayPal'},
   ];
 
   int _currentIndex = 0;
@@ -77,12 +92,13 @@ class CSInAppNotification {
 
     if (_isShowing) return;
     _isShowing = true;
-
+    Random random = Random();
     _overlayEntry = OverlayEntry(
       builder: (context) {
         return _NotificationWidget(
           title: title,
           content: content,
+          row: random.nextInt(20),
           onComplete: () {
             _overlayEntry?.remove();
             _overlayEntry = null;
@@ -108,8 +124,9 @@ class CSInAppNotification {
 class _NotificationWidget extends StatefulWidget {
   final String title;
   final String content;
+  final int row;
   final VoidCallback onComplete;
-  const _NotificationWidget({required this.title, required this.content, required this.onComplete});
+  const _NotificationWidget({required this.title, required this.content, required this.onComplete, required this.row});
 
   @override
   State<_NotificationWidget> createState() => _NotificationWidgetState();
@@ -164,56 +181,52 @@ class _NotificationWidgetState extends State<_NotificationWidget>
               child: Stack(
                 children: [
                   Positioned(
-                    top: 28,
-                    left: 7,
-                    child: CSImg(
-                      name: 'ps_inapp_notice_bg',
-                      width: MediaQuery.of(context).size.width - 14,
-                      height: 76,
-                    ),
-                  ),
-                  Positioned(
-                    right: 14.w,
-                    top: 32,
-                    child: CSImg(
-                      name: 'ps_inapp_notice_icon',
-                      width: 68,
-                      height: 68,
-                    ),
-                  ),
-                  Positioned(
-                    left: 25.w,
-                    top: 46,
-                    child: CSImg(
-                      name: 'ps_user_s_0',
-                      width: 49,
-                      height: 49,
-                    ),
-                  ),
-                  Positioned(
-                    left: 85.w,
-                    top: 46,
-                    height: 21,
-                    child: CSText(
-                      text: widget.title,
-                      size: 18,
-                      color: '#000000'.color(),
-                      weight: FontWeight.w900,
-                    ),
-                  ),
-                  Positioned(
-                    left: 85.w,
-                    top: 71,
-                    child: SizedBox(
-                      width: 227.w,
-                      height: 14,
-                      child: CSText(
-                        text: widget.content,
-                        size: 12,
-                        color: '#152456'.color(),
-                        weight: FontWeight.w600,
-                        maxLines: 3,
-                        align: TextAlign.left,
+                    top: 28.h,
+                    left: (0.width(context) - 328) * 0.5,
+                    width: 328,
+                    height: 84,
+                    child: Container(
+                      width: 328,
+                      height: 84,
+                      decoration: BoxDecoration(
+                        color: '#FFFFFF'.color(),
+                        borderRadius: BorderRadius.circular(12)
+                      ),
+                      child: Row(
+                        children: [
+                          SizedBox(width: 12.w),
+                          CSImg(
+                            name: 'cs_jie_user_${widget.row}',
+                            width: 60,
+                            height: 60,
+                          ),
+                          SizedBox(width: 8.w),
+                          SizedBox(
+                            width: 236,
+                            height: 84,
+                            child: Column(
+                              children: [
+                                SizedBox(height: 12),
+                                CSText(
+                                  text: widget.title,
+                                  size: 16,
+                                  color: '#000000'.color(),
+                                  weight: FontWeight.w900,
+                                  align: TextAlign.left,
+                                ),
+                                SizedBox(height: 4),
+                                CSText(
+                                  text: widget.content,
+                                  size: 12,
+                                  color: '#4A4A4A'.color(),
+                                  weight: FontWeight.w500,
+                                  maxLines: 3,
+                                  align: TextAlign.left,
+                                ),
+                              ],
+                            ),
+                          )
+                        ],
                       ),
                     ),
                   ),

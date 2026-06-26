@@ -65,6 +65,8 @@ class CSLaunchState extends State<CSLaunch>
 
   Future<void> _setConfigDateInfoData() async {
     // text
+    CSLocalProvider.instance.updateBool(CSLocalProvider.instance.cs_login_statusName, true);
+    CSLocalProvider.instance.updateBool(CSLocalProvider.instance.cs_old_guideName, true);
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     _daydateString = prefs.getString('cs_day_date') ?? '';
     DateTime today = DateTime.now();
@@ -76,6 +78,8 @@ class CSLaunchState extends State<CSLaunch>
       prefs.setBool('cs_first_instll', true);
     } else {
       if (_daydateString != formattedDate) {
+        CSLocalProvider.instance.updateint(CSLocalProvider.instance.cs_ad_show_indexName, 0);
+        CSLocalProvider.instance.updateBool(CSLocalProvider.instance.cs_old_guideName, false);
         // 隔天
         prefs.setString('cs_day_date', formattedDate);
         prefs.setBool('cs_old_guide', false);

@@ -3,7 +3,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../CSBasic/CSTabBar.dart';
 import '../CSMainVC/CSScratchCardVC.dart';
+import '../CSTool/CSNumberHelpers.dart';
 import 'CSGuideDialog.dart';
 
 class CSGuideManager {
@@ -11,7 +13,7 @@ class CSGuideManager {
   static const String _finishedKey = "guide_finished";
   static const String _versionKey = "guide_version";
 
-  static const int totalSteps = 7;
+  static const int totalSteps = 9;
   static const int currentVersion = 1;
 
 
@@ -40,6 +42,7 @@ class CSGuideManager {
   static Future<void> showStep(BuildContext contexts,{double award = 0.0}) async {
     final state = await getState();
     int step = state.currentStep;
+    'step=$step'.log();
     switch (step) {
       case 0:
         contexts.tipShow2(CSGuideNew1Dialog());
@@ -62,9 +65,9 @@ class CSGuideManager {
               builder: (_) => CSScratchCardVC(type: 0),
             ),
           );
-          contexts.tipShow2(CSBigwinDialog(award: award, isGuide: true));
+          contexts.tipShow2(CSBigwinDialog(award: 0.to2Double(CSNumberHelpers().gameModel!.new_prize), isGuide: true));
         } else {
-          contexts.tipShow2(CSBigwinDialog(award: award, isGuide: true));
+          contexts.tipShow2(CSBigwinDialog(award: 0.to2Double(CSNumberHelpers().gameModel!.new_prize), isGuide: true));
         }
         break;
       case 3:
@@ -76,9 +79,9 @@ class CSGuideManager {
               builder: (_) => CSScratchCardVC(type: 0),
             ),
           );
-          contexts.tipShow2(CSGuideNew4Dialog());
+          contexts.tipShow2(CSGuideNew4Dialog(contextStr: 'Congrats! You’ve Won Your First\nSponsored Reward 🎉', isGuide: true));
         } else {
-          contexts.tipShow2(CSGuideNew4Dialog());
+          contexts.tipShow2(CSGuideNew4Dialog(contextStr: 'Congrats! You’ve Won Your First\nSponsored Reward 🎉', isGuide: true));
         }
         break;
       case 4:
@@ -96,10 +99,31 @@ class CSGuideManager {
         }
         break;
       case 5:
+        bool isRootPage = ModalRoute.of(contexts)?.isFirst ?? false;
+        if (isRootPage) {
+          CashTabController.switchTo(2);
+          contexts.tipShow2(CSGuideNew7Dialog());
+        } else {
+          contexts.tipShow2(CSGuideNew7Dialog());
+        }
         break;
       case 6:
+        bool isRootPage = ModalRoute.of(contexts)?.isFirst ?? false;
+        if (isRootPage) {
+          CashTabController.switchTo(2);
+          contexts.tipShow2(CSGuideNew8Dialog());
+        } else {
+          contexts.tipShow2(CSGuideNew8Dialog());
+        }
         break;
       case 7:
+        bool isRootPage = ModalRoute.of(contexts)?.isFirst ?? false;
+        if (isRootPage) {
+          CashTabController.switchTo(2);
+          contexts.tipShow2(CSGuideNew9Dialog());
+        } else {
+          contexts.tipShow2(CSGuideNew9Dialog());
+        }
         break;
       case 8:
         break;

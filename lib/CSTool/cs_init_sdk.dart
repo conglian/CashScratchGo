@@ -44,38 +44,43 @@ class CSSDKHelpers {
     // _csinitloadFireBase();
   }
 
-
-
   void _initTopon() async {
-
     WidgetsBinding.instance.addPostFrameCallback((_) {
       // 这里保证在主线程
       sj_topon_start = DateTime.now();
       ATInitManger.initThinkUpSDK(
-          appidStr: 'h69fbf5b324d2e',
-          appidkeyStr: 'a6a5fd430dcfc69adb4220359cd1ad784').then((value){
-        cs_event_fire('nskdh_ad_initsuc', {
-          'ad_source_client' : 'topon',
-          'ad_init_time' : DateTime.now().difference(sj_topon_start).inMilliseconds
-        });
-        'topon init Success'.log();
-        CSCashAds().init();
-        cs_session_fire();
-        if (CSLocalProvider.instance.cs_install_status == false){
-          cs_install_fire();
-          CSLocalProvider.instance.updateBool(CSLocalProvider.instance.cs_install_statusName, true);
-        }
-      }).catchError((error){
-        'topon init error=$error'.log();
-        Future.delayed(Duration(seconds: 1),(){
-          _initTopon();
-        });
-      });
+            appidStr: 'h6a0c1323b2da9',
+            appidkeyStr: 'a9756a18ca5e9098c24597266d345a53a',
+          )
+          .then((value) {
+            cs_event_fire('nskdh_ad_initsuc', {
+              'ad_source_client': 'topon',
+              'ad_init_time': DateTime.now()
+                  .difference(sj_topon_start)
+                  .inMilliseconds,
+            });
+            'topon init Success'.log();
+            CSCardAds().init();
+            cs_session_fire();
+            if (CSLocalProvider.instance.cs_install_status == false) {
+              cs_install_fire();
+              CSLocalProvider.instance.updateBool(
+                CSLocalProvider.instance.cs_install_statusName,
+                true,
+              );
+            }
+          })
+          .catchError((error) {
+            'topon init error=$error'.log();
+            Future.delayed(Duration(seconds: 1), () {
+              _initTopon();
+            });
+          });
       // 打开SDK的Debug log，强烈建议在测试阶段打开，方便排查问题。
-      ATInitManger
-          .setLogEnabled(
-        logEnabled: false,
-      );
+      // ATInitManger
+      //     .setLogEnabled(
+      //   logEnabled: kDebugMode ? true : false,
+      // );
     });
   }
 
@@ -90,12 +95,18 @@ class CSSDKHelpers {
     config.attributionCallback = (AdjustAttribution attributionChangedData) {
       print('[Adjust]: Attribution changed!');
       if (attributionChangedData.trackerToken != null) {
-        print('[Adjust]: Tracker token: ${attributionChangedData.trackerToken}');
+        print(
+          '[Adjust]: Tracker token: ${attributionChangedData.trackerToken}',
+        );
       }
       if (attributionChangedData.trackerName != null) {
-        cs_event_fire('adjust_suc', {'adjust_user' : attributionChangedData.trackerName == 'Organic' ? 0 : 1});
+        cs_event_fire('adjust_suc', {
+          'adjust_user': attributionChangedData.trackerName == 'Organic'
+              ? 0
+              : 1,
+        });
         print('[Adjust]: Tracker name: ${attributionChangedData.trackerName}');
-        if (attributionChangedData.trackerName != 'Organic'){
+        if (attributionChangedData.trackerName != 'Organic') {
           cs_event_fire('organic_to_buy', {});
           // _toHome();
         }
@@ -116,10 +127,14 @@ class CSSDKHelpers {
         print('[Adjust]: Click label: ${attributionChangedData.clickLabel}');
       }
       if (attributionChangedData.fbInstallReferrer != null) {
-        print('[Adjust]: facebook install referrer: ${attributionChangedData.fbInstallReferrer}');
+        print(
+          '[Adjust]: facebook install referrer: ${attributionChangedData.fbInstallReferrer}',
+        );
       }
       if (attributionChangedData.jsonResponse != null) {
-        print('[Adjust]: JSON Response: ${attributionChangedData.jsonResponse}');
+        print(
+          '[Adjust]: JSON Response: ${attributionChangedData.jsonResponse}',
+        );
       }
     };
     Adjust.initSdk(config);
@@ -137,7 +152,7 @@ class CSSDKHelpers {
     "app firebase init".log();
     "app firebase loading".log();
     try {
-       await remoteConfig.fetchAndActivate();
+      await remoteConfig.fetchAndActivate();
 
       // final gp152_pig_number = remoteConfig.getValue('gp152_pig_number').asString();
       // if (gp152_pig_number != ''){
@@ -190,7 +205,6 @@ class CSSDKHelpers {
       //   CSLocalProvider.instance.updateint(CSLocalProvider.instance.new_ad_consoleName, new_ad_console);
       // }
 
-
       // final gp168_control = remoteConfig.getValue('gp168_control').asString();
       // if (gp168_control != ''){
       //   try {
@@ -209,11 +223,13 @@ class CSSDKHelpers {
         'quiz_console': 5, // 默认值
       });
       int quiz_console = remoteConfig.getValue('quiz_console').asInt();
-      if (quiz_console != null){
-        CSLocalProvider.instance.updateint(CSLocalProvider.instance.quiz_consoleName, quiz_console);
+      if (quiz_console != null) {
+        CSLocalProvider.instance.updateint(
+          CSLocalProvider.instance.quiz_consoleName,
+          quiz_console,
+        );
         "app firebase remoteconfig new_ad_console data $quiz_console".log();
       }
-
     } catch (e, s) {
       print("RemoteConfig fetch error: $e");
       sj_remoteConfigTryCount += 1;
@@ -235,12 +251,13 @@ class CSSDKHelpers {
       adjustAdRevenue.adRevenueNetwork = max.networkPlacement;
       adjustAdRevenue.adRevenuePlacement = max.placement;
       Adjust.trackAdRevenue(adjustAdRevenue);
-      await CSFacebookAnalytics.logPurchase( max.revenue, 'USD');
+      await CSFacebookAnalytics.logPurchase(max.revenue, 'USD');
       "af logs:: af revenue success ${max.revenue}".log();
     } catch (e) {
       "af logs:: af revenue error $e".log();
     }
   }
+
   // 上报收入
   cs_sendintTopOnAdToSdk(Map extraMap) async {
     final revenue = extraMap["publisher_revenue"] ?? 0;
@@ -258,6 +275,7 @@ class CSSDKHelpers {
     }
   }
 }
+
 class CSFacebookAnalytics {
   static final _channel = MethodChannel("com.example.cashscratchgo/facebook");
 

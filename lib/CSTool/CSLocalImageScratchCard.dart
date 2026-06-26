@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'CSAudioUtils.dart';
-import 'CS_LocalProvider.dart';
+import 'cs_LocalProvider.dart';
 import 'CS_extension_help.dart';
 
 
@@ -28,11 +28,11 @@ class CSLocalImageScratchCard extends StatefulWidget {
     required this.coverImagePath,
     this.autoStartY = 128.0,
     this.strokeWidth = 40.0,
-    this.scratchThreshold = 0.4,
-    this.revealDuration = const Duration(milliseconds: 3000),
+    this.scratchThreshold = 0.7,
+    this.revealDuration = const Duration(milliseconds: 2000),
     this.onScratchEnd,
     this.autoScratch = true,
-    this.autoScratchDuration = const Duration(seconds: 3),
+    this.autoScratchDuration = const Duration(seconds: 2),
     required this.contentW,
     required this.contentH,
   })  : assert(scratchThreshold >= 0 && scratchThreshold <= 1, 'scratchThreshold必须在0-1之间'),
@@ -346,8 +346,8 @@ class _CSLocalImageScratchCardState extends State<CSLocalImageScratchCard> with 
       left: position.dx - 15,
       top: position.dy - 15,
       child: SizedBox(
-        width: 40.w,
-        height: 40.w,
+        width: 40,
+        height: 40,
         child: Image.asset('cs_xing_icon'.image(), fit: BoxFit.contain),
       ),
     );

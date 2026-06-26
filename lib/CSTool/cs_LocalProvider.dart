@@ -6,8 +6,6 @@ import '../main.dart';
 import 'CSTBAEventTool.dart';
 import 'cs_extension_help.dart';
 
-final trigger = CSThresholdTrigger();
-
 
 class CSLocalProvider extends ChangeNotifier {
   // 1. 私有构造函数（禁止外部直接创建实例）
@@ -18,8 +16,6 @@ class CSLocalProvider extends ChangeNotifier {
 
   // 3. 提供全局访问点
   static CSLocalProvider get instance => _instance;
-
-  // SJTXModel txEntity = SJTXModel();
 
   String cs_account_id = '';
   String cs_tx_list = "";
@@ -77,11 +73,12 @@ class CSLocalProvider extends ChangeNotifier {
   bool cs_show_rank = false;
   bool cs_tx_ing_status = false;
   bool cs_install_status = false;
+  bool cs_dolas_80_end = false;
 
   int cs_scrach_unlock_index_0 = 0; // 存储的本地值
   int cs_scrach_unlock_index_1 = 0; // 存储的本地值
   int cs_ad_all_number = 0;
-  double cs_dolas_number = 0.00;
+  double cs_dollar_number = 0.00;
   double cs_dolas_old_number = 0.0;
   double add_olduser_point = 3.0;
   int cs_ad_reawrd_all_number = 0;
@@ -100,7 +97,6 @@ class CSLocalProvider extends ChangeNotifier {
   int cs_tx_card_index = 0;
   int cs_tx_wheel_index = 0;
   int cs_tx_bubble_index = 0;
-  int cs_tx_quiz_index = 0;
   int cs_box_index = 0;
   int cs_card_number = 0;
   int cs_Level_number = 1; // 存储的本地值
@@ -113,7 +109,6 @@ class CSLocalProvider extends ChangeNotifier {
   int cs_scrach_end_number_3 = 0; // 存储的本地值
   int cs_scrach_end_number_4 = 0; // 存储的本地值
   int cs_scrach_end_number_5 = 0; // 存储的本地值
-  int cs_scrach_end_number_6 = 0; // 存储的本地值
   int cs_currentNumberIndex = 0;
   int cs_domand_number = 0;
   int cs_tx_card_first = 0;
@@ -122,13 +117,22 @@ class CSLocalProvider extends ChangeNotifier {
   int new_ad_console = 1;
   int cs_zhuan_number = 0;
   int cs_quiz_tap_index = 0;
+  int cs_tx_box_index = 0;
 
-  // int cs_login_index = 0;
-  // int cs_tx_probability_index = 0;
+  int cs_scratch_box_index = 0;
+
+  int cs_scratch_gua_index = 0;
+
+  int card_push_number = 8;
+
   int cs_scratch_not_award_number = 0;
 
   // 主题类型
   int cs_quiz_model_index = 0;
+
+  int cs_scratch_num_row = 0;
+
+  int cs_scratch_num_index = 0;
 
   // 当前第几题
   int cs_quiz_num_index = 0;
@@ -138,6 +142,29 @@ class CSLocalProvider extends ChangeNotifier {
   double cs_pig_level_index = 0.0;
   int cs_quiz_all_num = 0;
   int quiz_console = 5;
+
+
+  String cs_scrach_end_time_0 = ''; // 存储的本地值
+  String cs_scrach_end_time_1 = ''; // 存储的本地值
+  String cs_scrach_end_time_2 = ''; // 存储的本地值
+  String cs_scrach_end_time_3 = ''; // 存储的本地值
+  String cs_scrach_end_time_4 = ''; // 存储的本地值
+  String cs_scrach_end_time_5 = ''; // 存储的本地值
+
+  // 加速卡
+  double cs_card_quicken_num = 0.0;
+
+  bool cs_card_quicken_30 = false;
+
+  bool cs_card_quicken_50 = false;
+
+  bool cs_card_quicken_80 = false;
+
+  bool cs_card_quicken_90 = false;
+
+  bool cs_card_quicken_1 = false;
+
+  bool cs_card_quicken_01 = false;
 
   String get cs_currentNumberIndexName => 'cs_currentNumberIndex';
 
@@ -185,7 +212,7 @@ class CSLocalProvider extends ChangeNotifier {
 
   String get cs_100_timer_starName => 'cs_100_timer_star';
 
-  String get cs_dolas_numberName => 'cs_dolas_number';
+  String get cs_dolas_numberName => 'cs_dollar_number';
 
   String get cs_card_numberName => 'cs_card_number';
 
@@ -207,8 +234,6 @@ class CSLocalProvider extends ChangeNotifier {
 
   String get cs_tx_wheel_indexName => 'cs_tx_wheel_index';
 
-  String get cs_tx_quiz_indexName => 'cs_tx_quiz_index';
-
   String get cs_tx_task_indexName => 'cs_tx_task_index';
 
   String get cs_tx_card_firstName => 'cs_tx_card_first';
@@ -217,8 +242,6 @@ class CSLocalProvider extends ChangeNotifier {
 
   String get cs_tx_dice_indexName => 'cs_tx_dice_index';
 
-  // String get cs_login_indexName => 'cs_login_index';
-  // String get cs_tx_probability_indexName => 'cs_tx_probability_index';
   String get cs_tx_first_statusName => 'cs_tx_first_status';
 
   String get cs_tx_last_statusName => 'cs_tx_last_status';
@@ -311,201 +334,239 @@ class CSLocalProvider extends ChangeNotifier {
 
   String get quiz_consoleName => 'quiz_console';
 
+  String get cs_tx_box_indexName => 'cs_tx_box_index';
+
+  String get cs_scrach_end_number_0Name => 'cs_scrach_end_number_0';
+
+  String get cs_scrach_end_number_1Name => 'cs_scrach_end_number_1';
+
+  String get cs_scrach_end_number_2Name => 'cs_scrach_end_number_2';
+
+  String get cs_scrach_end_number_3Name => 'cs_scrach_end_number_3';
+
+  String get cs_scrach_end_number_4Name => 'cs_scrach_end_number_4';
+
+  String get cs_scrach_end_number_5Name => 'cs_scrach_end_number_5';
+
+  String get cs_scratch_box_indexName => 'cs_scratch_box_index';
+
+  String get card_push_numberName => 'card_push_number';
+
+  String get cs_scratch_gua_indexName => 'cs_scratch_gua_index';
+
+  String get cs_dolas_80_endName => 'cs_dolas_80_end';
+
+  String get cs_scratch_num_rowName => 'cs_scratch_num_row';
+
+  String get cs_scratch_num_indexName => 'cs_scratch_num_index';
+
+  String get cs_card_quicken_numName => 'cs_card_quicken_nums';
+
+  String get cs_card_quicken_30Name => 'cs_card_quicken_30';
+
+  String get cs_card_quicken_50Name => 'cs_card_quicken_50';
+
+  String get cs_card_quicken_80Name => 'cs_card_quicken_80';
+
+  String get cs_card_quicken_90Name => 'cs_card_quicken_90';
+
+  String get cs_card_quicken_1Name => 'cs_card_quicken_1';
+
+  String get cs_card_quicken_01Name => 'cs_card_quicken_01';
+
+  String get cs_scrach_end_time_0Name => 'cs_scrach_end_time_0';
+
+  String get cs_scrach_end_time_1Name => 'cs_scrach_end_time_1';
+
+  String get cs_scrach_end_time_2Name => 'cs_scrach_end_time_2';
+
+  String get cs_scrach_end_time_3Name => 'cs_scrach_end_time_3';
+
+  String get cs_scrach_end_time_4Name => 'cs_scrach_end_time_4';
+
+  String get cs_scrach_end_time_5Name => 'cs_scrach_end_time_5';
+
+
 
   // 3. 初始化：从本地存储加载数据（组件初始化时调用）
   Future<void> init() async {
     final prefs = await SharedPreferences.getInstance();
     // 从本地读取值（key自定义，需与存储时一致）
-    // cs_tx_probability_index = prefs.getInt('cs_tx_probability_index') ?? 0;
-    // cs_login_index = prefs.getInt('cs_login_index') ?? 0;
-    cs_tx_dice_index = prefs.getInt('cs_tx_dice_index') ?? 0;
-    cs_tx_card_first = prefs.getInt('cs_tx_card_first') ?? 0;
-    cs_domand_number = prefs.getInt('cs_domand_number') ?? 0;
-    cs_dice_number = prefs.getInt('cs_dice_number') ?? 0;
-    cs_card_number = prefs.getInt('cs_card_number') ?? 0;
-    cs_box_index = prefs.getInt('cs_box_index') ?? 0;
-    cs_tx_quiz_index = prefs.getInt('cs_tx_quiz_index') ?? 0;
-    cs_wheel_number = prefs.getInt('cs_wheel_number') ?? 0;
-    cs_pig_level = prefs.getInt('cs_pig_level') ?? 0;
-    cs_pig_level_index = prefs.getDouble('cs_pig_level_index') ?? 0.0;
-    add_olduser_point = prefs.getDouble('add_olduser_point') ?? 3.0;
-    cs_tx_card_index = prefs.getInt('cs_tx_card_index') ?? 0;
-    cs_tx_wheel_index = prefs.getInt('cs_tx_wheel_index') ?? 0;
-    cs_tx_bubble_index = prefs.getInt('cs_tx_bubble_index') ?? 0;
-    cs_current_ranking = prefs.getInt('cs_current_ranking') ?? 99;
-    cs_all_ranking = prefs.getInt('cs_all_ranking') ?? 388;
-    cs_rank_ad_count = prefs.getInt('cs_rank_ad_count') ?? 388;
-    cs_tx_task_index = prefs.getInt('cs_tx_task_index') ?? 0;
-    cs_quiz_task_index = prefs.getInt('cs_quiz_task_index') ?? 0;
-    cs_tx_ing_account = prefs.getInt('cs_tx_ing_account') ?? 0;
-    cs_tx_ing_number = prefs.getInt('cs_tx_ing_number') ?? 0;
-    cs_card_a_number = prefs.getInt('cs_card_a_number') ?? 0;
-    cs_quiz_model_index = prefs.getInt('cs_quiz_model_index') ?? 0;
-    cs_quiz_num_index = prefs.getInt('cs_quiz_num_index') ?? 0;
-    cs_zhuan_number = prefs.getInt('cs_zhuan_number') ?? 0;
-    cs_quiz_all_num = prefs.getInt('cs_quiz_all_num') ?? 0;
-    cs_quiz_tap_index = prefs.getInt('cs_quiz_tap_index') ?? 0;
+    cs_tx_dice_index =  prefs.getInt('cs_tx_dice_index') ?? 0;
+    cs_tx_card_first =  prefs.getInt('cs_tx_card_first') ?? 0;
+    cs_domand_number =  prefs.getInt('cs_domand_number') ?? 0;
+    cs_dice_number =  prefs.getInt('cs_dice_number') ?? 0;
+    cs_card_number =  prefs.getInt('cs_card_number') ?? 0;
+    cs_box_index =  prefs.getInt('cs_box_index') ?? 0;
+    cs_tx_card_index =  prefs.getInt('cs_tx_card_index') ?? 0;
+    cs_wheel_number =  prefs.getInt('cs_wheel_number') ?? 0;
+    cs_pig_level =  prefs.getInt('cs_pig_level') ?? 0;
+    cs_tx_box_index =  prefs.getInt('cs_tx_box_index') ?? 0;
+    cs_pig_level_index =  prefs.getDouble('cs_pig_level_index') ?? 0.0;
+    add_olduser_point =  prefs.getDouble('add_olduser_point') ?? 3.0;
+    cs_tx_wheel_index =  prefs.getInt('cs_tx_wheel_index') ?? 0;
+    cs_tx_bubble_index =  prefs.getInt('cs_tx_bubble_index') ?? 0;
+    cs_current_ranking =  prefs.getInt('cs_current_ranking') ?? 99;
+    cs_all_ranking =  prefs.getInt('cs_all_ranking') ?? 388;
+    cs_rank_ad_count =  prefs.getInt('cs_rank_ad_count') ?? 388;
+    cs_tx_task_index =  prefs.getInt('cs_tx_task_index') ?? 0;
+    cs_quiz_task_index =  prefs.getInt('cs_quiz_task_index') ?? 0;
+    cs_tx_ing_account =  prefs.getInt('cs_tx_ing_account') ?? 0;
+    cs_tx_ing_number =  prefs.getInt('cs_tx_ing_number') ?? 0;
+    cs_card_a_number =  prefs.getInt('cs_card_a_number') ?? 0;
+    cs_quiz_model_index =  prefs.getInt('cs_quiz_model_index') ?? 0;
+    cs_quiz_num_index =  prefs.getInt('cs_quiz_num_index') ?? 0;
+    cs_zhuan_number =  prefs.getInt('cs_zhuan_number') ?? 0;
+    cs_quiz_all_num =  prefs.getInt('cs_quiz_all_num') ?? 0;
+    cs_quiz_tap_index =  prefs.getInt('cs_quiz_tap_index') ?? 0;
+    cs_scratch_box_index =  prefs.getInt('cs_scratch_box_index') ?? 0;
     cs_scratch_not_award_number =
-        prefs.getInt('cs_scratch_not_award_number') ?? 0;
-    cs_account_seled_index = prefs.getInt('cs_account_seled_index') ?? 0;
-    cs_scrach_unlock_index_0 = prefs.getInt('cs_scrach_unlock_index_0') ?? 0;
-    cs_scrach_unlock_index_1 = prefs.getInt('cs_scrach_unlock_index_1') ?? 0;
-    cs_ad_short_show_number = prefs.getInt('cs_ad_short_show_number') ?? 0;
-    cs_ad_short_close_number = prefs.getInt('cs_ad_short_close_number') ?? 0;
-    cs_ad_show_number = prefs.getInt('cs_ad_show_number') ?? 0;
-    cs_key_number = prefs.getInt('cs_key_number') ?? 0;
-    cs_quzi_row = prefs.getInt('cs_quzi_row') ?? 0;
-    cs_wheel_number = prefs.getInt('cs_wheel_number') ?? 0;
-    quiz_console = prefs.getInt('quiz_console') ?? 5;
-    new_ad_console = prefs.getInt('new_ad_console') ?? 1;
-    cs_bg_music = prefs.getBool('cs_bg_music') ?? true;
-    cs_sound_music = prefs.getBool('cs_sound_music') ?? true;
-    cs_tx_task3_tips = prefs.getBool('cs_tx_task3_tips') ?? false;
-    cs_tx_task4_tips = prefs.getBool('cs_tx_task4_tips') ?? false;
-    cs_txing_status = prefs.getBool('cs_txing_status') ?? false;
-    cs_login_status = prefs.getBool('cs_login_status') ?? false;
-    cs_good_review_status = prefs.getBool('cs_good_review_status') ?? false;
-    cs_open_tx = prefs.getBool('cs_open_tx') ?? false;
-    cs_install_status = prefs.getBool('cs_install_status') ?? false;
-    cs_show_box = prefs.getBool('cs_show_box') ?? false;
-    cs_afSwitch = prefs.getBool('cs_afSwitch') ?? true;
-    cs_set_root = prefs.getBool('cs_set_root') ?? false;
-    cs_show_rank = prefs.getBool('cs_show_rank') ?? false;
-    cs_af_status = prefs.getBool('cs_af_status') ?? false;
-    is_end_Scratch = prefs.getBool('is_end_Scratch') ?? true;
-    cs_cloak_status = prefs.getBool('cs_cloak_status') ?? false;
-    cs_show_box_tips = prefs.getBool('cs_show_box_tips') ?? false;
-    cs_first_box_tips = prefs.getBool('cs_first_box_tips') ?? false;
-    cs_fk_number_status = prefs.getBool('cs_fk_number_status') ?? false;
-    cs_fk_decvice_status = prefs.getBool('cs_fk_decvice_status') ?? false;
-    cs_fk_ad_short_show = prefs.getBool('cs_fk_ad_short_show') ?? false;
-    cs_fk_ad_short_close = prefs.getBool('cs_fk_ad_short_close') ?? false;
-    cs_fk_ip_status = prefs.getBool('cs_fk_ip_status') ?? false;
-    cs_newA_guide = prefs.getBool('cs_newA_guide') ?? false;
-    cs_scratch_guide = prefs.getBool('cs_scratch_guide') ?? true;
-    cs_old_guide = prefs.getBool('cs_old_guide') ?? true;
-    cs_new_guide = prefs.getBool('cs_new_guide') ?? false;
-    cs_show_bubble = prefs.getBool('cs_show_bubble') ?? false;
-    cs_show_dolas_ani = prefs.getBool('cs_show_dolas_ani') ?? false;
-    cs_show_box_guide = prefs.getBool('cs_show_box_guide') ?? false;
-    cs_dolas_800 = prefs.getBool('cs_dolas_800') ?? false;
-    cs_dolas_1000 = prefs.getBool('cs_dolas_1000') ?? false;
-    cs_100_timer_star = prefs.getBool('cs_100_timer_star') ?? false;
-    cs_tx_first_status = prefs.getBool('cs_tx_first_status') ?? false;
-    cs_tx_last_status = prefs.getBool('cs_tx_last_status') ?? false;
-    cs_first_show_cash = prefs.getBool('cs_first_show_cash') ?? false;
-    cs_tx_task2_tips = prefs.getBool('cs_tx_task2_tips') ?? false;
-    cs_last_tx_end = prefs.getBool('cs_last_tx_end') ?? false;
-    cs_yunying_3 = prefs.getBool('cs_yunying_3') ?? false;
-    cs_yunying_1 = prefs.getBool('cs_yunying_1') ?? false;
-    cs_tx_end_status = prefs.getBool('cs_tx_end_status') ?? false;
-    cs_show_80_pop = prefs.getBool('cs_show_80_pop') ?? false;
-    cs_tx_ing_status = prefs.getBool('cs_tx_ing_status') ?? false;
-    cs_ad_reawrd_all_number = prefs.getInt('cs_ad_reawrd_all_number') ?? 0;
-    cs_ad_all_number = prefs.getInt('cs_ad_all_number') ?? 0;
-    cs_dolas_number = prefs.getDouble('cs_dolas_number') ?? 0.00;
-    cs_dolas_old_number = prefs.getDouble('cs_dolas_old_number') ?? 0.0;
-    cs_ad_show_index = prefs.getInt('cs_ad_show_index') ?? 0;
-    cs_Level_number = prefs.getInt('cs_Level_number') ?? 1;
-    cs_Level_inedx = prefs.getInt('cs_Level_inedx') ?? 1;
-    cs_scrach_end_number_0 = prefs.getInt('cs_scrach_end_number_0') ?? 0;
-    cs_scrach_end_number_1 = prefs.getInt('cs_scrach_end_number_1') ?? 0;
-    cs_scrach_end_number_2 = prefs.getInt('cs_scrach_end_number_2') ?? 0;
-    cs_scrach_end_number_3 = prefs.getInt('cs_scrach_end_number_3') ?? 0;
-    cs_scrach_end_number_4 = prefs.getInt('cs_scrach_end_number_4') ?? 0;
-    cs_scrach_end_number_5 = prefs.getInt('cs_scrach_end_number_5') ?? 0;
-    cs_scrach_end_number_6 = prefs.getInt('cs_scrach_end_number_6') ?? 0;
-    cs_currentNumberIndex = prefs.getInt('cs_currentNumberIndex') ?? 0;
-    cs_scratch_status_0 = prefs.getBool('cs_scratch_status_0') ?? true;
-    cs_scratch_status_1 = prefs.getBool('cs_scratch_status_1') ?? true;
-    cs_scratch_status_2 = prefs.getBool('cs_scratch_status_2') ?? true;
-    cs_scratch_status_3 = prefs.getBool('cs_scratch_status_3') ?? true;
-    cs_scratch_status_4 = prefs.getBool('cs_scratch_status_4') ?? true;
-    cs_scratch_status_5 = prefs.getBool('cs_scratch_status_5') ?? true;
-    cs_scratch_status_6 = prefs.getBool('cs_scratch_status_6') ?? true;
-    cs_scratch_status_7 = prefs.getBool('cs_scratch_status_7') ?? true;
-    cs_scratch_status_8 = prefs.getBool('cs_scratch_status_8') ?? true;
+         prefs.getInt('cs_scratch_not_award_number') ?? 0;
+    cs_account_seled_index =  prefs.getInt('cs_account_seled_index') ?? 0;
+    cs_scrach_unlock_index_0 =  prefs.getInt('cs_scrach_unlock_index_0') ?? 0;
+    cs_scrach_unlock_index_1 =  prefs.getInt('cs_scrach_unlock_index_1') ?? 0;
+    cs_ad_short_show_number =  prefs.getInt('cs_ad_short_show_number') ?? 0;
+    cs_ad_short_close_number =  prefs.getInt('cs_ad_short_close_number') ?? 0;
+    cs_ad_show_number =  prefs.getInt('cs_ad_show_number') ?? 0;
+    cs_key_number =  prefs.getInt('cs_key_number') ?? 0;
+    cs_quzi_row =  prefs.getInt('cs_quzi_row') ?? 0;
+    cs_wheel_number =  prefs.getInt('cs_wheel_number') ?? 0;
+    quiz_console =  prefs.getInt('quiz_console') ?? 5;
+    new_ad_console =  prefs.getInt('new_ad_console') ?? 1;
+    cs_bg_music =  prefs.getBool('cs_bg_music') ?? true;
+    cs_sound_music =  prefs.getBool('cs_sound_music') ?? true;
+    cs_tx_task3_tips =  prefs.getBool('cs_tx_task3_tips') ?? false;
+    cs_tx_task4_tips =  prefs.getBool('cs_tx_task4_tips') ?? false;
+    cs_txing_status =  prefs.getBool('cs_txing_status') ?? false;
+    cs_login_status =  prefs.getBool('cs_login_status') ?? false;
+    cs_good_review_status =  prefs.getBool('cs_good_review_status') ?? false;
+    cs_open_tx =  prefs.getBool('cs_open_tx') ?? false;
+    cs_install_status =  prefs.getBool('cs_install_status') ?? false;
+    cs_show_box =  prefs.getBool('cs_show_box') ?? false;
+    cs_afSwitch =  prefs.getBool('cs_afSwitch') ?? true;
+    cs_set_root =  prefs.getBool('cs_set_root') ?? false;
+    cs_show_rank =  prefs.getBool('cs_show_rank') ?? false;
+    cs_af_status =  prefs.getBool('cs_af_status') ?? false;
+    is_end_Scratch =  prefs.getBool('is_end_Scratch') ?? true;
+    cs_cloak_status =  prefs.getBool('cs_cloak_status') ?? false;
+    cs_show_box_tips =  prefs.getBool('cs_show_box_tips') ?? false;
+    cs_first_box_tips =  prefs.getBool('cs_first_box_tips') ?? false;
+    cs_fk_number_status =  prefs.getBool('cs_fk_number_status') ?? false;
+    cs_fk_decvice_status =  prefs.getBool('cs_fk_decvice_status') ?? false;
+    cs_fk_ad_short_show =  prefs.getBool('cs_fk_ad_short_show') ?? false;
+    cs_fk_ad_short_close =  prefs.getBool('cs_fk_ad_short_close') ?? false;
+    cs_fk_ip_status =  prefs.getBool('cs_fk_ip_status') ?? false;
+    cs_newA_guide =  prefs.getBool('cs_newA_guide') ?? false;
+    cs_scratch_guide =  prefs.getBool('cs_scratch_guide') ?? true;
+    cs_old_guide =  prefs.getBool('cs_old_guide') ?? true;
+    cs_new_guide =  prefs.getBool('cs_new_guide') ?? false;
+    cs_show_bubble =  prefs.getBool('cs_show_bubble') ?? false;
+    cs_show_dolas_ani =  prefs.getBool('cs_show_dolas_ani') ?? false;
+    cs_show_box_guide =  prefs.getBool('cs_show_box_guide') ?? false;
+    cs_dolas_800 =  prefs.getBool('cs_dolas_800') ?? false;
+    cs_dolas_1000 =  prefs.getBool('cs_dolas_1000') ?? false;
+    cs_100_timer_star =  prefs.getBool('cs_100_timer_star') ?? false;
+    cs_tx_first_status =  prefs.getBool('cs_tx_first_status') ?? false;
+    cs_tx_last_status =  prefs.getBool('cs_tx_last_status') ?? false;
+    cs_first_show_cash =  prefs.getBool('cs_first_show_cash') ?? false;
+    cs_tx_task2_tips =  prefs.getBool('cs_tx_task2_tips') ?? false;
+    cs_last_tx_end =  prefs.getBool('cs_last_tx_end') ?? false;
+    cs_yunying_3 =  prefs.getBool('cs_yunying_3') ?? false;
+    cs_yunying_1 =  prefs.getBool('cs_yunying_1') ?? false;
+    cs_tx_end_status =  prefs.getBool('cs_tx_end_status') ?? false;
+    cs_show_80_pop =  prefs.getBool('cs_show_80_pop') ?? false;
+    cs_tx_ing_status =  prefs.getBool('cs_tx_ing_status') ?? false;
+    cs_ad_reawrd_all_number =  prefs.getInt('cs_ad_reawrd_all_number') ?? 0;
+    cs_ad_all_number =  prefs.getInt('cs_ad_all_number') ?? 0;
+    cs_dollar_number =  prefs.getDouble('cs_dollar_number') ?? 0.00;
+    cs_dolas_old_number =  prefs.getDouble('cs_dolas_old_number') ?? 0.0;
+    cs_ad_show_index =  prefs.getInt('cs_ad_show_index') ?? 0;
+    cs_Level_number =  prefs.getInt('cs_Level_number') ?? 1;
+    cs_Level_inedx =  prefs.getInt('cs_Level_inedx') ?? 1;
+    cs_scrach_end_number_0 =  prefs.getInt('cs_scrach_end_number_0') ?? 0;
+    cs_scrach_end_number_1 =  prefs.getInt('cs_scrach_end_number_1') ?? 0;
+    cs_scrach_end_number_2 =  prefs.getInt('cs_scrach_end_number_2') ?? 0;
+    cs_scrach_end_number_3 =  prefs.getInt('cs_scrach_end_number_3') ?? 0;
+    cs_scrach_end_number_4 =  prefs.getInt('cs_scrach_end_number_4') ?? 0;
+    cs_scrach_end_number_5 =  prefs.getInt('cs_scrach_end_number_5') ?? 0;
+    cs_currentNumberIndex =  prefs.getInt('cs_currentNumberIndex') ?? 0;
+    cs_scratch_status_0 =  prefs.getBool('cs_scratch_status_0') ?? true;
+    cs_scratch_status_1 =  prefs.getBool('cs_scratch_status_1') ?? true;
+    cs_scratch_status_2 =  prefs.getBool('cs_scratch_status_2') ?? true;
+    cs_scratch_status_3 =  prefs.getBool('cs_scratch_status_3') ?? true;
+    cs_scratch_status_4 =  prefs.getBool('cs_scratch_status_4') ?? true;
+    cs_scratch_status_5 =  prefs.getBool('cs_scratch_status_5') ?? true;
+    cs_scratch_status_6 =  prefs.getBool('cs_scratch_status_6') ?? true;
+    cs_scratch_status_7 =  prefs.getBool('cs_scratch_status_7') ?? true;
+    cs_scratch_status_8 =  prefs.getBool('cs_scratch_status_8') ?? true;
+    cs_dolas_80_end =  prefs.getBool('cs_dolas_80_end') ?? true;
+    cs_card_quicken_30 =  prefs.getBool('cs_card_quicken_30') ?? false;
+    cs_card_quicken_50 =  prefs.getBool('cs_card_quicken_50') ?? false;
+    cs_card_quicken_80 =  prefs.getBool('cs_card_quicken_80') ?? false;
+    cs_card_quicken_90 =  prefs.getBool('cs_card_quicken_90') ?? false;
+    cs_card_quicken_1 =  prefs.getBool('cs_card_quicken_1') ?? false;
+    cs_card_quicken_01 =  prefs.getBool('cs_card_quicken_01') ?? false;
     cs_ratio_str = prefs.getString('cs_ratio_str') ?? '90';
     cs_account_id = prefs.getString('cs_account_id') ?? '';
     cs_tx_list = prefs.getString("cs_tx_list") ?? "";
-    // init tx
-    // if (cs_tx_list.isEmpty) {
-    //   String jsonTXString = await rootBundle.loadString("cs_tx_list".jsons());
-    //   Map<String, dynamic> json_tx = jsonDecode(jsonTXString);
-    //   prefs.setString('cs_tx_list',jsonTXString);
-    //   txEntity = SJTXModel.fromJson(json_tx);
-    // } else {
-    //   String jsonTXString = prefs.getString('cs_tx_list') ?? "";
-    //   Map<String, dynamic> json_tx = jsonDecode(jsonTXString);
-    //   txEntity = SJTXModel.fromJson(json_tx);
-    // }
+    cs_scrach_end_time_0 = prefs.getString("cs_scrach_end_time_0") ?? "";
+    cs_scrach_end_time_1 = prefs.getString("cs_scrach_end_time_1") ?? "";
+    cs_scrach_end_time_2 = prefs.getString("cs_scrach_end_time_2") ?? "";
+    cs_scrach_end_time_3 = prefs.getString("cs_scrach_end_time_3") ?? "";
+    cs_scrach_end_time_4 = prefs.getString("cs_scrach_end_time_4") ?? "";
+    cs_scrach_end_time_5 = prefs.getString("cs_scrach_end_time_5") ?? "";
+    card_push_number = prefs.getInt('card_push_number') ?? 8;
+    cs_scratch_gua_index = prefs.getInt('cs_scratch_gua_index') ?? 0;
+    cs_scratch_num_row = prefs.getInt('cs_scratch_num_row') ?? 0;
+    cs_scratch_num_index = prefs.getInt('cs_scratch_num_index') ?? 0;
+    cs_card_quicken_num = prefs.getDouble('cs_card_quicken_nums') ?? 0;
+    Future.delayed(Duration(milliseconds: 100),(){
+      'updateUI=${cs_dollar_number}'.log();
+      notifyListeners(); // 加载完成后通知UI更新
+    });
   }
 
   // 通用bool
-  Future<bool> updateBool(String key, bool value) async {
+  Future<void> updateBool(String key, bool value) async {
     final prefs = await SharedPreferences.getInstance();
-    final result = await prefs.setBool(key, value);
-    await init();
-    notifyListeners(); // 加载完成后通知UI更新
-    return result;
+    bool reuslt = await prefs.setBool(key, value);
+    init();
   }
 
   // 通用int
-  Future<bool> updateint(String key, int value) async {
+  Future<void> updateint(String key, int value) async {
     final prefs = await SharedPreferences.getInstance();
-    final result = await prefs.setInt(key, value);
-    await init();
-    notifyListeners(); // 加载完成后通知UI更新
-    return result;
+    bool reuslt = await prefs.setInt(key, value);
+    init();
   }
 
   // 通用double
-  Future<bool> updatedouble(String key, double value) async {
+  Future<void> updatedouble(String key, double value) async {
     final prefs = await SharedPreferences.getInstance();
-    if (key == CSLocalProvider.instance.cs_dolas_numberName &&
-        cs_dolas_number <= 0) {
-      await updateBool(cs_first_show_cashName, true);
-    }
-    if (key == CSLocalProvider.instance.cs_dolas_numberName && value > 0) {
-      // PSPigDolasUpdateNotificationService.sendToQuizProgressNotification(0);
-      await updatedouble(cs_dolas_old_numberName, cs_dolas_old_number + value);
-    }
-    if (key == CSLocalProvider.instance.cs_dolas_numberName) {
-      value += cs_dolas_number;
-    }
-    final result = await prefs.setDouble(key, value);
-    // 开始提现
-
-    if (key == CSLocalProvider.instance.cs_dolas_numberName && value > 0){
-      trigger.check(CSLocalProvider.instance.cs_dolas_number.toInt(), onTrigger: (level) {
-        print("触发 → 达到 $level");
-        cs_event_fire('cash_money_detail', {'money_from' : level});
-      });
-      await updateBool(cs_show_dolas_aniName, true);
-    }
     if (key == CSLocalProvider.instance.cs_dolas_numberName) {
         // CSNoticeHelp().startSJForegroundService();
     }
-    await init();
-    notifyListeners(); // 加载完成后通知UI更新
-    return result;
+    print("value= $value");
+    await prefs.setDouble(key, value);
+    if (key == CSLocalProvider.instance.cs_dolas_numberName && value > 0) {
+      await prefs.setDouble(cs_dolas_old_numberName,  cs_dolas_old_number + value);
+    }
+    if (key == CSLocalProvider.instance.cs_dolas_numberName && value > 0){
+      trigger.check(CSLocalProvider.instance.cs_dollar_number.toInt(), onTrigger: (level) {
+        print("触发 → 达到 $level");
+        cs_event_fire('cash_money_detail', {'money_from' : level});
+      });
+      await prefs.setBool(cs_show_dolas_aniName, true);
+    }
+    init();
   }
 
   // 通用String
-  Future<bool> updateString(String key, String value) async {
+  Future<void> updateString(String key, String value) async {
     final prefs = await SharedPreferences.getInstance();
-    final result = await prefs.setString(key, value);
-    await init();
-    notifyListeners(); // 加载完成后通知UI更新
-    return result;
+    bool reuslt = await prefs.setString(key, value);
+    init();
   }
-
-  // Future<void> updateTXInStatus(int status) async {
-  //   SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-  //   txEntity.tx_info[cs_tx_ing_account].tx_list[cs_tx_ing_number].status = status;
-  //   sharedPreferences.setString('cs_tx_list', jsonEncode(txEntity.toJson()));
-  //   String jsonTXString = sharedPreferences.getString('cs_tx_list') ?? "";
-  //   Map<String, dynamic> json_tx = jsonDecode(jsonTXString);
-  //   txEntity = SJTXModel.fromJson(json_tx);
-  // }
 }
+
+

@@ -1,0 +1,513 @@
+{
+  "card_range": [
+    1000,
+    1200,
+    1500,
+    2000
+  ],
+  "new_prize": 134,
+  "queue_number_all": {
+    "int_all": 388,
+    "int_all_delete": [
+      1,
+      3
+    ]
+  },
+  "queue_number_current": {
+    "int_current": 99,
+    "int_current_delete": [
+      5,
+      8
+    ]
+  },
+  "intad_point": [
+    {
+      "first_number": 0,
+      "point": 0,
+      "end_number": 300
+    },
+    {
+      "first_number": 300,
+      "point": 50,
+      "end_number": 500
+    },
+    {
+      "first_number": 500,
+      "point": 80,
+      "end_number": 800
+    },
+    {
+      "first_number": 800,
+      "point": 90,
+      "end_number": 1000
+    }
+  ],
+  "big_win": [
+    {
+      "first_number": 0,
+      "win_number": 40,
+      "end_number": 300
+    },
+    {
+      "first_number": 300,
+      "win_number": 25,
+      "end_number": 600
+    },
+    {
+      "first_number": 600,
+      "win_number": 10,
+      "end_number": 800
+    },
+    {
+      "first_number": 800,
+      "win_number": 5,
+      "end_number": 1000
+    }
+  ],
+  "float_prize": [
+    {
+      "first_number": 0,
+      "prize": [
+        50,
+        60
+      ],
+      "end_number": 300
+    },
+    {
+      "first_number": 300,
+      "prize": [
+        20,
+        30
+      ],
+      "end_number": 600
+    },
+    {
+      "first_number": 600,
+      "prize": [
+        5,
+        10
+      ],
+      "end_number": 800
+    },
+    {
+      "first_number": 800,
+      "prize": [
+        1,
+        5
+      ],
+      "end_number": 1000
+    }
+  ],
+  "wheel_point": {
+    "point_20": 65,
+    "point_50": 20,
+    "point_80": 10,
+    "point_100": 5
+  },
+  "key_out": [
+    {
+      "first_number": 0,
+      "point": 50,
+      "end_number": 300
+    },
+    {
+      "first_number": 300,
+      "point": 30,
+      "end_number": 600
+    },
+    {
+      "first_number": 600,
+      "point": 10,
+      "end_number": 800
+    },
+    {
+      "first_number": 800,
+      "point": 5,
+      "end_number": 1000
+    }
+  ],
+  "speedcard_out": [
+    {
+      "first_number": 0,
+      "point": 50,
+      "end_number": 5
+    },
+    {
+      "first_number": 5,
+      "point": 30,
+      "end_number": 10
+    },
+    {
+      "first_number": 10,
+      "point": 20,
+      "end_number": 15
+    },
+    {
+      "first_number": 15,
+      "point": 5,
+      "end_number": 20
+    }
+  ],
+  "card_fruit": {
+    "winup_number": 50,
+    "point": 75,
+    "prize": [
+      {
+        "first_number": 0,
+        "prize": [
+          30,
+          45
+        ],
+        "end_number": 300
+      },
+      {
+        "first_number": 300,
+        "prize": [
+          20,
+          30
+        ],
+        "end_number": 600
+      },
+      {
+        "first_number": 600,
+        "prize": [
+          5,
+          15
+        ],
+        "end_number": 800
+      },
+      {
+        "first_number": 800,
+        "prize": [
+          1,
+          5
+        ],
+        "end_number": 1000
+      }
+    ]
+  },
+  "card_number": {
+    "winup_number": 60,
+    "point": 20,
+    "prize": [
+      {
+        "first_number": 0,
+        "prize": [
+          30,
+          45
+        ],
+        "end_number": 300
+      },
+      {
+        "first_number": 300,
+        "prize": [
+          20,
+          30
+        ],
+        "end_number": 600
+      },
+      {
+        "first_number": 600,
+        "prize": [
+          5,
+          15
+        ],
+        "end_number": 800
+      },
+      {
+        "first_number": 800,
+        "prize": [
+          1,
+          5
+        ],
+        "end_number": 1000
+      }
+    ]
+  },
+  "card_tiger": {
+    "winup_number": 60,
+    "tiger0": 30,
+    "tiger3": 30,
+    "tiger4": 20,
+    "tiger5": 10,
+    "tiger6": 9,
+    "tiger7": 1,
+    "tiger8": 0,
+    "tiger9": 0,
+    "tiger10": 0,
+    "prize": [
+      {
+        "first_number": 0,
+        "prize": [
+          30,
+          40
+        ],
+        "end_number": 300
+      },
+      {
+        "first_number": 300,
+        "prize": [
+          10,
+          20
+        ],
+        "end_number": 600
+      },
+      {
+        "first_number": 600,
+        "prize": [
+          5,
+          10
+        ],
+        "end_number": 800
+      },
+      {
+        "first_number": 800,
+        "prize": [
+          1,
+          5
+        ],
+        "end_number": 1000
+      }
+    ]
+  },
+  "card_77hot": {
+    "winup_number": 80,
+    "point_nowin": 50,
+    "point_7": 30,
+    "point_77": 20,
+    "prize": [
+      {
+        "first_number": 0,
+        "prize": [
+          30,
+          40
+        ],
+        "end_number": 300
+      },
+      {
+        "first_number": 300,
+        "prize": [
+          10,
+          20
+        ],
+        "end_number": 600
+      },
+      {
+        "first_number": 600,
+        "prize": [
+          5,
+          10
+        ],
+        "end_number": 800
+      },
+      {
+        "first_number": 800,
+        "prize": [
+          1,
+          5
+        ],
+        "end_number": 1000
+      }
+    ]
+  },
+  "card_emoji": {
+    "winup_number": 90,
+    "point_face": 40,
+    "prize": [
+      {
+        "first_number": 0,
+        "prize": [
+          30,
+          45
+        ],
+        "end_number": 300
+      },
+      {
+        "first_number": 300,
+        "prize": [
+          10,
+          20
+        ],
+        "end_number": 600
+      },
+      {
+        "first_number": 600,
+        "prize": [
+          5,
+          10
+        ],
+        "end_number": 800
+      },
+      {
+        "first_number": 800,
+        "prize": [
+          1,
+          5
+        ],
+        "end_number": 1000
+      }
+    ]
+  },
+  "card_8rich": {
+    "winup_number": 100,
+    "point_3match": 60,
+    "point_8bet": 20,
+    "prize": [
+      {
+        "first_number": 0,
+        "prize": [
+          30,
+          45
+        ],
+        "end_number": 300
+      },
+      {
+        "first_number": 300,
+        "prize": [
+          10,
+          20
+        ],
+        "end_number": 600
+      },
+      {
+        "first_number": 600,
+        "prize": [
+          5,
+          10
+        ],
+        "end_number": 800
+      },
+      {
+        "first_number": 800,
+        "prize": [
+          1,
+          5
+        ],
+        "end_number": 1000
+      }
+    ]
+  },
+  "wtd_task": [
+    {
+      "type": "card",
+      "num": 20
+    },
+    {
+      "type": "wheel",
+      "num": 5
+    },
+    {
+      "type": "bubble",
+      "num": 10
+    },
+    {
+      "type": "card",
+      "num": 30
+    },
+    {
+      "type": "wheel",
+      "num": 10
+    },
+    {
+      "type": "bubble",
+      "num": 15
+    },
+    {
+      "type": "card",
+      "num": 50
+    },
+    {
+      "type": "wheel",
+      "num": 20
+    },
+    {
+      "type": "bubble",
+      "num": 20
+    }
+  ],
+  "check_reward": [
+    3,
+    10
+  ],
+  "box_prize": [
+    {
+      "first_number": 0,
+      "prize": [
+        30,
+        40
+      ],
+      "end_number": 300
+    },
+    {
+      "first_number": 300,
+      "prize": [
+        10,
+        20
+      ],
+      "end_number": 600
+    },
+    {
+      "first_number": 600,
+      "prize": [
+        5,
+        10
+      ],
+      "end_number": 800
+    },
+    {
+      "first_number": 800,
+      "prize": [
+        1,
+        5
+      ],
+      "end_number": 1000
+    }
+  ],
+  "speedcard_prize": [
+    {
+      "first_number": 0,
+      "type": 1,
+      "prize": [
+        2,
+        3
+      ],
+      "end_number": 5
+    },
+    {
+      "first_number": 5,
+      "type": 1,
+      "prize": [
+        1,
+        2
+      ],
+      "end_number": 10
+    },
+    {
+      "first_number": 10,
+      "type": 1,
+      "prize": [
+        0.5,
+        0.8
+      ],
+      "end_number": 15
+    },
+    {
+      "first_number": 15,
+      "type": 1,
+      " ": [
+        0.1,
+        0.5
+      ],
+      "end_number": 19
+    },
+    {
+      "first_number": 19,
+      "type": 1,
+      "prize": [
+        0.01,
+        0.05
+      ],
+      "end_number": 20
+    }
+  ]
+}

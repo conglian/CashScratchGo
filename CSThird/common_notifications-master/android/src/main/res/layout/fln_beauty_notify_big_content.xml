@@ -21,8 +21,8 @@
             android:id="@+id/fln_beauty_notify_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="#FFFFFF"
-            android:textSize="16sp"
+            android:textColor="#601E00"
+            android:textSize="12sp"
             tools:text="This is title" />
 
         <LinearLayout
@@ -45,8 +45,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="14dp"
                 android:maxLines="3"
-                android:textColor="#FFFFFF"
-                android:textSize="14sp"
+                android:textColor="#601E00"
+                android:textSize="16sp"
                 android:textStyle="bold"
                 tools:text="This is body" />
         </LinearLayout>

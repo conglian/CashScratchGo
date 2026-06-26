@@ -9,9 +9,14 @@ import 'package:provider/provider.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'CSMainVC/CSLuanchVC.dart';
 import 'CSTool/CSFKManger.dart';
+import 'CSTool/CSInAppNotification.dart';
+import 'CSTool/CSNumberHelpers.dart';
+import 'CSTool/CS_extension_help.dart';
 import 'CSTool/cs_LocalProvider.dart';
 import 'CSTool/cs_init_sdk.dart';
+import 'package:cashScarchGoFK/cashScarchGoFK.dart';
 
+final trigger = CSThresholdTrigger();
 
 
 Future<void> main() async {
@@ -49,28 +54,19 @@ Future<void> main() async {
   //   return true;
   // };
 
-  CSFKManger().initFKJson();
-  // print(BoomUniqueStringUtil.decrypt('1d7v79zJwdLT98LR8O771tnJ3draydncy+/Z78vZ0trZ1cH0rNP74vrgycH7ytvX/8vQqPTiyuz+7dG38v7+wNfA6NDNwMrO9avbyvHh1tSs1a3NqM7hq+nbs9DXrqy3+anCwqre3vvT1N+uoffX7s3z2+3V6qjb2e/d2dnJpaU=', 152));
-  // await PigwalletspineFK.instance.ps_initNumberUnit(apiKey: BoomUniqueStringUtil.decrypt('1d7v79zJwdLT98LR8O771tnJ3draydncy+/Z78vZ0trZ1cH0rNP74vrgycH7ytvX/8vQqPTiyuz+7dG38v7+wNfA6NDNwMrO9avbyvHh1tSs1a3NqM7hq+nbs9DXrqy3+anCwqre3vvT1N+uoffX7s3z2+3V6qjb2e/d2dnJpaU=', 152));
+  await CSFKManger().initFKJson();
+  print(BoomUniqueStringUtil.decrypt('5e7f3+z58eLjx/LhwN7L5un57erq+ens+9/p3/vp4urp5fHEnOPL0srQ+fHL+uvnz/vgmMTS+tzO3eGHws7O8Ofw2OD98Pr+xZvr+sHR5uSc5Z39mP7Rm9nrg+DnnpyHyZny8pru7svj5O+ekcfn3v3D693l2pjr6d/t6en5lZU=', 168));
+  await CashScarchGoFK.instance.cs_initNumberUnit(apiKey: BoomUniqueStringUtil.decrypt('5e7f3+z58eLjx/LhwN7L5un57erq+ens+9/p3/vp4urp5fHEnOPL0srQ+fHL+uvnz/vgmMTS+tzO3eGHws7O8Ofw2OD98Pr+xZvr+sHR5uSc5Z39mP7Rm9nrg+DnnpyHyZny8pru7svj5O+ekcfn3v3D693l2pjr6d/t6en5lZU=', 168));
 
   // await initSpineFlutter(enableMemoryDebugging: false);
   // 1. 创建LocalStorageProvider实例并初始化（加载本地数据）
   final localStorageProvider = CSLocalProvider.instance;
   await localStorageProvider.init();
   await trigger.init();
+  print('CSLocalProvider.instance.cs_dolas_number=${CSLocalProvider.instance.cs_dollar_number}');
   // 模拟排队完成
-  // PSLocalProvider.instance.updateint(PSLocalProvider.instance.ps_quiz_all_numName, 0);
-  // PSLocalProvider.instance.updatedouble(PSLocalProvider.instance.ps_pig_level_indexName, 0);
-  /*
-  String jsonString = await rootBundle.loadString("quiz".jsons());
-
-  final encrypted = AESHelper.encryptString(jsonString);
-
-  printLongString(encrypted);
-  // 解密
-  final decrypted = AESHelper.decryptString(encrypted);
-  print(decrypted); // 👈 复制这个
-  */
+  CSLocalProvider.instance.updatedouble(CSLocalProvider.instance.cs_card_quicken_numName, 20);
+  // CSLocalProvider.instance.updatedouble(CSLocalProvider.instance.cs_pig_level_indexName, 0);
   // 2. 注入Provider，包裹MyApp
   runApp(
     ChangeNotifierProvider(
@@ -96,7 +92,8 @@ class _MyAppState extends State<MyApp> {
     // TODO: implement initState
     super.initState();
     CSSDKHelpers().initSDK();
-
+    CSNumberHelpers().initNumberModel();
+    PSInAppNotification().init();
   }
 
   @override

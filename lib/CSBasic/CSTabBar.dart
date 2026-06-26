@@ -1,3 +1,4 @@
+import 'package:cashscratchgo/CSTool/cs_LocalProvider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
@@ -39,6 +40,10 @@ class _CashBottomExampleState extends State<CashBottomExample> {
   void initState() {
     // TODO: implement initState
     super.initState();
+
+    CSLuckyWheelNotificationService.stream.listen((value) async {
+      setState(() {});
+    });
   }
 
   @override
@@ -68,7 +73,7 @@ class _CashBottomExampleState extends State<CashBottomExample> {
                 inactiveColorPrimary: Colors.transparent,
               ),
               PersistentBottomNavBarItem(
-                icon: Image.asset('cs_wheel_n'.image()),
+                icon: Image.asset(CSLocalProvider.instance.cs_wheel_number <= 0 ? 'cs_wheel_lock_icon'.image() : 'cs_wheel_n'.image()),
                 inactiveIcon: Image.asset('cs_wheel_s'.image()),
                 title: 'LUCKY SPIN',
                 activeColorPrimary: Colors.transparent,

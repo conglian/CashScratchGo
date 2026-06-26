@@ -7,38 +7,40 @@ import 'cs_extension_help.dart';
 
 void cs_session_fire() async {
   var baseBody = await CSRequestHelpers().baseBody();
-  baseBody["chinook"] = {};
+  baseBody["arccos"] = 'cal';
   CSRequestHelpers().post(baseBody, 2);
 }
 
 void cs_ad_fire(Map<String, dynamic> body) async {
   var baseBody = await CSRequestHelpers().baseBody();
-  baseBody["braid"] = body;
+  baseBody["yakima"] = body;
   CSRequestHelpers().post(baseBody, 3);
 }
 
 void cs_event_fire(String name, Map<String, dynamic> body) async {
   var baseBodys = await CSRequestHelpers().baseBody();
-  baseBodys["infima"] = name;
-  baseBodys['hermetic'] = body;
+  baseBodys["arccos"] = name;
+  baseBodys['soil'] = body;
   CSRequestHelpers().post(baseBodys, 0);
 }
 
 void cs_install_fire() async {
   var baseBody = await CSRequestHelpers().baseBody();
   var map = await FlutterTbaInfo.instance.getReferrerMap();
-  baseBody["material"] = map['build'];
-  baseBody["erode"] = map['referrer_url'];
-  baseBody["lea"] = map['install_version'];
-  baseBody["wile"] = map['user_agent'];
-  baseBody["freight"] = 'strewn';
-  baseBody["grovel"] = map['referrer_click_timestamp_seconds'];
-  baseBody["doberman"] = map['install_begin_timestamp_seconds'];
-  baseBody["defy"] = map['referrer_click_timestamp_server_seconds'];
-  baseBody["chair"] = map['install_begin_timestamp_server_seconds'];
-  baseBody["espouse"] = map['install_first_seconds'];
-  baseBody["ojibwa"] = map['last_update_seconds'];
-  baseBody["infima"] = 'handsome';
+  Map<String, dynamic> mannitol = {
+    "yipping": map['build'],
+    'mercator' : map['referrer_url'],
+    "vary": map['install_version'],
+    "exercise": map['user_agent'],
+    "juicy": 'molar',
+    "generous": map['referrer_click_timestamp_seconds'],
+    "sorry": map['install_begin_timestamp_seconds'],
+    "derriere": map['referrer_click_timestamp_server_seconds'],
+    "nassau": map['install_begin_timestamp_server_seconds'],
+    "oxen": map['install_first_seconds'],
+    "bindery": map['last_update_seconds'],
+  };
+  baseBody["mannitol"] = mannitol;
   CSRequestHelpers().post(baseBody, 1);
 }
 
@@ -52,13 +54,13 @@ class CSRequestHelpers {
   CSRequestHelpers._internal();
 
   static String cloak_Url =
-      "";
+      "https://fancy.scratchcardearngopro.com/sault/commute";
 
   static String tba_event_Url =
-      "";
+      "https://test-mark.scratchcardearngopro.com/molten/pimp/girt";
 
   // static String tba_event_Url =
-  //     "";
+  //     "https://mark.scratchcardearngopro.com/brant/schooner/highland";
 
   final Map<String, String> normalHeader = {
     'Content-Type': 'application/json',
@@ -69,7 +71,7 @@ class CSRequestHelpers {
   };
 
   Future<dynamic> getCloak() async {
-    var url = Uri.parse("${cloak_Url}?cab=${await FlutterTbaInfo.instance.getBundleId()}&afghan=sarasota&merry=${await FlutterTbaInfo.instance.getAppVersion()}&archaic=${DateTime.now().millisecondsSinceEpoch}");
+    var url = Uri.parse("${cloak_Url}?risen=${await FlutterTbaInfo.instance.getBundleId()}&toluene=soon&species=${await FlutterTbaInfo.instance.getAppVersion()}&qs=${DateTime.now().millisecondsSinceEpoch}");
     "scratch play land config request ${url}".log();
     try {
       var response = await http.get(
@@ -135,9 +137,9 @@ class CSRequestHelpers {
 extension RequestHelpersExtension on CSRequestHelpers {
   Future<String> getConfigQueryString() async {
     var queryBody = {
-      "walter": await FlutterTbaInfo.instance.getBundleId(),
-      "rancid": 'perky',
-      "advise": await FlutterTbaInfo.instance.getAppVersion(),
+      "risen": await FlutterTbaInfo.instance.getBundleId(),
+      "toluene": 'soon',
+      "species": await FlutterTbaInfo.instance.getAppVersion(),
     };
     'queryBody=$queryBody'.log();
     return Uri(queryParameters: queryBody).query;
@@ -146,33 +148,32 @@ extension RequestHelpersExtension on CSRequestHelpers {
   Future<Map<String, dynamic>> baseBody() async {
     Map<String, dynamic> baseBody = {};
 
-    Map<String, dynamic> sheppard = {
-      "walter": await FlutterTbaInfo.instance.getBundleId(),
-      'advise' : await FlutterTbaInfo.instance.getAppVersion(),
-      "sora": await FlutterTbaInfo.instance.getLogId(),
-      "digamma": await FlutterTbaInfo.instance.getDeviceModel(),
+    Map<String, dynamic> apical = {
+      "risen": await FlutterTbaInfo.instance.getBundleId(),
+      "shrank": await FlutterTbaInfo.instance.getLogId(),
+      "palomar": await FlutterTbaInfo.instance.getDeviceModel(),
+      'guffaw' : await FlutterTbaInfo.instance.getOperator(),
     };
-    baseBody['sheppard'] = sheppard;
+    baseBody['apical'] = apical;
 
-    Map<String, dynamic> smutty = {
-      "rancid": 'perky',
-      'barr' : await FlutterTbaInfo.instance.getDistinctId(),
-      'plaguey' : await FlutterTbaInfo.instance.getBrand(),
-      "moliere": await FlutterTbaInfo.instance.getOperator(),
-      'operant' : await FlutterTbaInfo.instance.getAndroidId(),
+    Map<String, dynamic> stuck = {
+      "toluene": 'soon',
+      'species' : await FlutterTbaInfo.instance.getAppVersion(),
+      'qs' : DateTime.now().millisecondsSinceEpoch,
+      "argo": await FlutterTbaInfo.instance.getManufacturer(),
+      'ease' : await FlutterTbaInfo.instance.getBrand(),
+      'gurgle' : await FlutterTbaInfo.instance.getOsVersion(),
+      "codify": await FlutterTbaInfo.instance.getGaid(),
     };
-    baseBody['smutty'] = smutty;
+    baseBody['stuck'] = stuck;
 
-    Map<String, dynamic> chromium = {
-      'basso' : DateTime.now().millisecondsSinceEpoch,
-      'glamour' : await FlutterTbaInfo.instance.getManufacturer(),
-      'pyle' : await FlutterTbaInfo.instance.getOsVersion(),
-      "complain": await FlutterTbaInfo.instance.getNetworkType(),
-      'dyadic' : await FlutterTbaInfo.instance.getSystemLanguage(),
-      "symphony": await FlutterTbaInfo.instance.getGaid(),
-      'prickle' : await FlutterTbaInfo.instance.getOsCountry(),
+    Map<String, dynamic> kimberly = {
+      'tonk' : await FlutterTbaInfo.instance.getDistinctId(),
+      'helmsman' : await FlutterTbaInfo.instance.getSystemLanguage(),
+      'synoptic' : await FlutterTbaInfo.instance.getAndroidId(),
+      "susan": await FlutterTbaInfo.instance.getOsCountry(),
     };
-    baseBody['chromium'] = chromium;
+    baseBody['kimberly'] = kimberly;
     return baseBody;
   }
 

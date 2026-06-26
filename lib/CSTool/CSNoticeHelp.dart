@@ -1,13 +1,14 @@
+import 'package:cashscratchgo/CSDialog/CSDialog.dart';
+import 'package:cashscratchgo/CSTool/cs_ad_manger.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_lifecycle_detector/flutter_lifecycle_detector.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import '../CSBasic/CSTabBar.dart';
+import '../main.dart';
 import 'CSFKManger.dart';
 import 'CSTBAEventTool.dart';
-import 'cs_LocalProvider.dart';
-import 'cs_ad_manger.dart';
-import 'cs_extension_help.dart';
-import '../main.dart';
+import 'CS_extension_help.dart';
+import 'package:cashscratchgo/CSTool/cs_LocalProvider.dart';
 
 
 class CSNoticeHelp {
@@ -25,7 +26,7 @@ class CSNoticeHelp {
   Future<void> initNotice(BuildContext context) async {
 
     const AndroidInitializationSettings initializationSettingsAndroid =
-    AndroidInitializationSettings('ps_logo'); // 不加 .png
+    AndroidInitializationSettings('cs_logo'); // 不加 .png
 
     const InitializationSettings initializationSettings = InitializationSettings(
       android: initializationSettingsAndroid,
@@ -62,7 +63,7 @@ class CSNoticeHelp {
       cs_event_fire('push_status', {});
     }else{
       "nf no permission".log();
-      // context.tipShow(PSPopTipsToolDialog(adStatus: .noticeOpen));
+      context.tipShow(CSNoticeOpenDialog());
     }
     "nf has permission".log();
     _initLifecycleListener();
@@ -207,14 +208,14 @@ class CSNoticeHelp {
   // 前台服务
   Future<void> startSJForegroundService() async {
     //自定义通知ID
-    final int id = 1200;
+    final int id = 1201;
     AndroidNotificationDetails androidNotificationDetails = AndroidNotificationDetails(
         'pigwalletForeground',
         'pigwalletForeground',
         ongoing: true,
         importance: Importance.min,
         priority: Priority.min,
-        styleInformation: ForegroundStyleInformation(value: '${0.dolasType()}${CSLocalProvider.instance.cs_dolas_number.toStringAsFixed(2)}', image:'ps_freground')
+        styleInformation: ForegroundStyleInformation(value: '${0.dolasType()}${CSLocalProvider.instance.cs_dollar_number.toStringAsFixed(2)}', image:'cs_freground')
     );
     await AndroidFlutterLocalNotificationsPlugin().startForegroundService(id, '', '',
         notificationDetails: androidNotificationDetails, payload: 'foreground');
@@ -223,20 +224,20 @@ class CSNoticeHelp {
   // 媒体通知
   Future<void> showSJNotificationMediaStyle1() async {
     //自定义通知ID
-    final int id = 478;
+    final int id = 4780;
     final randomMotivation = StepMotivationManager.getRandomMotivation();
     final String title = randomMotivation.title;
     final String body = randomMotivation.body;
     AndroidNotificationDetails details = AndroidNotificationDetails(
-      '152notice0',
-      'PigWalletSPine0',
+      '168notice0',
+      'cashscatchgo0',
       styleInformation:MediaStyleInformation(
         //支持网络图片链接
-        image:'ps_sm_logo',
+        image:'cs_sm_logo',
       ),
       priority: Priority.high,
       importance: Importance.high,
-      icon: 'ps_sm_logo',
+      icon: 'cs_sm_logo',
       //“groupKey”：防止通知被系统折叠
       groupKey: "$id",
     );
@@ -254,20 +255,20 @@ class CSNoticeHelp {
 
   Future<void> showSJNotificationMediaStyle2() async {
     //自定义通知ID
-    final int id = 2488;
+    final int id = 2588;
     final randomMotivation = StepMotivationManager.getRandomMotivation();
     final String title = randomMotivation.title;
     final String body = randomMotivation.body;
     AndroidNotificationDetails details = AndroidNotificationDetails(
-      '152notice21',
-      'PigWalletSPine21',
+      '168notice21',
+      'cashscatchgo21',
       styleInformation:MediaStyleInformation(
         //支持网络图片链接
-        image:'ps_sm_logo',
+        image:'cs_sm_logo',
       ),
       priority: Priority.high,
       importance: Importance.high,
-      icon: 'ps_sm_logo',
+      icon: 'cs_sm_logo',
       //“groupKey”：防止通知被系统折叠
       groupKey: "$id",
     );
@@ -285,20 +286,20 @@ class CSNoticeHelp {
 
   Future<void> showSJNotificationMediaStyle3() async {
     //自定义通知ID
-    final int id = 2914;
+    final int id = 2964;
     final randomMotivation = StepMotivationManager.getRandomMotivation();
     final String title = randomMotivation.title;
     final String body = randomMotivation.body;
     AndroidNotificationDetails details = AndroidNotificationDetails(
-      '152notice31',
-      'PigWalletSPine31',
+      '168notice31',
+      'cashscatchgo31',
       styleInformation:MediaStyleInformation(
         //支持网络图片链接
-        image:'ps_sm_logo',
+        image:'cs_sm_logo',
       ),
       priority: Priority.high,
       importance: Importance.high,
-      icon: 'ps_sm_logo',
+      icon: 'cs_sm_logo',
       //“groupKey”：防止通知被系统折叠
       groupKey: "$id",
     );
@@ -316,20 +317,20 @@ class CSNoticeHelp {
 
   Future<void> showSJNotificationMediaStyle4() async {
     //自定义通知ID
-    final int id = 1020;
+    final int id = 1720;
     final randomMotivation = StepMotivationManager.getRandomMotivation();
     final String title = randomMotivation.title;
     final String body = randomMotivation.body;
     AndroidNotificationDetails details = AndroidNotificationDetails(
-      '152notice41',
-      'PigWalletSPine41',
+      '168notice41',
+      'cashscatchgo41',
       styleInformation:MediaStyleInformation(
         //支持网络图片链接
-        image:'ps_sm_logo',
+        image:'cs_sm_logo',
       ),
       priority: Priority.high,
       importance: Importance.high,
-      icon: 'ps_sm_logo',
+      icon: 'cs_sm_logo',
       //“groupKey”：防止通知被系统折叠
       groupKey: "$id",
     );
@@ -353,7 +354,7 @@ class CSNoticeHelp {
   //     android: AndroidNotificationDetails(
   //       'scratchjoy Media',
   //       'scratchjoy',
-  //       styleInformation: MediaStyleInformation(image: 'ps_sm_logo'),
+  //       styleInformation: MediaStyleInformation(image: 'cs_sm_logo'),
   //     ),
   //   );
   //
@@ -376,23 +377,23 @@ class CSNoticeHelp {
   // 本地通知
   Future<void> _repeatNotification1() async {
     //自定义通知ID
-    final int id = 5290;
+    final int id = 7290;
     final randomMotivation = StepMotivationManager.getRandomMotivation();
     final String title = randomMotivation.title;
     final String body = randomMotivation.body;
     AndroidNotificationDetails details = AndroidNotificationDetails(
-      '152notice1',
-      'PigWalletSPine1',
+      '168notice1',
+      'cashscatchgo1',
       styleInformation: BeautyStyleInformation(
         title: title,
         body: body,
-        image:'ps_notice_big',
+        image:'cs_notice_big',
         button:'Withdraw',
-        appIcon:'ps_logo',
+        appIcon:'cs_logo',
       ),
       priority: Priority.high,
       importance: Importance.high,
-      icon: 'ps_sm_logo',
+      icon: 'cs_sm_logo',
       //“groupKey”：防止通知被系统折叠
       groupKey: "$id",
     );
@@ -410,23 +411,23 @@ class CSNoticeHelp {
 
   Future<void> _repeatNotification2() async {
     //自定义通知ID
-    final int id = 4562;
+    final int id = 2568;
     final randomMotivation = StepMotivationManager.getRandomMotivation();
     final String title = randomMotivation.title;
     final String body = randomMotivation.body;
     AndroidNotificationDetails details = AndroidNotificationDetails(
-      '152notice2',
-      'PigWalletSPine2',
+      '168notice2',
+      'cashscatchgo2',
       styleInformation: BeautyStyleInformation(
         title: title,
         body: body,
-        image:'ps_notice_big',
+        image:'cs_notice_big',
         button:'Withdraw',
-        appIcon:'ps_logo',
+        appIcon:'cs_logo',
       ),
       priority: Priority.high,
       importance: Importance.high,
-      icon: 'ps_sm_logo',
+      icon: 'cs_sm_logo',
       //“groupKey”：防止通知被系统折叠
       groupKey: "$id",
     );
@@ -444,23 +445,23 @@ class CSNoticeHelp {
 
   Future<void> _repeatNotification3() async {
     //自定义通知ID
-    final int id = 6552;
+    final int id = 2722;
     final randomMotivation = StepMotivationManager.getRandomMotivation();
     final String title = randomMotivation.title;
     final String body = randomMotivation.body;
     AndroidNotificationDetails details = AndroidNotificationDetails(
-      '152notice3',
-      'PigWalletSPine3',
+      '168notice3',
+      'cashscatchgo3',
       styleInformation: BeautyStyleInformation(
         title: title,
         body: body,
-        image:'ps_notice_big',
+        image:'cs_notice_big',
         button:'Withdraw',
-        appIcon:'ps_logo',
+        appIcon:'cs_logo',
       ),
       priority: Priority.high,
       importance: Importance.high,
-      icon: 'ps_sm_logo',
+      icon: 'cs_sm_logo',
       //“groupKey”：防止通知被系统折叠
       groupKey: "$id",
     );
@@ -478,23 +479,23 @@ class CSNoticeHelp {
 
   Future<void> _repeatNotification4() async {
     //自定义通知ID
-    final int id = 9175;
+    final int id = 7195;
     final randomMotivation = StepMotivationManager.getRandomMotivation();
     final String title = randomMotivation.title;
     final String body = randomMotivation.body;
     AndroidNotificationDetails details = AndroidNotificationDetails(
-      '152notice4',
-      'PigWalletSPine4',
+      '168notice4',
+      'cashscatchgo4',
       styleInformation: BeautyStyleInformation(
         title: title,
         body: body,
-        image:'ps_notice_big',
+        image:'cs_notice_big',
         button:'Withdraw',
-        appIcon:'ps_logo',
+        appIcon:'cs_logo',
       ),
       priority: Priority.high,
       importance: Importance.high,
-      icon: 'ps_sm_logo',
+      icon: 'cs_sm_logo',
       //“groupKey”：防止通知被系统折叠
       groupKey: "$id",
     );
@@ -512,40 +513,40 @@ class CSNoticeHelp {
 
   Future<void> _subscribeFcmTopic() async {
     await AndroidFlutterLocalNotificationsPlugin().subscribeToTopic(
-      'c152fcm_piggy',
+      'c168fcm_piggy',
       AndroidNotificationDetails(
-        'c152fcm_piggy',
-        'PigWalletSPine',
+        'c168fcm_piggy',
+        'cashscatchgo',
         styleInformation: BeautyStyleInformation(
           title: '',
           body: '',
           image:'',
           button:'Withdraw',
-          appIcon:'ps_logo',
+          appIcon:'cs_logo',
         ),
         priority: Priority.high,
         importance: Importance.high,
-        icon: 'ps_sm_logo',
+        icon: 'cs_sm_logo',
       ),
     );
   }
 
   Future<void> _subscribeFcmTopic2() async {
     await AndroidFlutterLocalNotificationsPlugin().subscribeToTopic(
-      'c152fcm_piggy_two',
+      'c168fcm_piggy_two',
       AndroidNotificationDetails(
-        'c152fcm_piggy_two',
-        'PigWalletSPine2',
+        'c168fcm_piggy_two',
+        'cashscatchgo2',
         styleInformation: BeautyStyleInformation(
           title: '',
           body: '',
           image:'',
           button:'Claim',
-          appIcon:'ps_logo',
+          appIcon:'cs_logo',
         ),
         priority: Priority.high,
         importance: Importance.high,
-        icon: 'ps_sm_logo',
+        icon: 'cs_sm_logo',
       ),
     );
   }
@@ -563,17 +564,17 @@ class CSNoticeHelp {
       const Duration(seconds: 30),
       'android.intent.action.USER_PRESENT',
       AndroidNotificationDetails(
-        '152PigWalletSPines',
-        'PigWalletSPines',
+        '168cashscatchgos',
+        'cashscatchgos',
         priority: Priority.high,
         importance: Importance.high,
-        icon: 'ps_sm_logo',
+        icon: 'cs_sm_logo',
         styleInformation: BeautyStyleInformation(
           title: randomMotivation2.title,
           body: randomMotivation2.body,
-          image:'ps_notice_big',
+          image:'cs_notice_big',
           button:'Withdraw',
-          appIcon:'ps_logo',
+          appIcon:'cs_logo',
         ),
         //“groupKey”：防止通知被系统折叠
         groupKey: "$ids",
@@ -595,17 +596,17 @@ class CSNoticeHelp {
       const Duration(seconds: 30),
       'android.intent.action.SCREEN_ON',
       AndroidNotificationDetails(
-        '152PigWalletSPinescreen',
-        'PigWalletSPineScreen',
+        '168cashscatchgoscreen',
+        'cashscatchgoScreen',
         priority: Priority.high,
         importance: Importance.high,
-        icon: 'ps_sm_logo',
+        icon: 'cs_sm_logo',
         styleInformation: BeautyStyleInformation(
           title: randomMotivation2.title,
           body: randomMotivation2.body,
-          image:'ps_notice_big',
+          image:'cs_notice_big',
           button:'Withdraw',
-          appIcon:'ps_logo',
+          appIcon:'cs_logo',
         ),
         //“groupKey”：防止通知被系统折叠
         groupKey: "$ids",
@@ -630,16 +631,18 @@ class CSNoticeHelp {
         cs_event_fire('session_back_get', {'"pak_version' : CSLocalProvider.instance.cs_login_status ? 1 : 0});
       } else {
         print('App进入前台');
-        // if (CSLocalProvider.instance.ps_bg_music && !SJJoyAds().someAdIsShowing()){
+        // if (PSLocalProvider.instance.ps_bg_music && !SJJoyAds().someAdIsShowing()){
         //   SJAudioUtils().playBGM();
         // }
         CSFKManger().cs_add_tabsession_custom();
         cs_event_fire('session_front_get', {'"pak_version' : CSLocalProvider.instance.cs_login_status ? 1 : 0});
         // 执行前台逻辑
         cs_session_fire();
-        CSCashAds().cs_showAd(homeKey.currentState!.context, 'nskdh_launch', onCacheResponse: (onCacheResponse){
-        }, adDidClosed: (adDidClosed){
-        });
+        if (!CSCardAds().is_showAd){
+          CSCardAds().cs_showAd(homeKey.currentState!.context, 'nskdh_launch',showDialog: false, onCacheResponse: (onCacheResponse){
+          }, adDidClosed: (adDidClosed){
+          });
+        }
       }
     });
   }
@@ -661,53 +664,25 @@ class StepMotivationManager {
   // 文案数据列表
   static final List<StepMotivation> _motivations = [
     StepMotivation(
-      title: "Piggy Almost Full!",
-      body: 'You’ve saved ${0.dolasType()}4.80—cash out before it spills!',
+      title: "Payout Update",
+      body: 'You’ve moved up in the cash queue. Keep scratching to reach payout.',
     ),
     StepMotivation(
-      title: "Cash-Out Time 🎉",
-      body: "Spin & play—your balance is ready to grab!",
+      title: "Cash Money Verified",
+      body: "Your scratch reward is approved. Finish a task to release cash.",
     ),
     StepMotivation(
-      title: "Your Payout Is Ready! 💰",
-      body: "Piggy bank is full and ready to pop—open the app to collect your cash.",
+      title: "Bonus Ending Soon",
+      body: "Your LuckyCard bonus expires soon. Scratch now to keep your cash.",
     ),
     StepMotivation(
-      title: "Advertiser Just Paid You! 🎁",
-      body: "Tap to feed your piggy & claim today’s payout.",
+      title: "Hurry! Cash Drop",
+      body: "A surprise scratch bonus just landed. Don’t miss this payout chance.",
     ),
     StepMotivation(
-      title: " Balance Near Max 💵",
-      body: "Almost full—withdraw before it’s gone!",
+      title: "Cash Window Open",
+      body: "Limited-time withdrawal chance unlocked. Scratch to secure it.",
     ),
-    // StepMotivation(
-    //   title: "Congrats! You've Earned a lot! 🎉",
-    //   body: "Another \$ 500 cash in your pocket! Keep playing for more!",
-    // ),
-    // StepMotivation(
-    //   title: "Feeling Lucky Today? 🍀",
-    //   body: "Come and try your luck, win a fortune!",
-    // ),
-    // StepMotivation(
-    //   title: "Pending withdraw amount💰",
-    //   body: "\$500 has arrived in your account",
-    // ),
-    // StepMotivation(
-    //   title: "Your Next Cash Reward is Ready! 👉",
-    //   body: "Just a few more games to claim your \$800 cash!",
-    // ),
-    // StepMotivation(
-    //   title: "\$1,000,000 Spectacular",
-    //   body: "🎰 Congrats! Your \$1,000,000 Spectacular ticket is activated!",
-    // ),
-    // StepMotivation(
-    //   title: "💥Fast \$50s – Speed Boost Activated!",
-    //   body: "💸 Your Fast \$50s ticket is ready!",
-    // ),
-    // StepMotivation(
-    //   title: "💰Multiplier Rewards Available!",
-    //   body: "24-hour special: Next multiplier DOUBLED!",
-    // ),
   ];
 
   /// 随机获取一条激励文案

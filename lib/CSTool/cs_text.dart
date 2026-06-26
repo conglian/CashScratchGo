@@ -224,3 +224,75 @@ class _CSBouncyTextState extends State<CSBouncyText>
     );
   }
 }
+
+
+class CSBouncyChild extends StatefulWidget {
+  final  Widget child; // 显示文字
+  final bool enableAnimation; // ✅ 是否启用动画
+
+  const CSBouncyChild({
+    super.key,
+    this.enableAnimation = true, required this.child, // 默认开启动画
+  });
+
+  @override
+  State<CSBouncyChild> createState() => _CSBouncyChildState();
+}
+
+class _CSBouncyChildState extends State<CSBouncyChild>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _controller;
+  late final Animation<double> _scale;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 450),
+    );
+
+    _scale = Tween(
+      begin: 0.85,
+      end: 1.05,
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut));
+
+    if (widget.enableAnimation) {
+      _controller.repeat(reverse: true);
+    }
+  }
+
+  @override
+  void didUpdateWidget(covariant CSBouncyChild oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    // 当外部切换动画状态时，动态启停动画
+    if (oldWidget.enableAnimation != widget.enableAnimation) {
+      if (widget.enableAnimation) {
+        _controller.repeat(reverse: true);
+      } else {
+        _controller.stop();
+        _controller.value = 1.0; // 停止时恢复正常大小
+      }
+    }
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // ✅ 没开动画时，直接返回普通 Text
+    if (!widget.enableAnimation) {
+      return widget.child;
+    }
+
+    return ScaleTransition(
+      scale: _scale,
+      child: widget.child,
+    );
+  }
+}

@@ -8,16 +8,15 @@ part of 'CSFkModel.dart';
 
 CSFkModel _$CSFkModelFromJson(Map<String, dynamic> json) => CSFkModel()
   ..ui = CSUIModel.fromJson(json['ui'] as Map<String, dynamic>)
-  ..behavior = CSbehaviorModel.fromJson(
-    json['behavior'] as Map<String, dynamic>,
-  )
+  ..behavior =
+      CSbehaviorModel.fromJson(json['behavior'] as Map<String, dynamic>)
   ..device = (json['device'] as List<dynamic>).map((e) => e as String).toList();
 
 Map<String, dynamic> _$CSFkModelToJson(CSFkModel instance) => <String, dynamic>{
-  'ui': instance.ui,
-  'behavior': instance.behavior,
-  'device': instance.device,
-};
+      'ui': instance.ui,
+      'behavior': instance.behavior,
+      'device': instance.device,
+    };
 
 CSUIModel _$CSUIModelFromJson(Map<String, dynamic> json) => CSUIModel()
   ..number = (json['number'] as num).toInt()
@@ -25,19 +24,17 @@ CSUIModel _$CSUIModelFromJson(Map<String, dynamic> json) => CSUIModel()
   ..device = (json['device'] as num).toInt();
 
 Map<String, dynamic> _$CSUIModelToJson(CSUIModel instance) => <String, dynamic>{
-  'number': instance.number,
-  'behavior': instance.behavior,
-  'device': instance.device,
-};
+      'number': instance.number,
+      'behavior': instance.behavior,
+      'device': instance.device,
+    };
 
 CSbehaviorModel _$CSbehaviorModelFromJson(Map<String, dynamic> json) =>
     CSbehaviorModel()
       ..ad_short_show = CSad_shortModel.fromJson(
-        json['ad_short_show'] as Map<String, dynamic>,
-      )
+          json['ad_short_show'] as Map<String, dynamic>)
       ..ad_short_close = CSad_shortModel.fromJson(
-        json['ad_short_close'] as Map<String, dynamic>,
-      )
+          json['ad_short_close'] as Map<String, dynamic>)
       ..wrong_deem_ad_less = (json['wrong_deem_ad_less'] as num).toInt()
       ..wrong_deem_ad_more = (json['wrong_deem_ad_more'] as num).toInt()
       ..no_install = (json['no_install'] as num).toInt()
@@ -59,4 +56,7 @@ CSad_shortModel _$CSad_shortModelFromJson(Map<String, dynamic> json) =>
       ..value = (json['value'] as num).toInt();
 
 Map<String, dynamic> _$CSad_shortModelToJson(CSad_shortModel instance) =>
-    <String, dynamic>{'duration': instance.duration, 'value': instance.value};
+    <String, dynamic>{
+      'duration': instance.duration,
+      'value': instance.value,
+    };

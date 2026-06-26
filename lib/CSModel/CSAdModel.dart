@@ -4,11 +4,11 @@ part 'CSAdModel.g.dart';
 
 @JsonSerializable()
 class CSAdModel {
-  late int jcyduijc = 0;
-  late int ewmgvdvf = 0;
-  late bool nskdh_switch = false;
-  late List<CSAdModellist> nskdh_int = [];
-  late List<CSAdModellist> nskdh_rv = [];
+  late int bxkghizv = 0;
+  late int nwboczqr = 0;
+  late bool nwkls_switch = false;
+  late List<CSAdModellist> nwkls_int = [];
+  late List<CSAdModellist> nwkls_rv = [];
   CSAdModel();
 
   // 工厂构造函数，用于反序列化
@@ -21,13 +21,13 @@ class CSAdModel {
 @JsonSerializable()
 class CSAdModellist {
   // id
-  late String twbvgilf = "";
+  late String prnospnz = "";
   // type
-  late String gjqlbdeg = "";
+  late String bamussgh = "";
   // ad_type
-  late String ntuoinuo = "";
+  late String cspsfdfm = "";
   //
-  late int mtnbnrsg = 0;
+  late int gbhayrnf = 0;
   //
   late double? ecpm = 0;
 

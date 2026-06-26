@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'package:cashScarchGoFK/cashScarchGoFK.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_tba_info/flutter_tba_info.dart';
 import 'package:http/http.dart' as http;
@@ -109,13 +110,13 @@ class CSFKManger {
 
   // 数字联盟
   cs_checkNum()async{
-    // var numberUnitID = await PigwalletspineFK.instance.cs_getNumberUnitID();
+    var numberUnitID = await CashScarchGoFK.instance.cs_getNumberUnitID();
     var url = Uri.parse('https://sg-ddi.shuzilm.cn/q');
     try {
       var response = await http.post(
         url,
         headers: eventHeader,
-        // body: jsonEncode({"protocol":2,"pkg":await FlutterTbaInfo.instance.getBundleId(),"did":numberUnitID}),
+        body: jsonEncode({"protocol":2,"pkg":await FlutterTbaInfo.instance.getBundleId(),"did":numberUnitID}),
       );
       print("upload event [Number] success ${response.body}");
 
@@ -125,16 +126,16 @@ class CSFKManger {
         var json = jsonDecode(response.body);
         if(json["err"] == 0 && json["device_type"] != 0 && fkModel.ui.number == 1){
           cs_event_fire('risk_chance', {'risk_from' : 'number'});
-          await CSLocalProvider.instance.updateBool(CSLocalProvider.instance.cs_fk_number_statusName,true);
+          CSLocalProvider.instance.updateBool(CSLocalProvider.instance.cs_fk_number_statusName,true);
         }else{
-          await CSLocalProvider.instance.updateBool(CSLocalProvider.instance.cs_fk_number_statusName,false);
+          CSLocalProvider.instance.updateBool(CSLocalProvider.instance.cs_fk_number_statusName,false);
         }
       }catch(e){
-        await CSLocalProvider.instance.updateBool(CSLocalProvider.instance.cs_fk_number_statusName,false);
+        CSLocalProvider.instance.updateBool(CSLocalProvider.instance.cs_fk_number_statusName,false);
       }
 
     } catch (e) {
-      await CSLocalProvider.instance.updateBool(CSLocalProvider.instance.cs_fk_number_statusName,false);
+      CSLocalProvider.instance.updateBool(CSLocalProvider.instance.cs_fk_number_statusName,false);
       "upload event [Number] faild".log();
     }
 
@@ -147,31 +148,31 @@ class CSFKManger {
   // 设备 Ip
   cs_checkIP()async{
 
-    var url = Uri.parse('https://ip-prod.piggywalletspinfunpro.com/api/clion');
+    var url = Uri.parse('https://ip-prod.scratchcardearngopro.com/api/cpanda');
     try {
       var response = await http.post(
         url,
         headers: eventHeader,
         body: jsonEncode({
-          "aduck" : await FlutterTbaInfo.instance.getAndroidId(),
+          "awolf" : await FlutterTbaInfo.instance.getAndroidId(),
         }),
       );
       print("upload event [IP] success ${response.body}");
       //{"code":200,"msg":"Success","data":{"blion":false}}
-      var result = BoomUniqueStringUtil.decrypt(response.body, 45);
+      var result = BoomUniqueStringUtil.decrypt(response.body, 55);
       print("upload event [IP] success ${result}");
       try{
-        var bfrog = jsonDecode(result)["data"]["bfrog"];
-        if(bfrog && fkModel.device.contains('ip') && fkModel.ui.device == 1){
+        var bsnake = jsonDecode(result)["data"]["bsnake"];
+        if(bsnake && fkModel.device.contains('ip') && fkModel.ui.device == 1){
           cs_event_fire('risk_chance', {'risk_from' : 'ip'});
-          await CSLocalProvider.instance.updateBool(CSLocalProvider.instance.cs_fk_ip_statusName,true);
+          CSLocalProvider.instance.updateBool(CSLocalProvider.instance.cs_fk_ip_statusName,true);
         }
       }catch(e){
-        await CSLocalProvider.instance.updateBool(CSLocalProvider.instance.cs_fk_ip_statusName,false);
+        CSLocalProvider.instance.updateBool(CSLocalProvider.instance.cs_fk_ip_statusName,false);
       }
 
     } catch (e) {
-      await CSLocalProvider.instance.updateBool(CSLocalProvider.instance.cs_fk_ip_statusName,false);
+      CSLocalProvider.instance.updateBool(CSLocalProvider.instance.cs_fk_ip_statusName,false);
       "upload event [IP] faild".log();
     }
   }
@@ -197,80 +198,80 @@ class CSFKManger {
   }
 
   Future<bool> cs_checkRoot() async {
-    // var result = await PigwalletspineFK.instance.cs_root();
-    // if(fkModel.ui.device == 0){
-    //   return false;
-    // }
-    // if(result && fkModel.device.contains('root')){
-    //   cs_event_fire('risk_chance', {'risk_from' : 'root'});
-    //   CSLocalProvider.instance.updateBool(CSLocalProvider.instance.cs_fk_decvice_statusName,true);
-    //   return true;
-    // }
+    var result = await CashScarchGoFK.instance.cs_root();
+    if(fkModel.ui.device == 0){
+      return false;
+    }
+    if(result && fkModel.device.contains('root')){
+      cs_event_fire('risk_chance', {'risk_from' : 'root'});
+      CSLocalProvider.instance.updateBool(CSLocalProvider.instance.cs_fk_decvice_statusName,true);
+      return true;
+    }
     return false;
   }
 
   Future<bool> cs_checkVpn() async {
-    // var result = await PigwalletspineFK.instance.cs_vpn();
-    // if(fkModel.ui.device == 0){
-    //   return false;
-    // }
-    // if(result && fkModel.device.contains('vpn')){
-    //   cs_event_fire('risk_chance', {'risk_from' : 'vpn'});
-    //   CSLocalProvider.instance.updateBool(CSLocalProvider.instance.cs_fk_decvice_statusName,true);
-    //   return true;
-    // }
+    var result = await CashScarchGoFK.instance.cs_vpn();
+    if(fkModel.ui.device == 0){
+      return false;
+    }
+    if(result && fkModel.device.contains('vpn')){
+      cs_event_fire('risk_chance', {'risk_from' : 'vpn'});
+      CSLocalProvider.instance.updateBool(CSLocalProvider.instance.cs_fk_decvice_statusName,true);
+      return true;
+    }
     return false;
   }
 
   Future<bool> cs_checkSim() async {
-    // var result = await PigwalletspineFK.instance.cs_sim();
-    // if(fkModel.ui.device == 0){
-    //   return false;
-    // }
-    // if(!result && fkModel.device.contains('sim')){
-    //   cs_event_fire('risk_chance', {'risk_from' : 'sim'});
-    //   CSLocalProvider.instance.updateBool(CSLocalProvider.instance.cs_fk_decvice_statusName,true);
-    //   return true;
-    // }
+    var result = await CashScarchGoFK.instance.cs_sim();
+    if(fkModel.ui.device == 0){
+      return false;
+    }
+    if(!result && fkModel.device.contains('sim')){
+      cs_event_fire('risk_chance', {'risk_from' : 'sim'});
+      CSLocalProvider.instance.updateBool(CSLocalProvider.instance.cs_fk_decvice_statusName,true);
+      return true;
+    }
     return false;
   }
 
   Future<bool> cs_checkSimulator() async {
-    // var result = await PigwalletspineFK.instance.cs_simulator();
-    // if(fkModel.ui.device == 0){
-    //   return false;
-    // }
-    // if(result && fkModel.device.contains('simulator')){
-    //   cs_event_fire('risk_chance', {'risk_from' : 'simulator'});
-    //   CSLocalProvider.instance.updateBool(CSLocalProvider.instance.cs_fk_decvice_statusName,true);
-    //   return true;
-    // }
+    var result = await CashScarchGoFK.instance.cs_simulator();
+    if(fkModel.ui.device == 0){
+      return false;
+    }
+    if(result && fkModel.device.contains('simulator')){
+      cs_event_fire('risk_chance', {'risk_from' : 'simulator'});
+      CSLocalProvider.instance.updateBool(CSLocalProvider.instance.cs_fk_decvice_statusName,true);
+      return true;
+    }
     return false;
   }
 
   Future<bool> cs_checkDeveloper() async {
-    // var result = await PigwalletspineFK.instance.cs_developer();
-    // if(fkModel.ui.device == 0){
-    //   return false;
-    // }
-    // if(result && fkModel.device.contains('developer')){
-    //   cs_event_fire('risk_chance', {'risk_from' : 'developer'});
-    //   CSLocalProvider.instance.updateBool(CSLocalProvider.instance.cs_fk_decvice_statusName,true);
-    //   return true;
-    // }
+    var result = await CashScarchGoFK.instance.cs_developer();
+    if(fkModel.ui.device == 0){
+      return false;
+    }
+    if(result && fkModel.device.contains('developer')){
+      cs_event_fire('risk_chance', {'risk_from' : 'developer'});
+      CSLocalProvider.instance.updateBool(CSLocalProvider.instance.cs_fk_decvice_statusName,true);
+      return true;
+    }
     return false;
   }
 
   Future<bool> cs_checkStore() async {
-    // var result = await PigwalletspineFK.instance.cs_store();
-    // if(fkModel.ui.device == 0){
-    //   return false;
-    // }
-    // if(!result && fkModel.device.contains('googleplay')){
-    //   cs_event_fire('risk_chance', {'risk_from' : 'googleplay'});
-    //   CSLocalProvider.instance.updateBool(CSLocalProvider.instance.cs_fk_decvice_statusName,true);
-    //   return true;
-    // }
+    var result = await CashScarchGoFK.instance.cs_store();
+    if(fkModel.ui.device == 0){
+      return false;
+    }
+    if(!result && fkModel.device.contains('googleplay')){
+      cs_event_fire('risk_chance', {'risk_from' : 'googleplay'});
+      CSLocalProvider.instance.updateBool(CSLocalProvider.instance.cs_fk_decvice_statusName,true);
+      return true;
+    }
     return false;
   }
 }
