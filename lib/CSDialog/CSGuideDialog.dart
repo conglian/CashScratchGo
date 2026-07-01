@@ -11,6 +11,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lottie/lottie.dart';
 import '../CSBasic/CSTabBar.dart';
 import '../CSMainVC/CSScratchCardVC.dart';
+import '../CSTool/CSAudioUtils.dart';
 import '../CSTool/CSLocalImageScratchCard.dart';
 import '../CSTool/CSTBAEventTool.dart';
 import '../CSTool/cs_GradientNumber.dart';
@@ -37,7 +38,7 @@ class CSGuideNew1DialogState extends State<CSGuideNew1Dialog>
   void initState() {
     super.initState();
 
-    cs_event_fire('new_guide_one', {});
+    cs_event_fire('card_guide', {});
 
     /// 放大缩小动画
     _controller = AnimationController(
@@ -78,20 +79,25 @@ class CSGuideNew1DialogState extends State<CSGuideNew1Dialog>
       body: ParticleButton(
         onTap: (){
           Navigator.pop(context, 0);
+          cs_event_fire('card_guide_c', {});
           CSGuideManager.nextStep(context);
         },
         child: Stack(
           children: [
             Positioned(
               left: 25.w,
-              top: 102.h,
+              top: 115.h,
               child: CSImg(
                 name: 'cs_scratch_list_0',
                 width: 160.w,
                 height: 132.h,
               ),
             ),
-
+            Positioned(
+              left: 99.w,
+              top: 206.h,
+              child: CSGradientStrokeText(text: '\$${CSNumberHelpers().gameModel!.card_fruit.winup_number}', gradientColors: ['#FFC800'.color(),'#E20000'.color(), '#FFC400'.color()], width: 50, height: 28, fontSize: 20, strokeWidth: 1, strokeColor: '#FFFFFF'.color()),
+            ),
             /// 手指动画
             Positioned(
               left: 138.w,
@@ -147,7 +153,7 @@ class CSGuideNew1DialogState extends State<CSGuideNew1Dialog>
                           'Advertiser-Sponsored Scratch Rewards\n Share Up To ',
                         ),
                         TextSpan(
-                          text: '\$50 ',
+                          text: '\$${CSNumberHelpers().gameModel!.card_fruit.winup_number} ',
                           style: TextStyle(
                             color: '#F10000'.color(),
                           ),
@@ -194,11 +200,13 @@ class CSGuideNew2DialogState extends State<CSGuideNew2Dialog>
 
   List<int> award_index = [0, 1,2,3,3,3,2,1,2];
 
+  bool show_an = true;
+
   @override
   void initState() {
     super.initState();
 
-    cs_event_fire('new_guide_two', {});
+    cs_event_fire('card_detail_guide', {});
 
     /// 放大缩小动画
     _controller = AnimationController(
@@ -218,6 +226,12 @@ class CSGuideNew2DialogState extends State<CSGuideNew2Dialog>
 
     /// 无限循环
     _controller.repeat(reverse: true);
+
+    Future.delayed(Duration(milliseconds: 1800),(){
+      setState(() {
+        show_an = false;
+      });
+    });
   }
 
   @override
@@ -333,7 +347,8 @@ class CSGuideNew2DialogState extends State<CSGuideNew2Dialog>
                         ],
                       ),
                     ),onScratchEnd: (){
-                         Future.delayed(Duration(milliseconds: 2000),() async {
+                      cs_event_fire('card_detail_guide_c', {});
+                      Future.delayed(Duration(milliseconds: 2000),() async {
                            Navigator.pop(context);
                            CSGuideManager.nextStep(homeKey.currentState!.context, award: 0.to2Double(CSNumberHelpers().gameModel!.new_prize));
                          });
@@ -342,7 +357,21 @@ class CSGuideNew2DialogState extends State<CSGuideNew2Dialog>
 
                 ],
               ),
-            ))
+            )),
+      Positioned(top: 338.h,child: Visibility(
+                visible: show_an,
+                child: SizedBox(
+                  width: 0.width(context),
+                  height: 252.h,
+                  child: Lottie.asset(
+                    width: 180.w,
+                    height: 180.w,
+                    fit: BoxFit.fill,
+                    "cs_gua_guide.zip".files(),
+                    repeat: true,
+                  ),
+                ),
+              )),
           ],
         ),
     );
@@ -350,11 +379,12 @@ class CSGuideNew2DialogState extends State<CSGuideNew2Dialog>
 }
 
 class CSBigwinDialog extends StatefulWidget {
+  final int type;
   final bool isGuide;
   final double award;
   const CSBigwinDialog({
     super.key,
-    required this.award, required this.isGuide,
+    required this.award, required this.isGuide, required this.type,
   });
 
   @override
@@ -375,8 +405,14 @@ class CSBigwinDialogState extends State<CSBigwinDialog>
   void initState() {
     super.initState();
 
-    cs_event_fire('new_guide_three', {});
-
+    if (widget.isGuide){
+      cs_event_fire('card_coin_guide_pop', {});
+    } else {
+      cs_event_fire('bigwin_pop', {'source_from' : getTypeName(), 'card_from' : 'no'});
+    }
+    if (widget.type == 6){
+      cs_event_fire('wheel_reward_pop', {});
+    }
     /// 光圈旋转动画
     _rotateController = AnimationController(
       vsync: this,
@@ -410,6 +446,32 @@ class CSBigwinDialogState extends State<CSBigwinDialog>
     );
 
     _breathController.repeat(reverse: true);
+
+    if (CSLocalProvider.instance.cs_sound_music){
+      CSAudioUtils().playBigwinAudio();
+    }
+
+    Future.delayed(Duration(seconds: 4),(){
+      CSAudioUtils().stopAllTempAudio();
+    });
+  }
+  // source_from:fruit、number、tigter、77、emoji、rich8
+  String getTypeName(){
+    if (widget.type == 0){
+      return 'fruit';
+    } else if (widget.type == 1){
+      return 'number';
+    } else if (widget.type == 2){
+      return 'tigter';
+    } else if (widget.type == 3){
+      return 'card77';
+    } else if (widget.type == 4){
+      return 'emoji';
+    } else if (widget.type == 5){
+      return 'rich8';
+    } else {
+      return 'wheel';
+    }
   }
 
   @override
@@ -522,8 +584,19 @@ class CSBigwinDialogState extends State<CSBigwinDialog>
               ),
               ParticleButton(
                 onTap: () {
+
+                  if (widget.type == 6){
+                    cs_event_fire('wheel_reward_pop_c', {});
+                  } else {
+
+                    if (widget.isGuide){
+                      cs_event_fire('card_coin_guide_pop_c', {});
+                    } else {
+                      cs_event_fire('bigwin_pop_c', {'source_from' : getTypeName(), 'card_from' : 'no'});
+                    }
+                  }
                   if (widget.isGuide){
-                    CSCardAds().cs_showAd(context, '_rv', onCacheResponse: (onCacheResponse) async {
+                    CSCardAds().cs_showAd(context, widget.type == 6 ? "rakwt_wheel_rv" : 'rakwt_card_rv', onCacheResponse: (onCacheResponse) async {
                       Navigator.pop(context, 1);
                       await CSLocalProvider.instance.updatedouble(CSLocalProvider.instance.cs_dolas_numberName, CSLocalProvider.instance.cs_dollar_number + widget.award);
                       CSGuideManager.nextStep(context);
@@ -533,7 +606,7 @@ class CSBigwinDialogState extends State<CSBigwinDialog>
                       CSGuideManager.nextStep(context);
                     });
                   } else {
-                    CSCardAds().cs_showAd(context, 'rv', onCacheResponse: (onCacheResponse){
+                    CSCardAds().cs_showAd(context, widget.type == 6 ? "rakwt_wheel_rv" : 'rakwt_card_rv', onCacheResponse: (onCacheResponse){
                       Navigator.pop(context, 1);
                     }, adDidClosed: (adDidClosed) async {
                       Navigator.pop(context, 1);
@@ -563,13 +636,22 @@ class CSBigwinDialogState extends State<CSBigwinDialog>
               SizedBox(height: 10.h),
               ParticleButton(
                 onTap: () async {
+                  if (widget.type == 6){
+                    cs_event_fire('wheel_reward_pop_close', {});
+                  } else {
+                    if (widget.isGuide){
+                      cs_event_fire('card_coin_guide_pop_c', {});
+                    } else {
+                      cs_event_fire('bigwin_pop_close', {'source_from' : getTypeName(), 'card_from' : 'no'});
+                    }
+                  }
                   if (widget.isGuide){
                     Navigator.pop(context, 0);
                     await CSLocalProvider.instance.updatedouble(CSLocalProvider.instance.cs_dolas_numberName, widget.award + CSLocalProvider.instance.cs_dollar_number);
                     CSGuideManager.nextStep(context);
                   } else {
                     if (CSNumberHelpers().checkProbability()){
-                      CSCardAds().cs_showAd(context, '_int', onCacheResponse: (onCacheResponse){
+                      CSCardAds().cs_showAd(context, widget.type == 6 ? "rakwt_wheel_int" : 'rakwt_card_int', onCacheResponse: (onCacheResponse){
                         Navigator.pop(context, 0);
                       }, adDidClosed: (adDidClosed) async {
                         Navigator.pop(context, 0);
@@ -624,7 +706,7 @@ class CSGuideNew4DialogState extends State<CSGuideNew4Dialog>
   void initState() {
     super.initState();
 
-    cs_event_fire('new_guide_four', {});
+    cs_event_fire('first_', {});
 
     /// 平移动画
     _controller = AnimationController(
@@ -751,7 +833,7 @@ class CSGuideNew5DialogState extends State<CSGuideNew5Dialog>
   void initState() {
     super.initState();
 
-    cs_event_fire('new_guide_one', {});
+    cs_event_fire('cash_guide', {});
 
     /// 放大缩小动画
     _controller = AnimationController(
@@ -786,6 +868,14 @@ class CSGuideNew5DialogState extends State<CSGuideNew5Dialog>
       body: ParticleButton(
         onTap: (){
           Navigator.pop(context, 0);
+          if (Navigator.canPop(context)){
+            Navigator.pop(context, 0);
+          }
+          if (Navigator.canPop(context)){
+            Navigator.pop(context, 0);
+          }
+          CashTabController.switchTo(2);
+          cs_event_fire('cash_page_guide_c', {});
           CSGuideManager.nextStep(context);
         },
         child: Stack(
@@ -834,10 +924,16 @@ class CSGuideNew5DialogState extends State<CSGuideNew5Dialog>
 
             Positioned(right: 16.w,bottom: 26.h,child: ParticleButton(
               onTap: (){
-                  Navigator.pop(context);
-                  Navigator.pop(context);
-                  CashTabController.switchTo(2);
-                  CSGuideManager.nextStep(context);
+                cs_event_fire('cash_guide_c', {});
+                Navigator.pop(context);
+                if (Navigator.canPop(context)){
+                  Navigator.pop(context, 0);
+                }
+                if (Navigator.canPop(context)){
+                  Navigator.pop(context, 0);
+                }
+                CashTabController.switchTo(2);
+                CSGuideManager.nextStep(context);
                 },
               child: Container(
                 width: 52,
@@ -875,11 +971,12 @@ class CSGuideNew5DialogState extends State<CSGuideNew5Dialog>
 }
 
 class CSCashWinDialog extends StatefulWidget {
+  final int type;
   final bool isGuide;
   final double award;
   const CSCashWinDialog({
     super.key,
-    required this.award, required this.isGuide,
+    required this.award, required this.isGuide, required this.type,
   });
 
   @override
@@ -900,7 +997,7 @@ class CSCashWinDialogState extends State<CSCashWinDialog>
   void initState() {
     super.initState();
 
-    cs_event_fire('new_guide_three', {});
+    cs_event_fire('cashwin_pop', {'source_from' : getTypeName(), 'card_from' : 'no'});
 
     /// 光圈旋转动画
     _rotateController = AnimationController(
@@ -935,6 +1032,32 @@ class CSCashWinDialogState extends State<CSCashWinDialog>
     );
 
     _breathController.repeat(reverse: true);
+
+    if (CSLocalProvider.instance.cs_sound_music){
+      CSAudioUtils().playCashAudio();
+    }
+
+    Future.delayed(Duration(seconds: 2),(){
+      CSAudioUtils().stopAllTempAudio();
+    });
+  }
+
+  String getTypeName(){
+    if (widget.type == 0){
+      return 'fruit';
+    } else if (widget.type == 1){
+      return 'number';
+    } else if (widget.type == 2){
+      return 'tigter';
+    } else if (widget.type == 3){
+      return 'card77';
+    } else if (widget.type == 4){
+      return 'emoji';
+    } else if (widget.type == 5){
+      return 'rich8';
+    } else {
+      return 'wheel';
+    }
   }
 
   @override
@@ -1047,9 +1170,9 @@ class CSCashWinDialogState extends State<CSCashWinDialog>
               // ),
               ParticleButton(
                 onTap: () {
+                  cs_event_fire('cashwin_pop_c', {'source_from' : getTypeName(), 'card_from' : 'no'});
                   Navigator.pop(context, 1);
-                  'CSLocalProvider.instance.cs_dolas_number=${CSLocalProvider.instance.cs_dollar_number}'.log();
-                  CSCardAds().cs_showAd(context, '_rv', onCacheResponse: (onCacheResponse){}, adDidClosed: (adDidClosed) async {
+                  CSCardAds().cs_showAd(context, 'rakwt_card_rv', onCacheResponse: (onCacheResponse){}, adDidClosed: (adDidClosed) async {
                    await CSLocalProvider.instance.updatedouble(CSLocalProvider.instance.cs_dolas_numberName, (widget.award * 2) + CSLocalProvider.instance.cs_dollar_number);
                   });
                 },
@@ -1072,32 +1195,33 @@ class CSCashWinDialogState extends State<CSCashWinDialog>
                   ),
                 ),
               ),
-              SizedBox(height: 10.h),
-              ParticleButton(
-                onTap: () {
-                  Navigator.pop(context, 0);
-                  if (CSNumberHelpers().checkProbability()){
-                    CSCardAds().cs_showAd(context, '_int', onCacheResponse: (onCacheResponse){}, adDidClosed: (adDidClosed){
-                      CSLocalProvider.instance.updatedouble(CSLocalProvider.instance.cs_dolas_numberName, widget.award + CSLocalProvider.instance.cs_dollar_number);
-                    });
-                  } else {
-                    CSLocalProvider.instance.updatedouble(CSLocalProvider.instance.cs_dolas_numberName, widget.award + CSLocalProvider.instance.cs_dollar_number);
-                  }
-                },
-                child: SizedBox(
-                  width: 252.w,
-                  height: 52.h,
-                  child: Center(
-                    child: CSUnderlineTextButton(
-                      text:
-                      '\$${(widget.award).toStringAsFixed(2)}',
-                      textColor: '#FFFFFF'.color(),
-                      underlineColor: '#FFFFFF'.color(),
-                      fontSize: 16,
-                    ),
-                  ),
-                ),
-              ),
+              // SizedBox(height: 10.h),
+              // ParticleButton(
+              //   onTap: () {
+              //     cs_event_fire('cashwin_pop_close', {'source_from' : getTypeName(), 'card_from' : 'no'});
+              //     Navigator.pop(context, 0);
+              //     if (CSNumberHelpers().checkProbability()){
+              //       CSCardAds().cs_showAd(context, 'rakwt_card_int', onCacheResponse: (onCacheResponse){}, adDidClosed: (adDidClosed){
+              //         CSLocalProvider.instance.updatedouble(CSLocalProvider.instance.cs_dolas_numberName, widget.award + CSLocalProvider.instance.cs_dollar_number);
+              //       });
+              //     } else {
+              //       CSLocalProvider.instance.updatedouble(CSLocalProvider.instance.cs_dolas_numberName, widget.award + CSLocalProvider.instance.cs_dollar_number);
+              //     }
+              //   },
+              //   child: SizedBox(
+              //     width: 252.w,
+              //     height: 52.h,
+              //     child: Center(
+              //       child: CSUnderlineTextButton(
+              //         text:
+              //         '\$${(widget.award).toStringAsFixed(2)}',
+              //         textColor: '#FFFFFF'.color(),
+              //         underlineColor: '#FFFFFF'.color(),
+              //         fontSize: 16,
+              //       ),
+              //     ),
+              //   ),
+              // ),
             ],
           )
         ],
@@ -1158,7 +1282,10 @@ class CSGuideNew6DialogState extends State<CSGuideNew6Dialog>
       body: ParticleButton(
         onTap: (){
           Navigator.pop(context, 0);
-          Navigator.pop(context, 0);
+          if (Navigator.canPop(context)){
+            Navigator.pop(context, 0);
+          }
+          cs_event_fire('wheel_c', {'source_from' : 'guide'});
           CashTabController.switchTo(1);
         },
         child: Stack(
@@ -1222,7 +1349,7 @@ class CSGuideNew7DialogState extends State<CSGuideNew7Dialog>
   void initState() {
     super.initState();
 
-    cs_event_fire('new_guide_one', {});
+    cs_event_fire('cash_page_guide', {});
   }
 
   @override
@@ -1237,6 +1364,7 @@ class CSGuideNew7DialogState extends State<CSGuideNew7Dialog>
       body: ParticleButton(
         onTap: (){
           Navigator.pop(context, 1);
+          cs_event_fire('cash_page_guide_c', {});
           CSGuideManager.nextStep(context);
         },
         child: Stack(
@@ -1318,7 +1446,7 @@ class CSGuideNew8DialogState extends State<CSGuideNew8Dialog>
   void initState() {
     super.initState();
 
-    cs_event_fire('new_guide_one', {});
+    cs_event_fire('cash_rule_pop', {});
   }
 
   @override
@@ -1347,6 +1475,7 @@ class CSGuideNew8DialogState extends State<CSGuideNew8Dialog>
                       image: CSDImg('cs_close_btn')
                   ),
                 ), onTap: (){
+                  cs_event_fire('cash_rule_pop_c', {});
                   Navigator.pop(context, 1);
                   CSGuideManager.nextStep(context);
 
@@ -1443,7 +1572,7 @@ class CSGuideNew9DialogState extends State<CSGuideNew9Dialog> {
   @override
   void initState() {
     super.initState();
-    cs_event_fire('new_guide_one', {});
+    cs_event_fire('cash_rule_pop', {});
   }
 
   @override
@@ -1466,6 +1595,12 @@ class CSGuideNew9DialogState extends State<CSGuideNew9Dialog> {
     });
   }
 
+  List<String> ppStr = ['Paypal', 'Amazon', 'PayBank'];
+
+  List<String> numStr = ['1000', '1200', '1500'];
+
+  List<String> adsStr = ['Anna · California · USA', 'Michael · Texas · USA', 'Emma · New York · USA'];
+
   Widget _buildPage(int index) {
     return Stack(
       children: [
@@ -1484,7 +1619,7 @@ class CSGuideNew9DialogState extends State<CSGuideNew9Dialog> {
                   left: 8,
                   top: 8,
                   child: CSImg(
-                    name: 'cs_jie_1_4',
+                    name: 'cs_cash_home_$index',
                     width: 28,
                     height: 28,
                   ),
@@ -1513,7 +1648,7 @@ class CSGuideNew9DialogState extends State<CSGuideNew9Dialog> {
                         SizedBox(height: 16),
                         CSGradientStrokeText(
                           text:
-                          '\$${CSNumberHelpers().gameModel!.card_range.first}',
+                          '\$${numStr[index]}',
                           gradientColors: [
                             '#FFFFFF'.color(),
                             '#FFF189'.color()
@@ -1524,21 +1659,21 @@ class CSGuideNew9DialogState extends State<CSGuideNew9Dialog> {
                         ),
                         SizedBox(height: 8),
                         CSText(
-                          text: 'Received Via Paypal',
+                          text: 'Received Via ${ppStr[index]}',
                           size: 16,
                           color: '#000000'.color(),
                           weight: FontWeight.w700,
                         ),
                         SizedBox(height: 28),
                         CSText(
-                          text: 'Anna · California · USA',
+                          text: adsStr[index],
                           size: 12,
                           color: '#4A4A4A'.color(),
                           weight: FontWeight.w500,
                         ),
                         SizedBox(height: 4),
                         CSText(
-                          text: '2 Hours Ago',
+                          text: '${3 + index} Hours Ago',
                           size: 11,
                           color: '#888888'.color(),
                           weight: FontWeight.w500,
@@ -1594,6 +1729,7 @@ class CSGuideNew9DialogState extends State<CSGuideNew9Dialog> {
             top: 40.h,
             child: GestureDetector(
               onTap: () {
+                cs_event_fire('cash_rule_pop_close', {});
                 Navigator.pop(context, 1);
                 CSGuideManager.nextStep(context);
               },
@@ -1634,7 +1770,7 @@ class CSGuideNew9DialogState extends State<CSGuideNew9Dialog> {
                           text: 'You Can Withdraw Once Your Balance Reach ',
                         ),
                         TextSpan(
-                          text: '\$1000 ',
+                          text: '\$${CSNumberHelpers().gameModel!.card_range.first} ',
                           style: TextStyle(
                             color: '#FFD91D'.color(),
                           ),
@@ -1724,8 +1860,59 @@ class CSGuideNew9DialogState extends State<CSGuideNew9Dialog> {
             bottom: 92.h,
             child: GestureDetector(
               onTap: () {
+                cs_event_fire('cash_rule_pop_c', {});
                 Navigator.pop(context, 1);
                 CSGuideManager.nextStep(context);
+                // 外部跳转挂卡详情页
+                if (CSLocalProvider.instance.cs_scrach_end_number_0 < 10){
+                  CashTabController.switchTo(0);
+                  Navigator.push(
+                    homeKey.currentState!.context,
+                    MaterialPageRoute(
+                      builder: (_) => CSScratchCardVC(type: 0),
+                    ),
+                  );
+                } else if (CSLocalProvider.instance.cs_scrach_end_number_1 < 10){
+                  CashTabController.switchTo(0);
+                  Navigator.push(
+                    homeKey.currentState!.context,
+                    MaterialPageRoute(
+                      builder: (_) => CSScratchCardVC(type: 1),
+                    ),
+                  );
+                } else if (CSLocalProvider.instance.cs_scrach_end_number_2 < 10){
+                  CashTabController.switchTo(0);
+                  Navigator.push(
+                    homeKey.currentState!.context,
+                    MaterialPageRoute(
+                      builder: (_) => CSScratchCardVC(type: 2),
+                    ),
+                  );
+                } else if (CSLocalProvider.instance.cs_scrach_end_number_3 < 10){
+                  CashTabController.switchTo(0);
+                  Navigator.push(
+                    homeKey.currentState!.context,
+                    MaterialPageRoute(
+                      builder: (_) => CSScratchCardVC(type: 3),
+                    ),
+                  );
+                } else if (CSLocalProvider.instance.cs_scrach_end_number_4 < 10){
+                  CashTabController.switchTo(0);
+                  Navigator.push(
+                    homeKey.currentState!.context,
+                    MaterialPageRoute(
+                      builder: (_) => CSScratchCardVC(type: 4),
+                    ),
+                  );
+                } else if (CSLocalProvider.instance.cs_scrach_end_number_5 < 10){
+                  CashTabController.switchTo(0);
+                  Navigator.push(
+                    homeKey.currentState!.context,
+                    MaterialPageRoute(
+                      builder: (_) => CSScratchCardVC(type: 5),
+                    ),
+                  );
+                }
               },
               child: Container(
                 width: 252,

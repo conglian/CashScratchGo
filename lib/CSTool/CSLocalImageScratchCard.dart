@@ -81,9 +81,10 @@ class _CSLocalImageScratchCardState extends State<CSLocalImageScratchCard> with 
       } else if (value == 1) {
         if (widget.autoScratch && mounted && !_isAutoScratching) {
           _startAutoScratch();
-          // if (CSLocalProvider.instance.CS_bg_music) CSMP3Player().pauseBackground();
-          // CSMP3Player().pauseEffect();
-          // if (CSLocalProvider.instance.CS_sound_music) CSMP3Player().playEffect();
+          CSAudioUtils().stopAllTempAudio();
+          if (CSLocalProvider.instance.cs_sound_music){
+            CSAudioUtils().playGuaAudio();
+          }
         }
       }
     });
@@ -309,7 +310,7 @@ class _CSLocalImageScratchCardState extends State<CSLocalImageScratchCard> with 
         });
         // CS_event_fire('scratch_card', {'type' : 'user'});
         if (CSLocalProvider.instance.cs_sound_music) {
-          await CSAudioUtils().playGuakaAudio();
+          await CSAudioUtils().playGuaAudio();
         }
       },
       onPanUpdate: _isAutoScratching ? null : (details) => _handlePanUpdate(details, Size(widget.contentW, widget.contentH)),

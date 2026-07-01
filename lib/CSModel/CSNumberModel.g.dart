@@ -41,6 +41,12 @@ GameConfig _$GameConfigFromJson(Map<String, dynamic> json) => GameConfig()
       SBcard_emojiModel.fromJson(json['card_emoji'] as Map<String, dynamic>)
   ..card_8rich =
       SBcard_8richModel.fromJson(json['card_8rich'] as Map<String, dynamic>)
+  ..speedcard_out = (json['speedcard_out'] as List<dynamic>)
+      .map((e) => IntAdPoint.fromJson(e as Map<String, dynamic>))
+      .toList()
+  ..speedcard_prize = (json['speedcard_prize'] as List<dynamic>)
+      .map((e) => CSspeedcard_prizeModel.fromJson(e as Map<String, dynamic>))
+      .toList()
   ..wtd_task = (json['wtd_task'] as List<dynamic>)
       .map((e) => wtd_taskModel.fromJson(e as Map<String, dynamic>))
       .toList()
@@ -68,6 +74,8 @@ Map<String, dynamic> _$GameConfigToJson(GameConfig instance) =>
       'card_77hot': instance.card_77hot,
       'card_emoji': instance.card_emoji,
       'card_8rich': instance.card_8rich,
+      'speedcard_out': instance.speedcard_out,
+      'speedcard_prize': instance.speedcard_prize,
       'wtd_task': instance.wtd_task,
       'key_out': instance.key_out,
       'check_reward': instance.check_reward,
@@ -137,6 +145,25 @@ Map<String, dynamic> _$SBcard_tigerModelToJson(SBcard_tigerModel instance) =>
       'tiger8': instance.tiger8,
       'tiger9': instance.tiger9,
       'tiger10': instance.tiger10,
+      'prize': instance.prize,
+    };
+
+CSspeedcard_prizeModel _$CSspeedcard_prizeModelFromJson(
+        Map<String, dynamic> json) =>
+    CSspeedcard_prizeModel()
+      ..first_number = (json['first_number'] as num).toInt()
+      ..end_number = (json['end_number'] as num).toInt()
+      ..type = (json['type'] as num).toInt()
+      ..prize = (json['prize'] as List<dynamic>?)
+          ?.map((e) => (e as num).toDouble())
+          .toList();
+
+Map<String, dynamic> _$CSspeedcard_prizeModelToJson(
+        CSspeedcard_prizeModel instance) =>
+    <String, dynamic>{
+      'first_number': instance.first_number,
+      'end_number': instance.end_number,
+      'type': instance.type,
       'prize': instance.prize,
     };
 

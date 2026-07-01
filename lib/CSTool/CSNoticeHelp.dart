@@ -37,7 +37,7 @@ class CSNoticeHelp {
       onDidReceiveNotificationResponse: (response) {
         'nf click response:${response}'.log();
         final String? payload = response.payload;
-        cs_event_fire('inform_c', {'type': payload ?? ''});
+        cs_event_fire('inform_c', {'infrom_from': payload ?? ''});
         if(payload == null)return;
       },
     );
@@ -54,7 +54,7 @@ class CSNoticeHelp {
       bool didNotificationLaunchApp =
           notificationAppLaunchDetails.didNotificationLaunchApp ?? false;
       if (didNotificationLaunchApp) {
-        cs_event_fire('inform_c', {'type': notificationResponse?.payload ?? ''});
+        cs_event_fire('inform_c', {'infrom_from': notificationResponse?.payload ?? ''});
       }
     }
 
@@ -89,7 +89,7 @@ class CSNoticeHelp {
       "==initNotificationCount==localcount:$locals==".log();
       if (locals > 0) {
         for (int i = 0; i < locals; i++) {
-          cs_event_fire('inform_p', {'type' : "noti1"});
+          cs_event_fire('inform_p', {'infrom_from' : "noti1"});
         }
       }
       int locals2 = await AndroidFlutterLocalNotificationsPlugin()
@@ -97,7 +97,7 @@ class CSNoticeHelp {
       "==initNotificationCount==localcount:$locals2==".log();
       if (locals2 > 0) {
         for (int i = 0; i < locals2; i++) {
-          cs_event_fire('inform_p', {'type' : "noti2"});
+          cs_event_fire('inform_p', {'infrom_from' : "noti2"});
         }
       }
       int locals3 = await AndroidFlutterLocalNotificationsPlugin()
@@ -105,7 +105,7 @@ class CSNoticeHelp {
       "==initNotificationCount==localcount:$locals3==".log();
       if (locals3 > 0) {
         for (int i = 0; i < locals3; i++) {
-          cs_event_fire('inform_p', {'type' : "noti3"});
+          cs_event_fire('inform_p', {'infrom_from' : "noti3"});
         }
       }
       int locals4 = await AndroidFlutterLocalNotificationsPlugin()
@@ -113,7 +113,7 @@ class CSNoticeHelp {
       "==initNotificationCount==localcount:$locals4==".log();
       if (locals4 > 0) {
         for (int i = 0; i < locals4; i++) {
-          cs_event_fire('inform_p', {'type' : "noti4"});
+          cs_event_fire('inform_p', {'infrom_from' : "noti4"});
         }
       }
       int fcms = await AndroidFlutterLocalNotificationsPlugin()
@@ -121,7 +121,7 @@ class CSNoticeHelp {
       "==initNotificationCount==localcount:$fcms==".log();
       if (fcms > 0) {
         for (int i = 0; i < fcms; i++) {
-          cs_event_fire('inform_p', {'type' : "fcm"});
+          cs_event_fire('inform_p', {'infrom_from' : "fcm"});
         }
       }
 
@@ -130,7 +130,7 @@ class CSNoticeHelp {
       "==initNotificationCount==localcount:$unlocks==".log();
       if (unlocks > 0) {
         for (int i = 0; i < unlocks; i++) {
-          cs_event_fire('inform_p', {'type' : "unlock"});
+          cs_event_fire('inform_p', {'infrom_from' : "unlock"});
         }
       }
 
@@ -139,7 +139,7 @@ class CSNoticeHelp {
       "==initNotificationCount==localcount:$screenon==".log();
       if (screenon > 0) {
         for (int i = 0; i < screenon; i++) {
-          cs_event_fire('inform_p', {'type' : "screenon"});
+          cs_event_fire('inform_p', {'infrom_from' : "screenon"});
         }
       }
 
@@ -148,7 +148,7 @@ class CSNoticeHelp {
       "==initNotificationCount==localcount:$foreground==".log();
       if (foreground > 0) {
         for (int i = 0; i < foreground; i++) {
-          cs_event_fire('inform_p', {'type' : "foreground"});
+          cs_event_fire('inform_p', {'infrom_from' : "foreground"});
         }
       }
 
@@ -157,7 +157,7 @@ class CSNoticeHelp {
       "==initNotificationCount==localcount:$media==".log();
       if (media > 0) {
         for (int i = 0; i < media; i++) {
-          cs_event_fire('inform_p', {'type' : "media"});
+          cs_event_fire('inform_p', {'infrom_from' : "media"});
         }
       }
 
@@ -166,7 +166,7 @@ class CSNoticeHelp {
       "==initNotificationCount==localcount:$media==".log();
       if (media2 > 0) {
         for (int i = 0; i < media2; i++) {
-          cs_event_fire('inform_p', {'type' : "media"});
+          cs_event_fire('inform_p', {'infrom_from' : "media"});
         }
       }
 
@@ -175,7 +175,7 @@ class CSNoticeHelp {
       "==initNotificationCount==localcount:$media==".log();
       if (media3 > 0) {
         for (int i = 0; i < media3; i++) {
-          cs_event_fire('inform_p', {'type' : "media"});
+          cs_event_fire('inform_p', {'infrom_from' : "media"});
         }
       }
 
@@ -184,7 +184,7 @@ class CSNoticeHelp {
       "==initNotificationCount==localcount:$media==".log();
       if (media4 > 0) {
         for (int i = 0; i < media4; i++) {
-          cs_event_fire('inform_p', {'type' : "media"});
+          cs_event_fire('inform_p', {'infrom_from' : "media"});
         }
       }
 
@@ -639,7 +639,7 @@ class CSNoticeHelp {
         // 执行前台逻辑
         cs_session_fire();
         if (!CSCardAds().is_showAd){
-          CSCardAds().cs_showAd(homeKey.currentState!.context, 'nskdh_launch',showDialog: false, onCacheResponse: (onCacheResponse){
+          CSCardAds().cs_showAd(homeKey.currentState!.context, 'rakwt_launch_hot',showDialog: false, onCacheResponse: (onCacheResponse){
           }, adDidClosed: (adDidClosed){
           });
         }

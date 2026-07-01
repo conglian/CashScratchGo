@@ -23,7 +23,7 @@ android {
     }
 
     defaultConfig {
-        applicationId = "com.example.cashscratchgo2"
+        applicationId = "com.scratchcard.earngo.pro"
         versionCode = flutter.versionCode
         versionName = flutter.versionName
         minSdkVersion(27)

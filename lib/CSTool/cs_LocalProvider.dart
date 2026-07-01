@@ -57,6 +57,7 @@ class CSLocalProvider extends ChangeNotifier {
   bool cs_show_box_tips = false;
   bool cs_first_box_tips = false;
   bool cs_first_show_cash = false;
+  bool cs_first_show_rank = false;
   bool cs_open_tx = false;
   bool cs_tx_task2_tips = false;
   bool cs_last_tx_end = false;
@@ -165,6 +166,12 @@ class CSLocalProvider extends ChangeNotifier {
   bool cs_card_quicken_1 = false;
 
   bool cs_card_quicken_01 = false;
+
+  bool cs_first_show_home = false;
+
+  bool cs_new_guide_end = false;
+
+  int cs_qunm_ad_index = 0;
 
   String get cs_currentNumberIndexName => 'cs_currentNumberIndex';
 
@@ -386,7 +393,17 @@ class CSLocalProvider extends ChangeNotifier {
 
   String get cs_scrach_end_time_5Name => 'cs_scrach_end_time_5';
 
+  String get cs_show_box_guideName => 'cs_show_box_guide';
 
+  String get cs_qunm_ad_indexName => 'cs_qunm_ad_index';
+
+  String get cs_first_show_rankName => 'cs_first_show_rank';
+
+  String get cs_rank_ad_countName => 'cs_rank_ad_count';
+
+  String get cs_first_show_homeName => 'cs_first_show_home';
+
+  String get cs_new_guide_endName => 'cs_new_guide_end';
 
   // 3. 初始化：从本地存储加载数据（组件初始化时调用）
   Future<void> init() async {
@@ -420,6 +437,7 @@ class CSLocalProvider extends ChangeNotifier {
     cs_quiz_all_num =  prefs.getInt('cs_quiz_all_num') ?? 0;
     cs_quiz_tap_index =  prefs.getInt('cs_quiz_tap_index') ?? 0;
     cs_scratch_box_index =  prefs.getInt('cs_scratch_box_index') ?? 0;
+    cs_qunm_ad_index = prefs.getInt('cs_qunm_ad_index') ?? 0;
     cs_scratch_not_award_number =
          prefs.getInt('cs_scratch_not_award_number') ?? 0;
     cs_account_seled_index =  prefs.getInt('cs_account_seled_index') ?? 0;
@@ -439,8 +457,11 @@ class CSLocalProvider extends ChangeNotifier {
     cs_tx_task4_tips =  prefs.getBool('cs_tx_task4_tips') ?? false;
     cs_txing_status =  prefs.getBool('cs_txing_status') ?? false;
     cs_login_status =  prefs.getBool('cs_login_status') ?? false;
+    cs_first_show_home = prefs.getBool('cs_first_show_home') ?? false;
     cs_good_review_status =  prefs.getBool('cs_good_review_status') ?? false;
     cs_open_tx =  prefs.getBool('cs_open_tx') ?? false;
+    cs_new_guide_end = prefs.getBool('cs_new_guide_end') ?? false;
+    cs_first_show_rank = prefs.getBool('cs_first_show_rank') ?? false;
     cs_install_status =  prefs.getBool('cs_install_status') ?? false;
     cs_show_box =  prefs.getBool('cs_show_box') ?? false;
     cs_afSwitch =  prefs.getBool('cs_afSwitch') ?? true;

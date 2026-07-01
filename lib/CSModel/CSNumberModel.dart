@@ -28,6 +28,10 @@ class GameConfig {
 
   late SBcard_8richModel card_8rich = SBcard_8richModel();
 
+  late List<IntAdPoint> speedcard_out = [];
+
+  late List<CSspeedcard_prizeModel> speedcard_prize = [];
+
   late List<wtd_taskModel> wtd_task = [];
 
   late List<IntAdPoint> key_out = [];
@@ -118,6 +122,27 @@ class SBcard_tigerModel {
 
   // 序列化方法
   Map<String, dynamic> toJson() => _$SBcard_tigerModelToJson(this);
+}
+
+
+@JsonSerializable()
+class CSspeedcard_prizeModel {
+  //
+  late int first_number = 0;
+  //
+  late int end_number = 0;
+  //
+  late int type = 0;
+  //
+  late List<double>? prize = [];
+
+  CSspeedcard_prizeModel();
+
+  // 工厂构造函数，用于反序列化
+  factory CSspeedcard_prizeModel.fromJson(Map<String, dynamic> json) => _$CSspeedcard_prizeModelFromJson(json);
+
+  // 序列化方法
+  Map<String, dynamic> toJson() => _$CSspeedcard_prizeModelToJson(this);
 }
 
 @JsonSerializable()

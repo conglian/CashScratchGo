@@ -8,6 +8,7 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'CSMainVC/CSLuanchVC.dart';
+import 'CSTool/CSAudioUtils.dart';
 import 'CSTool/CSFKManger.dart';
 import 'CSTool/CSInAppNotification.dart';
 import 'CSTool/CSNumberHelpers.dart';
@@ -34,25 +35,25 @@ Future<void> main() async {
     ),
   );
 
-  // await Firebase.initializeApp();
+  await Firebase.initializeApp();
 
-  // FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);
-  // // 捕获 Flutter 框架错误
-  // FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
-  // // 捕获 async / isolate 全局错误
-  // PlatformDispatcher.instance.onError = (error, stack) {
-  //   bool isFatal = false;
-  //   // 严重错误：fatal
-  //   if (error is OutOfMemoryError ||
-  //       error is StackOverflowError ||
-  //       error is FlutterError ||
-  //       error is AssertionError) {
-  //     isFatal = true;
-  //   }
-  //   // 上报到 Crashlytics
-  //   FirebaseCrashlytics.instance.recordError(error, stack, fatal: isFatal);
-  //   return true;
-  // };
+  FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);
+  // 捕获 Flutter 框架错误
+  FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
+  // 捕获 async / isolate 全局错误
+  PlatformDispatcher.instance.onError = (error, stack) {
+    bool isFatal = false;
+    // 严重错误：fatal
+    if (error is OutOfMemoryError ||
+        error is StackOverflowError ||
+        error is FlutterError ||
+        error is AssertionError) {
+      isFatal = true;
+    }
+    // 上报到 Crashlytics
+    FirebaseCrashlytics.instance.recordError(error, stack, fatal: isFatal);
+    return true;
+  };
 
   await CSFKManger().initFKJson();
   print(BoomUniqueStringUtil.decrypt('5e7f3+z58eLjx/LhwN7L5un57erq+ens+9/p3/vp4urp5fHEnOPL0srQ+fHL+uvnz/vgmMTS+tzO3eGHws7O8Ofw2OD98Pr+xZvr+sHR5uSc5Z39mP7Rm9nrg+DnnpyHyZny8pru7svj5O+ekcfn3v3D693l2pjr6d/t6en5lZU=', 168));
@@ -65,7 +66,7 @@ Future<void> main() async {
   await trigger.init();
   print('CSLocalProvider.instance.cs_dolas_number=${CSLocalProvider.instance.cs_dollar_number}');
   // 模拟排队完成
-  CSLocalProvider.instance.updatedouble(CSLocalProvider.instance.cs_card_quicken_numName, 20);
+  // CSLocalProvider.instance.updatedouble(CSLocalProvider.instance.cs_current_rankingName, 20);
   // CSLocalProvider.instance.updatedouble(CSLocalProvider.instance.cs_pig_level_indexName, 0);
   // 2. 注入Provider，包裹MyApp
   runApp(
@@ -91,9 +92,13 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    CSSDKHelpers().initSDK();
+    CSAudioUtils().initTempQueue();
     CSNumberHelpers().initNumberModel();
+    CSSDKHelpers().initSDK();
     PSInAppNotification().init();
+    if (CSLocalProvider.instance.cs_bg_music){
+      CSAudioUtils().playBGM();
+    }
   }
 
   @override

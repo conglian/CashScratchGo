@@ -1,3 +1,4 @@
+import 'package:cashscratchgo/CSTool/CSTBAEventTool.dart';
 import 'package:cashscratchgo/CSTool/cs_LocalProvider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -91,6 +92,11 @@ class _CashBottomExampleState extends State<CashBottomExample> {
 
             /// ✅ 不再 setState
             onItemSelected: (i) {
+              if (i == 1){
+                cs_event_fire('wheel_c', {'source_from' : 'home'});
+              } else if (i == 2){
+                cs_event_fire('cash_page', {'page_from' : 'tab'});
+              }
               CashTabController.switchTo(i);
             },
           );

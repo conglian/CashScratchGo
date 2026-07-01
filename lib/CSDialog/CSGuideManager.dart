@@ -1,3 +1,4 @@
+import 'package:cashscratchgo/CSTool/cs_LocalProvider.dart';
 import 'package:cashscratchgo/CSTool/cs_extension_help.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -6,6 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../CSBasic/CSTabBar.dart';
 import '../CSMainVC/CSScratchCardVC.dart';
 import '../CSTool/CSNumberHelpers.dart';
+import '../CSTool/CSTBAEventTool.dart';
 import 'CSGuideDialog.dart';
 
 class CSGuideManager {
@@ -65,9 +67,9 @@ class CSGuideManager {
               builder: (_) => CSScratchCardVC(type: 0),
             ),
           );
-          contexts.tipShow2(CSBigwinDialog(award: 0.to2Double(CSNumberHelpers().gameModel!.new_prize), isGuide: true));
+          contexts.tipShow2(CSBigwinDialog(award: 0.to2Double(CSNumberHelpers().gameModel!.new_prize), isGuide: true, type: 0));
         } else {
-          contexts.tipShow2(CSBigwinDialog(award: 0.to2Double(CSNumberHelpers().gameModel!.new_prize), isGuide: true));
+          contexts.tipShow2(CSBigwinDialog(award: 0.to2Double(CSNumberHelpers().gameModel!.new_prize), isGuide: true, type: 0));
         }
         break;
       case 3:
@@ -79,8 +81,10 @@ class CSGuideManager {
               builder: (_) => CSScratchCardVC(type: 0),
             ),
           );
+          cs_event_fire('first_', {});
           contexts.tipShow2(CSGuideNew4Dialog(contextStr: 'Congrats! You’ve Won Your First\nSponsored Reward 🎉', isGuide: true));
         } else {
+          cs_event_fire('first_', {});
           contexts.tipShow2(CSGuideNew4Dialog(contextStr: 'Congrats! You’ve Won Your First\nSponsored Reward 🎉', isGuide: true));
         }
         break;
@@ -117,6 +121,7 @@ class CSGuideManager {
         }
         break;
       case 7:
+        CSLocalProvider.instance.updateBool(CSLocalProvider.instance.cs_new_guide_endName, true);
         bool isRootPage = ModalRoute.of(contexts)?.isFirst ?? false;
         if (isRootPage) {
           CashTabController.switchTo(2);

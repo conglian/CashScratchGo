@@ -3,6 +3,7 @@ import 'dart:math';
 import 'dart:ui';
 import 'package:cashscratchgo/CSDialog/CSDialog.dart';
 import 'package:cashscratchgo/CSTool/CSNumberHelpers.dart';
+import 'package:cashscratchgo/CSTool/CSTBAEventTool.dart';
 import 'package:cashscratchgo/CSTool/cs_LocalProvider.dart';
 import 'package:cashscratchgo/CSTool/cs_GradientNumber.dart';
 import 'package:cashscratchgo/CSTool/cs_GradientText.dart';
@@ -213,7 +214,7 @@ class _CSCashListVCState extends State<CSCashListVC> with SingleTickerProviderSt
                       child: CSText(text: 'Speed Up', size: 12, color: '#5C2F02'.color(), weight: FontWeight.w700),
                     ),
                   ), onTap: (){
-                    CSCardAds().cs_showAd(context, '_rv', onCacheResponse: (onCacheResponse){}, adDidClosed: (adDidClosed){
+                    CSCardAds().cs_showAd(context, 'rakwt_queue_rv', onCacheResponse: (onCacheResponse){}, adDidClosed: (adDidClosed){
                       cs_rankupdate();
                     });
                   })),
@@ -221,7 +222,7 @@ class _CSCashListVCState extends State<CSCashListVC> with SingleTickerProviderSt
                 Visibility(
                   visible: CSLocalProvider.instance.cs_card_quicken_num >= 20,
                   child: Positioned(right: 8.w,bottom: 20.h,child: ParticleButton(child: CSImg(name: 'cs_ad_icon', width: 12, height: 12), onTap: (){
-                    CSCardAds().cs_showAd(context, '_rv', onCacheResponse: (onCacheResponse){}, adDidClosed: (adDidClosed){
+                    CSCardAds().cs_showAd(context, 'rakwt_queue_rv', onCacheResponse: (onCacheResponse){}, adDidClosed: (adDidClosed){
                       cs_rankupdate();
                     });
                   })),
@@ -429,21 +430,21 @@ class _CSCashListVCState extends State<CSCashListVC> with SingleTickerProviderSt
     } else if (CSLocalProvider.instance.cs_tx_task_index == 1){
       return 'cs_tx_wheel';
     } else if (CSLocalProvider.instance.cs_tx_task_index == 2){
-      return 'cs_tx_quu';
+      return 'cs_dolas_bubble';
     } else if (CSLocalProvider.instance.cs_tx_task_index == 3){
       return 'cs_tx_card';
     } else if (CSLocalProvider.instance.cs_tx_task_index == 4){
       return 'cs_tx_wheel';
     } else if (CSLocalProvider.instance.cs_tx_task_index == 5){
-      return 'cs_tx_quu';
+      return 'cs_dolas_bubble';
     } else if (CSLocalProvider.instance.cs_tx_task_index == 6){
       return 'cs_tx_card';
     } else if (CSLocalProvider.instance.cs_tx_task_index == 7){
       return 'cs_tx_wheel';
     } else if (CSLocalProvider.instance.cs_tx_task_index == 8){
-      return 'cs_tx_quu';
+      return 'cs_dolas_bubble';
     } else {
-      return 'cs_tx_quu';
+      return 'cs_dolas_bubble';
     }
   }
   String getTaskTopString(){
@@ -681,6 +682,7 @@ class _CSCashListVCState extends State<CSCashListVC> with SingleTickerProviderSt
   }
   
   void tapWtdEvent(int row){
+    cs_event_fire('cash_page_c', {});
     if (CSLocalProvider.instance.cs_dollar_number < CSNumberHelpers().gameModel!.card_range[row]){
       context.tipShow(CSNotCashDialog(row: row));
     } else {

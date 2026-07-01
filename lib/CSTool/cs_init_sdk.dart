@@ -14,6 +14,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_tba_info/flutter_tba_info.dart';
 import 'package:thinkup_sdk/at_init.dart';
+import '../CSModel/CSAdModel.dart';
+import '../CSModel/CSFkModel.dart';
+import '../CSModel/CSNumberModel.dart';
+import 'CSFKManger.dart';
+import 'CSNumberHelpers.dart';
 import 'CSTBAEventTool.dart';
 import 'cs_LocalProvider.dart';
 import 'cs_extension_help.dart';
@@ -41,7 +46,7 @@ class CSSDKHelpers {
   Future<void> initSDK() async {
     _initAdjustSDk();
     _initTopon();
-    // _csinitloadFireBase();
+    _csinitloadFireBase();
   }
 
   void _initTopon() async {
@@ -53,7 +58,7 @@ class CSSDKHelpers {
             appidkeyStr: 'a9756a18ca5e9098c24597266d345a53a',
           )
           .then((value) {
-            cs_event_fire('nskdh_ad_initsuc', {
+            cs_event_fire('ad_initsuc', {
               'ad_source_client': 'topon',
               'ad_init_time': DateTime.now()
                   .difference(sj_topon_start)
@@ -61,6 +66,7 @@ class CSSDKHelpers {
             });
             'topon init Success'.log();
             CSCardAds().init();
+            CSCardAds().init_suc = true;
             cs_session_fire();
             if (CSLocalProvider.instance.cs_install_status == false) {
               cs_install_fire();
@@ -77,10 +83,10 @@ class CSSDKHelpers {
             });
           });
       // 打开SDK的Debug log，强烈建议在测试阶段打开，方便排查问题。
-      // ATInitManger
-      //     .setLogEnabled(
-      //   logEnabled: kDebugMode ? true : false,
-      // );
+      ATInitManger
+          .setLogEnabled(
+        logEnabled: kDebugMode ? true : false,
+      );
     });
   }
 
@@ -154,31 +160,33 @@ class CSSDKHelpers {
     try {
       await remoteConfig.fetchAndActivate();
 
-      // final gp152_pig_number = remoteConfig.getValue('gp152_pig_number').asString();
-      // if (gp152_pig_number != ''){
-      //   try {
-      //     Map<String, dynamic> jsonMap = json.decode(gp152_pig_number);
-      //     var intModel = AppConfig.fromJson(jsonMap);
-      //     PSNumberHelpers().intModel = intModel;
-      //     "app firebase remoteconfig gp152_pig_number data $jsonMap".log();
-      //   } catch (error) {
-      //     print("app firebase remoteconfig gp152_pig_number error ${error}");
-      //   }
-      // }
+      final playcard_number = remoteConfig.getValue('playcard_number').asString();
+      if (playcard_number != ''){
+        try {
+          Map<String, dynamic> jsonMap = json.decode(playcard_number);
+          var intModel = GameConfig.fromJson(jsonMap);
+          CSNumberHelpers().gameModel = intModel;
+          "app firebase remoteconfig playcard_number data $jsonMap".log();
+        } catch (error) {
+          print("app firebase remoteconfig playcard_number error ${error}");
+        }
+      }
 
-      // final nskdh_ad_config = remoteConfig.getValue('nskdh_ad_config').asString();
-      // if (nskdh_ad_config != ''){
-      //   try {
-      //     Map<String, dynamic> jsonMap = json.decode(nskdh_ad_config);
-      //     if (is_ad_suc == false){
-      //       is_ad_suc = true;
-      //       CSPigAds().init(inputAd: PSAdModel.fromJson(jsonMap));
-      //       "app firebase remoteconfig nskdh_ad_config data $jsonMap".log();
-      //     }
-      //   } catch (error) {
-      //     print("app firebase remoteconfig nskdh_ad_config error ${error}");
-      //   }
-      // }
+      final nwkls_ad_config = remoteConfig.getValue('nwkls_ad_config').asString();
+      if (nwkls_ad_config != ''){
+        try {
+          Map<String, dynamic> jsonMap = json.decode(nwkls_ad_config);
+
+          CSCardAds().cs_PigAdModel = CSAdModel.fromJson(jsonMap);
+          if (CSCardAds().init_suc == true){
+            CSCardAds().init(inputAd: CSCardAds().cs_PigAdModel);
+          }
+          "app firebase remoteconfig nwkls_ad_config data $jsonMap".log();
+        } catch (error) {
+          print("app firebase remoteconfig nwkls_ad_config error ${error}");
+        }
+      }
+
       //  'c152pig_android_fb=默认'.log();
       //  PSFacebookAnalytics.init(appId: '3083467831849635', clientToken: '7d8a9303f209a20ddf9213b726a897af', appName: 'C152GP');
 
@@ -194,41 +202,31 @@ class CSSDKHelpers {
       //   PSFacebookAnalytics.init(appId: '3083467831849635', clientToken: '7d8a9303f209a20ddf9213b726a897af', appName: 'C152GP');
       // }
 
-      // 新用户流程中的ad开关
-      // 给默认值，确保不存在 Key 时不会报错
-      // await remoteConfig.setDefaults(<String, dynamic>{
-      //   'new_ad_console': 0, // 默认值
-      // });
-      // int new_ad_console = remoteConfig.getValue('new_ad_console').asInt();
-      // if (new_ad_console != null){
-      //   "app firebase remoteconfig new_ad_console data $new_ad_console".log();
-      //   CSLocalProvider.instance.updateint(CSLocalProvider.instance.new_ad_consoleName, new_ad_console);
-      // }
 
-      // final gp168_control = remoteConfig.getValue('gp168_control').asString();
-      // if (gp168_control != ''){
-      //   try {
-      //     Map<String, dynamic> jsonMap = json.decode(gp168_control);
-      //     var fkModel = CSFkModel.fromJson(jsonMap);
-      //     CSFKManger().fkModel = fkModel;
-      //     "app firebase remoteconfig gp152_control data $jsonMap".log();
-      //   } catch (error) {
-      //     print("app firebase remoteconfig gp152_control error ${error}");
-      //   }
-      // }
+      final risk_control = remoteConfig.getValue('risk_control').asString();
+      if (risk_control != ''){
+        try {
+          Map<String, dynamic> jsonMap = json.decode(risk_control);
+          var fkModel = CSFkModel.fromJson(jsonMap);
+          CSFKManger().fkModel = fkModel;
+          "app firebase remoteconfig risk_control data $jsonMap".log();
+        } catch (error) {
+          print("app firebase remoteconfig risk_control error ${error}");
+        }
+      }
 
       // 新用户流程中的ad开关
       // 给默认值，确保不存在 Key 时不会报错
       await remoteConfig.setDefaults(<String, dynamic>{
-        'quiz_console': 5, // 默认值
+        'card_push_number': 5, // 默认值
       });
-      int quiz_console = remoteConfig.getValue('quiz_console').asInt();
-      if (quiz_console != null) {
+      int card_push_number = remoteConfig.getValue('card_push_number').asInt();
+      if (card_push_number != null) {
         CSLocalProvider.instance.updateint(
-          CSLocalProvider.instance.quiz_consoleName,
-          quiz_console,
+          CSLocalProvider.instance.card_push_numberName,
+          card_push_number,
         );
-        "app firebase remoteconfig new_ad_console data $quiz_console".log();
+        "app firebase remoteconfig card_push_number data $card_push_number".log();
       }
     } catch (e, s) {
       print("RemoteConfig fetch error: $e");

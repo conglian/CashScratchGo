@@ -42,11 +42,59 @@ class _CSScratchCardVCState extends State<CSScratchCardVC> with SingleTickerProv
 
   List<dynamic> card_award = [];
 
+  late AnimationController _controller;
+
+  late Animation<double> _scaleAnimation;
+
   @override
   void initState() {
     super.initState();
     getCardContent();
-    print('CSLocalProvider.instance.cs_dolas_number=${CSLocalProvider.instance.cs_dollar_number}');
+
+    /// 放大缩小动画
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 350),
+    );
+
+    _scaleAnimation = Tween<double>(
+      begin: 0.9,
+      end: 1.15,
+    ).animate(
+      CurvedAnimation(
+        parent: _controller,
+        curve: Curves.easeInOut,
+      ),
+    );
+
+    _controller.addStatusListener((status) {
+      if (status == AnimationStatus.completed) {
+        _controller.reverse();
+      } else if (status == AnimationStatus.dismissed) {
+        _controller.forward();
+      }
+    });
+
+    _controller.forward();
+    
+    cs_event_fire('card_detail_page', {'page_from' : getTypeName()});
+  }
+
+  // page_from:fruit、number、tigter、77、emoji、rich8
+  String getTypeName(){
+    if (widget.type == 0){
+      return 'fruit';
+    } else if (widget.type == 1){
+      return 'number';
+    } else if (widget.type == 2){
+      return 'tigter';
+    } else if (widget.type == 3){
+      return 'card77';
+    } else if (widget.type == 4){
+      return 'emoji';
+    } else {
+      return 'rich8';
+    }
   }
 
   Future<void> getCardContent() async {
@@ -73,6 +121,7 @@ class _CSScratchCardVCState extends State<CSScratchCardVC> with SingleTickerProv
 
   @override
   void dispose() {
+    _controller.dispose();
     super.dispose();
   }
 
@@ -102,23 +151,153 @@ class _CSScratchCardVCState extends State<CSScratchCardVC> with SingleTickerProv
             ),
           ),
           Positioned(left: 12.w, top: 92.h,
+            width: 68,
+            height: 68,
             child: Consumer<CSLocalProvider>(
                 builder: (context, provider, child) {
-                  return Container(
-                    width: 68,
-                    height: 68,
-                    decoration: BoxDecoration(
-                      image: CSDImg('cs_box_btn')
+                  return ShakeContainer(
+                    enableShake: provider.cs_scratch_box_index >= 5,
+                    child: ParticleButton(
+                      onTap: (){
+                        if (provider.cs_scratch_box_index >= 5){
+                          context.tipShow(CSBoxOpenDiaologWidget());
+                        }
+                      },
+                      child: Container(
+                        width: 68,
+                        height: 68,
+                        decoration: BoxDecoration(
+                          image: CSDImg('cs_box_btn')
+                        ),
+                        child: Stack(
+                          children: [
+                            Center(child: GradientCircleProgress(progress: provider.cs_scratch_box_index / 5.0)),
+                          ],
+                        ),
+                      ),
                     ),
-                    child: Center(child: GradientCircleProgress(progress: provider.cs_scratch_box_index / 5.0)),
                   );
                 }
             ),
           ),
+          Positioned(left: 32.w, top: 144.h, width: 30, height: 15,
+            child: Consumer<CSLocalProvider>(
+                builder: (context, provider, child) {
+                  return CSGradientStrokeText(text: '${provider.cs_scratch_box_index >= 5 ? 5 : provider.cs_scratch_box_index}/5', gradientColors: ['#FFFAE1'.color(),'#FFE365'.color()], width: 30, height: 20, fontSize: 14, strokeWidth: 1, strokeColor: '#601E00'.color());
+                }
+            ),
+          ),
+          Positioned(
+            left: 55.w,
+            top: 130.h,
+            width: 72.w,
+            height: 72.h,
+            child: Consumer<CSLocalProvider>(
+                builder: (context, provider, child) {
+                  return Visibility(
+                    visible: provider.cs_scratch_box_index >= 5,
+                    child: ParticleButton(
+                      onTap: (){
+                        if (provider.cs_scratch_box_index >= 5){
+                          context.tipShow(CSBoxOpenDiaologWidget());
+                        }
+                      },
+                      child: ScaleTransition(
+                        scale: _scaleAnimation,
+                        child: CSImg(
+                          name: 'cs_finger_icon',
+                          width: 72.w,
+                          height: 72.h,
+                        ),
+                      ),
+                    ),
+                  );
+                }
+            ),
+          ),
+          Positioned(left: (0.width(context) - 328.w) * 0.5,top: getcardcenterTop(),child: Container(
+            width: 328.w,
+            height: 48.h,
+            decoration: BoxDecoration(
+                image: CSDImg('cs_cards_top_bg')
+            ),
+            child: Stack(
+              children: [
+                Center(
+                  child: Container(
+                    width: 272.w,
+                    height: 24.h,
+                    decoration: BoxDecoration(
+                        color: '#4E0A0A'.color(),
+                        borderRadius: BorderRadius.circular(12.h)
+                    ),
+                    child:
+                    Consumer<CSLocalProvider>(
+                        builder: (context, provider, child) {
+                          return Stack(
+                            children: [
+                              Positioned(left: 2, top: 2,
+                                child: Container(
+                                  width: 268.w * (provider.cs_card_quicken_num / 20),
+                                  height: 20.h,
+                                  decoration: BoxDecoration(
+                                    color: '#F39F0E'.color(),
+                                    borderRadius: BorderRadius.circular(12.h),
+                                  ),
+                                ),
+                              ),
+                              Positioned(top: 4.h,left: 100.w,child: CSStrokeText(text: '${0.to2Double(provider.cs_card_quicken_num)}/20', size: 14, color: '#FFFFFF'.color(), weight: FontWeight.w900, skWidth: 1, skColor: '#4D2D15'.color()))
+                            ],
+                          );
+                        }
+                    ),
+                  ),
+                ),
+                Positioned(left: 6.w,top: 2.h,child: CSImg(name: 'cs_crad_s_bg', width: 40, height: 40,)),
+                Positioned(right: 6.w,top: 6.h,child: Container(
+                  width: 100.w,
+                  height: 36.h,
+                  decoration: BoxDecoration(
+                      image: CSDImg('cs_cash_list_${CSLocalProvider.instance.cs_account_seled_index}_s')
+                  ),
+                  child: Stack(
+                    children: [
+                      Container(
+                        width: 100.w,
+                        height: 36.h,
+                        decoration: BoxDecoration(
+                            color: '#000000'.color(opacity: 0.5),
+                            borderRadius: BorderRadius.circular(8)
+                        ),
+                        child: Row(
+                          children: [
+                            SizedBox(width: 2.w),
+                            CSImg(name: 'cs_lock_icons', width: 28, height: 28,),
+                            CSGradientStrokeText(text: '\$${0.to2Double(CSLocalProvider.instance.cs_dollar_number)}', gradientColors: ['#FFFFFF'.color(),'#FFF189'.color()], width: 70, height: 24, fontSize: 16, strokeWidth: 1, strokeColor: '#983300'.color())
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
+                )),
+              ],
+            ),
+          ),),
           Positioned(child: CSBubbleButton()),
         ],
       ),
     );
+  }
+  double getcardcenterTop(){
+    if (widget.type == 1){
+      return 226.h;
+    } else if (widget.type == 3){
+      return 232.h;
+    } else if (widget.type == 5){
+      return 232.h;
+    } else {
+      return 240.h;
+    }
   }
   Widget getScratchCardWidget(){
     if (widget.type == 0){
@@ -175,8 +354,15 @@ class _CSScratchCardVCState extends State<CSScratchCardVC> with SingleTickerProv
                                       children: [
                                         if (card_award[3][index] == -1)
                                           CSAnimatedImageMove(imageUrl: 'cs_key_icon', isAnimationEnabled: _show_animation, ws: 64, hs: 64, targetKey: targetKey),
-                                        if (card_award[3][index] != -1)
-                                          CSBouncyImage(imagePath: 'cs_card1_icon_${card_award[3][index]}', width: 64, height: 64, enableAnimation:(card_award[0] == 0 && (index == 0 || index == 1 || index == 2) && _show_animation) || (card_award[0] == 1 && (index == 3 || index == 4 || index == 5) && _show_animation) || (card_award[0] == 2 && (index == 4 || index == 5 || index == 6) && _show_animation))
+                                        if (card_award[3][index] == -2)
+                                          Column(
+                                            children: [
+                                              CSBouncyImage(imagePath: 'cs_tx_quu', width: 50, height: 50, enableAnimation: _show_animation),
+                                              Padding(padding: EdgeInsetsGeometry.only(left: 8.w),child: CSBouncyText(text: '${0.to2Double(card_award[7])}', fontSize: 16, color: '#FFE365'.color())),
+                                            ],
+                                          ),
+                                        if (card_award[3][index] != -1 && card_award[3][index] != -2)
+                                          CSBouncyImage(imagePath: 'cs_card1_icon_${card_award[3][index]}', width: 64, height: 64, enableAnimation:(card_award[0] == 0 && (index == 0 || index == 1 || index == 2) && _show_animation) || (card_award[0] == 1 && (index == 3 || index == 4 || index == 5) && _show_animation) || (card_award[0] == 2 && (index == 8 || index == 7 || index == 6) && _show_animation))
                                       ],
                                     )),
                                   ]
@@ -194,6 +380,7 @@ class _CSScratchCardVCState extends State<CSScratchCardVC> with SingleTickerProv
                 Future.delayed(Duration(milliseconds: 2000),() async {
                   // key
                   if (card_award[1] == 1){
+                    cs_event_fire('key_out', {'source_from' : getTypeName()});
                     await CSLocalProvider.instance.updateint(CSLocalProvider.instance.cs_wheel_numberName, CSLocalProvider.instance.cs_wheel_number + 1);
                     Future.delayed(Duration(milliseconds: 100),() async {
                       CSLuckyWheelNotificationService.sendToDomandNumberNotification(0);
@@ -218,31 +405,66 @@ class _CSScratchCardVCState extends State<CSScratchCardVC> with SingleTickerProv
 
                   if (card_award[2] == 1){
                     if (card_award[4] >= CSNumberHelpers().getbigwinNum()){
-                      int code = await context.tipShow2(CSBigwinDialog(award: card_award[4], isGuide: false));
-                      if (code >= 0){
-                        if (CSLocalProvider.instance.cs_scrach_end_number_0 >= 10){
-                          Navigator.pop(context);
-                        } else {
-                          showTXPopDialog();
+                      if (card_award[6] == true){
+                        int code = await context.tipShow2(CSBigWinLevelDialog(award: card_award[4], type: widget.type, qunm_award: card_award[7]));
+                        if (code >= 0){
+                          if (CSLocalProvider.instance.cs_scrach_end_number_0 >= 10){
+                            Navigator.pop(context);
+                          } else {
+                            showLevelDialog();
+                          }
+                        }
+
+                      } else {
+                        int code = await context.tipShow2(CSBigwinDialog(award: card_award[4], isGuide: false, type: widget.type));
+                        if (code >= 0){
+                          if (CSLocalProvider.instance.cs_scrach_end_number_0 >= 10){
+                            Navigator.pop(context);
+                          } else {
+                            showLevelDialog();
+                          }
                         }
                       }
                     } else {
-                      int code = await context.tipShow2(CSCashWinDialog(award: card_award[4], isGuide: false));
-                      if (code >= 0){
-                        if (CSLocalProvider.instance.cs_scrach_end_number_0 >= 10){
-                          Navigator.pop(context);
-                        } else {
-                          showTXPopDialog();
+                      if (card_award[6] == true){
+                        int code = await context.tipShow2(CSCashwindoubleDialog(award: card_award[4], type: widget.type, qunm_award: card_award[7]));
+                        if (code >= 0){
+                          if (CSLocalProvider.instance.cs_scrach_end_number_0 >= 10){
+                            Navigator.pop(context);
+                          } else {
+                            showLevelDialog();
+                          }
+                        }
+
+                      } else {
+                        int code = await context.tipShow2(CSCashWinDialog(award: card_award[4], isGuide: false, type: widget.type));
+                        if (code >= 0){
+                          if (CSLocalProvider.instance.cs_scrach_end_number_0 >= 10){
+                            Navigator.pop(context);
+                          } else {
+                            showLevelDialog();
+                          }
                         }
                       }
                     }
                   } else {
-                    int code = await context.tipShow2(CSNotAwardDialog());
-                    if (code >= 0){
-                      if (CSLocalProvider.instance.cs_scrach_end_number_0 >= 10){
-                        Navigator.pop(context);
-                      } else {
-                        showTXPopDialog();
+                    if (card_award[6] == true) {
+                      int code = await context.tipShow2(CSAccelerationCardDialog(award: card_award[7]));
+                      if (code >= 0){
+                        if (CSLocalProvider.instance.cs_scrach_end_number_0 >= 10){
+                          Navigator.pop(context);
+                        } else {
+                          showLevelDialog();
+                        }
+                      }
+                    } else {
+                      int code = await context.tipShow2(CSNotAwardDialog());
+                      if (code >= 0){
+                        if (CSLocalProvider.instance.cs_scrach_end_number_0 >= 10){
+                          Navigator.pop(context);
+                        } else {
+                          showLevelDialog();
+                        }
                       }
                     }
                   }
@@ -324,9 +546,16 @@ class _CSScratchCardVCState extends State<CSScratchCardVC> with SingleTickerProv
                                     children: [
                                       if (card_award[6][index] == -1)
                                         CSAnimatedImageMove(imageUrl: 'cs_key_icon', isAnimationEnabled: _show_animation, ws: 55, hs: 48, targetKey: targetKey),
-                                      if (card_award[6][index] != -1)
+                                      if (card_award[6][index] == -2)
+                                        Column(
+                                          children: [
+                                            CSBouncyImage(imagePath: 'cs_tx_quu', width: 45, height: 45, enableAnimation: _show_animation),
+                                            CSBouncyText(text: '${card_award[8]}', fontSize: 15, color: '#FFF1A9'.color(), fontWeight: FontWeight.w700, enableAnimation: _show_animation)
+                                          ],
+                                        ),
+                                      if (card_award[6][index] != -1 && card_award[6][index] != -2)
                                         Padding(padding: EdgeInsetsGeometry.only(left: 8.w, top: 2.h),child: CSBouncyText(text: '${card_award[6][index]}', fontSize: 32, color: '#FFF1A9'.color(), fontWeight: FontWeight.w900, enableAnimation: _show_animation && index == card_award[0])),
-                                      if (card_award[6][index] != -1)
+                                      if (card_award[6][index] != -1 && card_award[6][index] != -2)
                                         CSStrokeText(text: '\$${card_award[5][index]}', size: 16, color: '#FFDD1F'.color(), weight: FontWeight.w900, skWidth: 1, skColor: '#000000'.color())
                                     ],
                                   )
@@ -345,6 +574,7 @@ class _CSScratchCardVCState extends State<CSScratchCardVC> with SingleTickerProv
                 Future.delayed(Duration(milliseconds: 2000),() async {
                   // key
                   if (card_award[1] == 1){
+                    cs_event_fire('key_out', {'source_from' : getTypeName()});
                     await CSLocalProvider.instance.updateint(CSLocalProvider.instance.cs_wheel_numberName, CSLocalProvider.instance.cs_wheel_number + 1);
                     Future.delayed(Duration(milliseconds: 100),() async {
                       CSLuckyWheelNotificationService.sendToDomandNumberNotification(0);
@@ -369,31 +599,66 @@ class _CSScratchCardVCState extends State<CSScratchCardVC> with SingleTickerProv
 
                   if (card_award[2] == 1){
                     if (card_award[4] >= CSNumberHelpers().getbigwinNum()){
-                      int code = await context.tipShow2(CSBigwinDialog(award: card_award[4], isGuide: false));
-                      if (code >= 0){
-                        if (CSLocalProvider.instance.cs_scrach_end_number_1 >= 10){
-                          Navigator.pop(context);
-                        } else {
-                          showTXPopDialog();
+                      if (card_award[7] == true){
+                        int code = await context.tipShow2(CSBigWinLevelDialog(award: card_award[4], type: widget.type, qunm_award: card_award[8]));
+                        if (code >= 0){
+                          if (CSLocalProvider.instance.cs_scrach_end_number_1 >= 10){
+                            Navigator.pop(context);
+                          } else {
+                            showLevelDialog();
+                          }
+                        }
+
+                      } else {
+                        int code = await context.tipShow2(CSBigwinDialog(award: card_award[4], isGuide: false, type: widget.type));
+                        if (code >= 0){
+                          if (CSLocalProvider.instance.cs_scrach_end_number_1 >= 10){
+                            Navigator.pop(context);
+                          } else {
+                            showLevelDialog();
+                          }
                         }
                       }
                     } else {
-                      int code = await context.tipShow2(CSCashWinDialog(award: card_award[4], isGuide: false));
-                      if (code >= 0){
-                        if (CSLocalProvider.instance.cs_scrach_end_number_1 >= 10){
-                          Navigator.pop(context);
-                        } else {
-                          showTXPopDialog();
+                      if (card_award[7] == true){
+                        int code = await context.tipShow2(CSCashwindoubleDialog(award: card_award[4], type: widget.type, qunm_award: card_award[8]));
+                        if (code >= 0){
+                          if (CSLocalProvider.instance.cs_scrach_end_number_1 >= 10){
+                            Navigator.pop(context);
+                          } else {
+                            showLevelDialog();
+                          }
+                        }
+
+                      } else {
+                        int code = await context.tipShow2(CSCashWinDialog(award: card_award[4], isGuide: false, type: widget.type));
+                        if (code >= 0){
+                          if (CSLocalProvider.instance.cs_scrach_end_number_1 >= 10){
+                            Navigator.pop(context);
+                          } else {
+                            showLevelDialog();
+                          }
                         }
                       }
                     }
                   } else {
-                    int code = await context.tipShow2(CSNotAwardDialog());
-                    if (code >= 0){
-                      if (CSLocalProvider.instance.cs_scrach_end_number_1 >= 10){
-                        Navigator.pop(context);
-                      } else {
-                        showTXPopDialog();
+                    if (card_award[7] == true) {
+                      int code = await context.tipShow2(CSAccelerationCardDialog(award: card_award[8]));
+                      if (code >= 0){
+                        if (CSLocalProvider.instance.cs_scrach_end_number_1 >= 10){
+                          Navigator.pop(context);
+                        } else {
+                          showLevelDialog();
+                        }
+                      }
+                    } else {
+                      int code = await context.tipShow2(CSNotAwardDialog());
+                      if (code >= 0){
+                        if (CSLocalProvider.instance.cs_scrach_end_number_1 >= 10){
+                          Navigator.pop(context);
+                        } else {
+                          showLevelDialog();
+                        }
                       }
                     }
                   }
@@ -412,6 +677,9 @@ class _CSScratchCardVCState extends State<CSScratchCardVC> with SingleTickerProv
         ),
       );
     } else if (widget.type == 2){
+      if (card_award.isEmpty){
+        return SizedBox();
+      }
       return SizedBox(
         width: 0.width(context),
         height: 312.h,
@@ -542,9 +810,19 @@ class _CSScratchCardVCState extends State<CSScratchCardVC> with SingleTickerProv
                                   ),
                                   if (card_award[2][index] == -1)
                                     Center(child: CSAnimatedImageMove(imageUrl: 'cs_key_icon', isAnimationEnabled: _show_animation, ws: 50, hs: 50, targetKey: targetKey)),
-                                  if (card_award[2][index] != -1)
+                                  if (card_award[2][index] == -2)
+                                    CSBouncyImage(imagePath: 'cs_tx_quu', width: 68.w, height: 68.w, enableAnimation: _show_animation),
+                                  if (card_award[2][index] == -2)
+                                    Column(
+                                      children: [
+                                        SizedBox(height: 50.h),
+                                        CSStrokeText(text: '\$${card_award[7]}', size: 16, color: '#FFDD1F'.color(), weight: FontWeight.w900, skWidth: 1, skColor: '#000000'.color())
+                                      ],
+                                    ),
+                                  if (card_award[2][index] != -1 && card_award[2][index] != -2)
                                     CSBouncyImage(imagePath: 'cs_card3_${card_award[2][index]}', width: 68.w, height: 68.w, enableAnimation: _show_animation && card_award[2][index] == 0),
-                                  Column(
+                                  if (card_award[2][index] != -1 && card_award[2][index] != -2)
+                                    Column(
                                     children: [
                                       SizedBox(height: 50.h),
                                       CSStrokeText(text: '\$${card_award[3][index]}', size: 16, color: '#FFDD1F'.color(), weight: FontWeight.w900, skWidth: 1, skColor: '#000000'.color())
@@ -565,6 +843,7 @@ class _CSScratchCardVCState extends State<CSScratchCardVC> with SingleTickerProv
                 Future.delayed(Duration(milliseconds: 2000),() async {
                   // key
                   if (card_award[0] == 1){
+                    cs_event_fire('key_out', {'source_from' : getTypeName()});
                     await CSLocalProvider.instance.updateint(CSLocalProvider.instance.cs_wheel_numberName, CSLocalProvider.instance.cs_wheel_number + 1);
                     Future.delayed(Duration(milliseconds: 100),() async {
                       CSLuckyWheelNotificationService.sendToDomandNumberNotification(0);
@@ -589,31 +868,64 @@ class _CSScratchCardVCState extends State<CSScratchCardVC> with SingleTickerProv
 
                   if (card_award[1] == 1){
                     if (card_award[4] >= CSNumberHelpers().getbigwinNum()){
-                      int code = await context.tipShow2(CSBigwinDialog(award: card_award[4], isGuide: false));
-                      if (code >= 0){
-                        if (CSLocalProvider.instance.cs_scrach_end_number_2 >= 10){
-                          Navigator.pop(context);
-                        } else {
-                          showTXPopDialog();
+                      if (card_award[6] == true){
+                        int code = await context.tipShow2(CSBigWinLevelDialog(award: card_award[4], type: widget.type, qunm_award: card_award[7]));
+                        if (code >= 0){
+                          if (CSLocalProvider.instance.cs_scrach_end_number_2 >= 10){
+                            Navigator.pop(context);
+                          } else {
+                            showLevelDialog();
+                          }
+                        }
+                      } else {
+                        int code = await context.tipShow2(CSBigwinDialog(award: card_award[4], isGuide: false, type: widget.type));
+                        if (code >= 0){
+                          if (CSLocalProvider.instance.cs_scrach_end_number_2 >= 10){
+                            Navigator.pop(context);
+                          } else {
+                            showLevelDialog();
+                          }
                         }
                       }
                     } else {
-                      int code = await context.tipShow2(CSCashWinDialog(award: card_award[4], isGuide: false));
-                      if (code >= 0){
-                        if (CSLocalProvider.instance.cs_scrach_end_number_2 >= 10){
-                          Navigator.pop(context);
-                        } else {
-                          showTXPopDialog();
+                      if (card_award[6] == true){
+                        int code = await context.tipShow2(CSCashwindoubleDialog(award: card_award[4], type: widget.type, qunm_award: card_award[7]));
+                        if (code >= 0){
+                          if (CSLocalProvider.instance.cs_scrach_end_number_2 >= 10){
+                            Navigator.pop(context);
+                          } else {
+                            showLevelDialog();
+                          }
+                        }
+                      } else {
+                        int code = await context.tipShow2(CSCashWinDialog(award: card_award[4], isGuide: false, type: widget.type));
+                        if (code >= 0){
+                          if (CSLocalProvider.instance.cs_scrach_end_number_2 >= 10){
+                            Navigator.pop(context);
+                          } else {
+                            showLevelDialog();
+                          }
                         }
                       }
                     }
                   } else {
-                    int code = await context.tipShow2(CSNotAwardDialog());
-                    if (code >= 0){
-                      if (CSLocalProvider.instance.cs_scrach_end_number_2 >= 10){
-                        Navigator.pop(context);
-                      } else {
-                        showTXPopDialog();
+                    if (card_award[6] == true) {
+                      int code = await context.tipShow2(CSAccelerationCardDialog(award: card_award[7]));
+                      if (code >= 0){
+                        if (CSLocalProvider.instance.cs_scrach_end_number_2 >= 10){
+                          Navigator.pop(context);
+                        } else {
+                          showLevelDialog();
+                        }
+                      }
+                    } else {
+                      int code = await context.tipShow2(CSNotAwardDialog());
+                      if (code >= 0){
+                        if (CSLocalProvider.instance.cs_scrach_end_number_2 >= 10){
+                          Navigator.pop(context);
+                        } else {
+                          showLevelDialog();
+                        }
                       }
                     }
                   }
@@ -679,11 +991,20 @@ class _CSScratchCardVCState extends State<CSScratchCardVC> with SingleTickerProv
                                   ),
                                   if (card_award[2][index] == -1)
                                     Center(child: CSAnimatedImageMove(imageUrl: 'cs_key_icon', isAnimationEnabled: _show_animation, ws: 50, hs: 50, targetKey: targetKey)),
+                                  if (card_award[2][index] == -2)
+                                    Center(child: CSBouncyImage(imagePath: 'cs_tx_quu', width: 48, height: 48, enableAnimation: _show_animation)),
+                                  if (card_award[2][index] == -2)
+                                    Column(
+                                      children: [
+                                        SizedBox(height: 52.h),
+                                        Padding(padding:  EdgeInsetsGeometry.only(left: 12.w),child: CSStrokeText(text: '${card_award[6]}', size: 16, color: '#FFDD1F'.color(), weight: FontWeight.w900, skWidth: 1, skColor: '#000000'.color()))
+                                      ],
+                                    ),
                                   if (card_award[2][index] == 1)
                                     Center(child: CSBouncyImage(imagePath: 'cs_7_b', width: 48, height: 48, enableAnimation: _show_animation)),
                                   if (card_award[2][index] == 2)
                                     Center(child: CSBouncyImage(imagePath: 'cs_77_b', width: 48, height: 48, enableAnimation: _show_animation)),
-                                  if (card_award[2][index] != 2 && card_award[2][index] != 1 && card_award[2][index] != -1)
+                                  if (card_award[2][index] != 2 && card_award[2][index] != 1 && card_award[2][index] != -1 && card_award[2][index] != -2)
                                     SizedBox(
                                       width: 68.w,
                                       height: 68.w,
@@ -711,6 +1032,7 @@ class _CSScratchCardVCState extends State<CSScratchCardVC> with SingleTickerProv
                 Future.delayed(Duration(milliseconds: 2000),() async {
                   // key
                   if (card_award[0] == 1){
+                    cs_event_fire('key_out', {'source_from' : getTypeName()});
                     await CSLocalProvider.instance.updateint(CSLocalProvider.instance.cs_wheel_numberName, CSLocalProvider.instance.cs_wheel_number + 1);
                     Future.delayed(Duration(milliseconds: 100),() async {
                       CSLuckyWheelNotificationService.sendToDomandNumberNotification(0);
@@ -735,31 +1057,65 @@ class _CSScratchCardVCState extends State<CSScratchCardVC> with SingleTickerProv
 
                   if (card_award[1] == 1){
                     if (card_award[4] >= CSNumberHelpers().getbigwinNum()){
-                      int code = await context.tipShow2(CSBigwinDialog(award: card_award[4], isGuide: false));
-                      if (code >= 0){
-                        if (CSLocalProvider.instance.cs_scrach_end_number_3 >= 10){
-                          Navigator.pop(context);
-                        } else {
-                          showTXPopDialog();
+                      if (card_award[5] == true){
+                        int code = await context.tipShow2(CSBigWinLevelDialog(award: card_award[4], type: widget.type, qunm_award: card_award[6]));
+                        if (code >= 0){
+                          if (CSLocalProvider.instance.cs_scrach_end_number_3 >= 10){
+                            Navigator.pop(context);
+                          } else {
+                            showLevelDialog();
+                          }
+                        }
+                      } else {
+                        int code = await context.tipShow2(CSBigwinDialog(award: card_award[4], isGuide: false, type: widget.type));
+                        if (code >= 0){
+                          if (CSLocalProvider.instance.cs_scrach_end_number_3 >= 10){
+                            Navigator.pop(context);
+                          } else {
+                            showLevelDialog();
+                          }
                         }
                       }
                     } else {
-                      int code = await context.tipShow2(CSCashWinDialog(award: card_award[4], isGuide: false));
-                      if (code >= 0){
-                        if (CSLocalProvider.instance.cs_scrach_end_number_3 >= 10){
-                          Navigator.pop(context);
-                        } else {
-                          showTXPopDialog();
+
+                      if (card_award[5] == true){
+                        int code = await context.tipShow2(CSCashwindoubleDialog(award: card_award[4], type: widget.type, qunm_award: card_award[6]));
+                        if (code >= 0){
+                          if (CSLocalProvider.instance.cs_scrach_end_number_3 >= 10){
+                            Navigator.pop(context);
+                          } else {
+                            showLevelDialog();
+                          }
+                        }
+                      } else {
+                        int code = await context.tipShow2(CSCashWinDialog(award: card_award[4], isGuide: false, type: widget.type));
+                        if (code >= 0){
+                          if (CSLocalProvider.instance.cs_scrach_end_number_3 >= 10){
+                            Navigator.pop(context);
+                          } else {
+                            showLevelDialog();
+                          }
                         }
                       }
                     }
                   } else {
-                    int code = await context.tipShow2(CSNotAwardDialog());
-                    if (code >= 0){
-                      if (CSLocalProvider.instance.cs_scrach_end_number_3 >= 10){
-                        Navigator.pop(context);
-                      } else {
-                        showTXPopDialog();
+                    if (card_award[5] == true) {
+                      int code = await context.tipShow2(CSAccelerationCardDialog(award: card_award[6]));
+                      if (code >= 0){
+                        if (CSLocalProvider.instance.cs_scrach_end_number_3 >= 10){
+                          Navigator.pop(context);
+                        } else {
+                          showLevelDialog();
+                        }
+                      }
+                    } else {
+                      int code = await context.tipShow2(CSNotAwardDialog());
+                      if (code >= 0){
+                        if (CSLocalProvider.instance.cs_scrach_end_number_3 >= 10){
+                          Navigator.pop(context);
+                        } else {
+                          showLevelDialog();
+                        }
                       }
                     }
                   }
@@ -823,10 +1179,19 @@ class _CSScratchCardVCState extends State<CSScratchCardVC> with SingleTickerProv
                                       repeat: true,
                                     ),
                                   ),
-                                  if (card_award[2][index] != -1)
+                                  if (card_award[2][index] != -1 && card_award[2][index] != -2)
                                     Positioned(left: 7.w,top: 8.h,child: CSBouncyImage(imagePath: 'cs_card4_${card_award[2][index]}', width: 55.w, height: 55.w, enableAnimation: _show_animation && card_award[2][index] == 0,)),
                                   if (card_award[2][index] == -1)
                                     Center(child: CSAnimatedImageMove(imageUrl: 'cs_key_icon', isAnimationEnabled: _show_animation, ws: 50, hs: 50, targetKey: targetKey)),
+                                  if (card_award[2][index] == -2)
+                                    Positioned(left: 7.w,top: 8.h,child: CSBouncyImage(imagePath: 'cs_tx_quu', width: 55.w, height: 55.w, enableAnimation: _show_animation)),
+                                  if (card_award[2][index] == -2)
+                                    Column(
+                                      children: [
+                                        SizedBox(height: 50.h),
+                                        Padding(padding: EdgeInsetsGeometry.only(left: 12.w),child: CSStrokeText(text: '${card_award[6]}', size: 16, color: '#FFDD1F'.color(), weight: FontWeight.w900, skWidth: 1, skColor: '#000000'.color()))
+                                      ],
+                                    ),
                                   if (card_award[2][index] == 0)
                                     Column(
                                     children: [
@@ -849,6 +1214,7 @@ class _CSScratchCardVCState extends State<CSScratchCardVC> with SingleTickerProv
                 Future.delayed(Duration(milliseconds: 2000),() async {
                   // key
                   if (card_award[0] == 1){
+                    cs_event_fire('key_out', {'source_from' : getTypeName()});
                     await CSLocalProvider.instance.updateint(CSLocalProvider.instance.cs_wheel_numberName, CSLocalProvider.instance.cs_wheel_number + 1);
                     Future.delayed(Duration(milliseconds: 100),() async {
                       CSLuckyWheelNotificationService.sendToDomandNumberNotification(0);
@@ -873,31 +1239,65 @@ class _CSScratchCardVCState extends State<CSScratchCardVC> with SingleTickerProv
 
                   if (card_award[1] == 1){
                     if (card_award[4] >= CSNumberHelpers().getbigwinNum()){
-                      int code = await context.tipShow2(CSBigwinDialog(award: card_award[4], isGuide: false));
-                      if (code >= 0){
-                        if (CSLocalProvider.instance.cs_scrach_end_number_4 >= 10){
-                          Navigator.pop(context);
-                        } else {
-                          showTXPopDialog();
+
+                      if (card_award[5] == true){
+                        int code = await context.tipShow2(CSBigWinLevelDialog(award: card_award[4], type: widget.type, qunm_award: card_award[6]));
+                        if (code >= 0){
+                          if (CSLocalProvider.instance.cs_scrach_end_number_4 >= 10){
+                            Navigator.pop(context);
+                          } else {
+                            showLevelDialog();
+                          }
+                        }
+                      } else {
+                        int code = await context.tipShow2(CSBigwinDialog(award: card_award[4], isGuide: false, type: widget.type));
+                        if (code >= 0){
+                          if (CSLocalProvider.instance.cs_scrach_end_number_4 >= 10){
+                            Navigator.pop(context);
+                          } else {
+                            showLevelDialog();
+                          }
                         }
                       }
                     } else {
-                      int code = await context.tipShow2(CSCashWinDialog(award: card_award[4], isGuide: false));
-                      if (code >= 0){
-                        if (CSLocalProvider.instance.cs_scrach_end_number_4 >= 10){
-                          Navigator.pop(context);
-                        } else {
-                          showTXPopDialog();
+                      if (card_award[5] == true){
+                        int code = await context.tipShow2(CSCashwindoubleDialog(award: card_award[4], type: widget.type, qunm_award: card_award[6]));
+                        if (code >= 0){
+                          if (CSLocalProvider.instance.cs_scrach_end_number_4 >= 10){
+                            Navigator.pop(context);
+                          } else {
+                            showLevelDialog();
+                          }
+                        }
+                      } else {
+                        int code = await context.tipShow2(CSCashWinDialog(award: card_award[4], isGuide: false, type: widget.type));
+                        if (code >= 0){
+                          if (CSLocalProvider.instance.cs_scrach_end_number_4 >= 10){
+                            Navigator.pop(context);
+                          } else {
+                            showLevelDialog();
+                          }
                         }
                       }
                     }
                   } else {
-                    int code = await context.tipShow2(CSNotAwardDialog());
-                    if (code >= 0){
-                      if (CSLocalProvider.instance.cs_scrach_end_number_4 >= 10){
-                        Navigator.pop(context);
-                      } else {
-                        showTXPopDialog();
+                    if (card_award[5] == true) {
+                      int code = await context.tipShow2(CSAccelerationCardDialog(award: card_award[6]));
+                      if (code >= 0){
+                        if (CSLocalProvider.instance.cs_scrach_end_number_4 >= 10){
+                          Navigator.pop(context);
+                        } else {
+                          showLevelDialog();
+                        }
+                      }
+                    } else {
+                      int code = await context.tipShow2(CSNotAwardDialog());
+                      if (code >= 0){
+                        if (CSLocalProvider.instance.cs_scrach_end_number_4 >= 10){
+                          Navigator.pop(context);
+                        } else {
+                          showLevelDialog();
+                        }
                       }
                     }
                   }
@@ -961,8 +1361,17 @@ class _CSScratchCardVCState extends State<CSScratchCardVC> with SingleTickerProv
                                       repeat: true,
                                     ),
                                   ),
-                                  if (card_award[2][index] != -1)
+                                  if (card_award[2][index] != -1 && card_award[2][index] != -2)
                                     Positioned(left: 7.w,top: 8.h,child: CSBouncyImage(imagePath: 'cs_card5_${card_award[2][index]}', width: 55.w, height: 55.w, enableAnimation: _show_animation && award_index.contains(index))),
+                                  if (card_award[2][index] == -2)
+                                    Positioned(left: 0.w,top: 8.h,child: CSBouncyImage(imagePath: 'cs_tx_quu', width: 55.w, height: 55.w, enableAnimation: _show_animation)),
+                                  if (card_award[2][index] == -2)
+                                    Column(
+                                      children: [
+                                        SizedBox(height: 50.h),
+                                        Padding(padding: EdgeInsetsGeometry.only(left: 12.w),child: CSStrokeText(text: '${card_award[7]}', size: 14, color: '#FFDD1F'.color(), weight: FontWeight.w900, skWidth: 1, skColor: '#000000'.color()))
+                                      ],
+                                    ),
                                   if (card_award[2][index] == -1)
                                     Center(child: CSAnimatedImageMove(imageUrl: 'cs_key_icon', isAnimationEnabled: _show_animation, ws: 50, hs: 50, targetKey: targetKey)),
                                   if (award_index.contains(index))
@@ -987,6 +1396,7 @@ class _CSScratchCardVCState extends State<CSScratchCardVC> with SingleTickerProv
                 Future.delayed(Duration(milliseconds: 2000),() async {
                   // key
                   if (card_award[0] == 1){
+                    cs_event_fire('key_out', {'source_from' : getTypeName()});
                     await CSLocalProvider.instance.updateint(CSLocalProvider.instance.cs_wheel_numberName, CSLocalProvider.instance.cs_wheel_number + 1);
                     Future.delayed(Duration(milliseconds: 100),() async {
                       CSLuckyWheelNotificationService.sendToDomandNumberNotification(0);
@@ -1011,31 +1421,65 @@ class _CSScratchCardVCState extends State<CSScratchCardVC> with SingleTickerProv
 
                   if (card_award[1] == 1){
                     if (card_award[4] >= CSNumberHelpers().getbigwinNum()){
-                      int code = await context.tipShow2(CSBigwinDialog(award: card_award[4], isGuide: false));
-                      if (code >= 0){
-                        if (CSLocalProvider.instance.cs_scrach_end_number_5 >= 10){
-                          Navigator.pop(context);
-                        } else {
-                          showTXPopDialog();
+                      if (card_award[6] == true){
+                        int code = await context.tipShow2(CSBigWinLevelDialog(award: card_award[4], type: widget.type, qunm_award: card_award[7]));
+                        if (code >= 0){
+                          if (CSLocalProvider.instance.cs_scrach_end_number_5 >= 10){
+                            Navigator.pop(context);
+                          } else {
+                            showLevelDialog();
+                          }
+                        }
+                      } else {
+                        int code = await context.tipShow2(CSBigwinDialog(award: card_award[4], isGuide: false, type: widget.type));
+                        if (code >= 0){
+                          if (CSLocalProvider.instance.cs_scrach_end_number_5 >= 10){
+                            Navigator.pop(context);
+                          } else {
+                            showLevelDialog();
+                          }
                         }
                       }
                     } else {
-                      int code = await context.tipShow2(CSCashWinDialog(award: card_award[4], isGuide: false));
-                      if (code >= 0){
-                        if (CSLocalProvider.instance.cs_scrach_end_number_5 >= 10){
-                          Navigator.pop(context);
-                        } else {
-                          showTXPopDialog();
+                      if (card_award[6] == true){
+                        int code = await context.tipShow2(CSCashwindoubleDialog(award: card_award[4], type: widget.type, qunm_award: card_award[7]));
+                        if (code >= 0){
+                          if (CSLocalProvider.instance.cs_scrach_end_number_5 >= 10){
+                            Navigator.pop(context);
+                          } else {
+                            showLevelDialog();
+                          }
+                        }
+                      } else {
+                        int code = await context.tipShow2(CSCashWinDialog(award: card_award[4], isGuide: false, type: widget.type));
+                        if (code >= 0){
+                          if (CSLocalProvider.instance.cs_scrach_end_number_5 >= 10){
+                            Navigator.pop(context);
+                          } else {
+                            showLevelDialog();
+                          }
                         }
                       }
                     }
                   } else {
-                    int code = await context.tipShow2(CSNotAwardDialog());
-                    if (code >= 0){
-                      if (CSLocalProvider.instance.cs_scrach_end_number_5 >= 10){
-                        Navigator.pop(context);
-                      } else {
-                        showTXPopDialog();
+                    if (card_award[6] == true) {
+                      int code = await context.tipShow2(CSAccelerationCardDialog(award: card_award[7]));
+                      if (code >= 0){
+                        if (CSLocalProvider.instance.cs_scrach_end_number_5 >= 10){
+                          Navigator.pop(context);
+                        } else {
+                          showLevelDialog();
+                        }
+                      }
+
+                    } else {
+                      int code = await context.tipShow2(CSNotAwardDialog());
+                      if (code >= 0){
+                        if (CSLocalProvider.instance.cs_scrach_end_number_5 >= 10){
+                          Navigator.pop(context);
+                        } else {
+                          showLevelDialog();
+                        }
                       }
                     }
                   }
@@ -1063,64 +1507,33 @@ class _CSScratchCardVCState extends State<CSScratchCardVC> with SingleTickerProv
     setTxProgress();
     if (CSLocalProvider.instance.cs_scratch_gua_index == CSLocalProvider.instance.card_push_number && CSLocalProvider.instance.cs_account_id.isEmpty){
       int code = await context.tipShow(CSCardTipsDialog());
-      if (code >= 0){
-        showLevelDialog();
-      }
     } else if (CSLocalProvider.instance.cs_account_id.isNotEmpty && CSLocalProvider.instance.cs_dollar_number / CSNumberHelpers().gameModel!.card_range.first >= 0.8 && CSLocalProvider.instance.cs_dolas_80_end == false){
       await CSLocalProvider.instance.updateBool(CSLocalProvider.instance.cs_dolas_80_endName, true);
       int code = await context.tipShow(CSCardTipsDialog());
-      if (code >= 0){
-        showLevelDialog();
-      }
     } else if (CSLocalProvider.instance.cs_scratch_num_row >= 5) {
       await CSLocalProvider.instance.updateint(CSLocalProvider.instance.cs_scratch_num_rowName, 0);
+      cs_event_fire('card_toast', {});
       int code = await context.tipShow(CSCardhengDialog(tips: RewardTextUtil.getRandomMessage()));
-      if (code >= 0){
-        showLevelDialog();
-      }
     } else if (CSLocalProvider.instance.cs_scratch_num_index == 8 || CSLocalProvider.instance.cs_scratch_num_index == 15 || CSLocalProvider.instance.cs_scratch_num_index == 20){
-      int code = await context.tipShow(CSQuizRankTwoDialog(quiz_num: CSLocalProvider.instance.cs_scratch_num_index + 20));
-      if (code >= 0){
-        showLevelDialog();
-      }
+      int code = await context.tipShow(CSQuizRankTwoDialog(quiz_num: CSLocalProvider.instance.cs_scratch_gua_index));
     } else if (CSLocalProvider.instance.cs_card_quicken_num / 20 >= 0.3 && CSLocalProvider.instance.cs_card_quicken_30 == false) {
       await CSLocalProvider.instance.updateBool(CSLocalProvider.instance.cs_card_quicken_30Name, true);
       int code = await context.tipShow(CSTXonly2Dialog(pro: 75));
-      if (code >= 0){
-        showLevelDialog();
-      }
     } else if (CSLocalProvider.instance.cs_card_quicken_num / 20 >= 0.5 && CSLocalProvider.instance.cs_card_quicken_50 == false) {
       await CSLocalProvider.instance.updateBool(CSLocalProvider.instance.cs_card_quicken_50Name, true);
       int code = await context.tipShow(CSTXonly2Dialog(pro: 89));
-      if (code >= 0){
-        showLevelDialog();
-      }
     } else if (CSLocalProvider.instance.cs_card_quicken_num / 20 >= 0.8 && CSLocalProvider.instance.cs_card_quicken_80 == false) {
       await CSLocalProvider.instance.updateBool(CSLocalProvider.instance.cs_card_quicken_80Name, true);
       int code = await context.tipShow(CSTXonly2Dialog(pro: 99));
-      if (code >= 0){
-        showLevelDialog();
-      }
     } else if (CSLocalProvider.instance.cs_card_quicken_num / 20 >= 0.9 && CSLocalProvider.instance.cs_card_quicken_90 == false) {
       await CSLocalProvider.instance.updateBool(CSLocalProvider.instance.cs_card_quicken_90Name, true);
       int code = await context.tipShow(CSTXonlyDialog());
-      if (code >= 0){
-        showLevelDialog();
-      }
     } else if (CSLocalProvider.instance.cs_card_quicken_num >= 19 && CSLocalProvider.instance.cs_card_quicken_1 == false) {
-      await CSLocalProvider.instance.updateBool(CSLocalProvider.instance.cs_card_quicken_90Name, true);
+      await CSLocalProvider.instance.updateBool(CSLocalProvider.instance.cs_card_quicken_1Name, true);
       int code = await context.tipShow(CSTXonly3Dialog());
-      if (code >= 0){
-        showLevelDialog();
-      }
     } else if (CSLocalProvider.instance.cs_card_quicken_num >= 19.9 && CSLocalProvider.instance.cs_card_quicken_01 == false) {
       await CSLocalProvider.instance.updateBool(CSLocalProvider.instance.cs_card_quicken_01Name, true);
       int code = await context.tipShow(CSTXonly3Dialog());
-      if (code >= 0){
-        showLevelDialog();
-      }
-    } else {
-      showLevelDialog();
     }
   }
   // 显示升级
@@ -1138,13 +1551,48 @@ class _CSScratchCardVCState extends State<CSScratchCardVC> with SingleTickerProv
   }
 
   // 判断是否发起提现
-  void txFirstShowDialog(){
-    if (CSLocalProvider.instance.cs_dollar_number >= CSNumberHelpers().gameModel!.card_range.first && CSLocalProvider.instance.cs_first_show_cash == false){
-      CSLocalProvider.instance.updateBool(CSLocalProvider.instance.cs_first_show_cashName, true);
-      context.tipShow(CSLastTipsDialog());
-    }
+  Future<void> txFirstShowDialog() async {
+    Future.delayed(Duration(milliseconds: 100),() async {
+      if (CSLocalProvider.instance.cs_dollar_number >= CSNumberHelpers().gameModel!.card_range.first && CSLocalProvider.instance.cs_first_show_cash == false) {
+        CSLocalProvider.instance.updateBool(
+            CSLocalProvider.instance.cs_first_show_cashName, true);
+        CSLocalProvider.instance.updateint(
+            CSLocalProvider.instance.cs_qunm_ad_indexName, 0);
+        int code = await context.tipShow(CSLastTipsDialog());
+        if (code >= 0) {
+          showBoxGuide();
+        }
+      } else {
+        showBoxGuide();
+      }
+    });
   }
 
+  // 是否显示宝箱引导
+  Future<void> showBoxGuide() async {
+    if (CSLocalProvider.instance.cs_scratch_box_index >= 5 && CSLocalProvider.instance.cs_show_box_guide == false) {
+      CSLocalProvider.instance.updateBool(CSLocalProvider.instance.cs_show_box_guideName, true);
+      int code = await context.tipShow(CSBoxGuideDialog());
+      if (code >= 0){
+        showRankDialog();
+      }
+    } else {
+      showRankDialog();
+    }
+  }
+  // 是否显示排行榜
+  Future<void> showRankDialog() async {
+    if (CSLocalProvider.instance.cs_card_quicken_num >= 20 && CSLocalProvider.instance.cs_first_show_rank == false){
+      CSLocalProvider.instance.updateBool(CSLocalProvider.instance.cs_first_show_rankName, true);
+      // 显示排行榜
+      int code = await context.tipShow(CSRankDialog());
+      if (code >= 0){
+        showTXPopDialog();
+      }
+    } else {
+      showTXPopDialog();
+    }
+  }
 
   // 提现任务进度记录
   Future<void> setTxProgress() async {
@@ -1272,12 +1720,29 @@ class _CSScratchCardVCState extends State<CSScratchCardVC> with SingleTickerProv
         children: [
           Column(
             children: [
+              ParticleButton(
+                onTap: (){
+                  if (!_show_animation){
+                    CSScratchUpdateNotificationService.sendToDomandNumberNotification(1);
+                  }
+                },
+                child: Container(
+                  width: 264.w,
+                  height: 52,
+                  decoration: BoxDecoration(
+                      image: CSDImg('cs_green_btn_bg')
+                  ),
+                  child: Center(
+                    child: CSStrokeText(text: 'REVEAL ALL', size: 24, color: '#FFFFFF'.color(), weight: FontWeight.w900, skWidth: 2, skColor: '#5C2F02'.color()),
+                  ),
+                ),
+              ),
               Row(
                 children: [
                   SizedBox(width: 16.w),
                   ParticleButton(child: Container(
-                    width: 52,
-                    height: 52,
+                    width: 60,
+                    height: 60,
                     key: targetKey,
                     decoration: BoxDecoration(
                         image: CSDImg('cs_wheel_icon_bottom')
@@ -1290,12 +1755,13 @@ class _CSScratchCardVCState extends State<CSScratchCardVC> with SingleTickerProv
                     ),
                   ), onTap: (){
                     Navigator.pop(context);
+                    cs_event_fire('wheel_c', {'source_from' : 'detail'});
                     CashTabController.switchTo(1);
                   }),
-                  SizedBox(width: 50.w),
+                  SizedBox(width: 48.w),
                   ParticleButton(
                     onTap: (){
-                      // ad
+                      context.tipShow(CSMoreCardDialog(card_index: widget.type));
                     },
                     child: SizedBox(
                       width: 138,
@@ -1323,31 +1789,7 @@ class _CSScratchCardVCState extends State<CSScratchCardVC> with SingleTickerProv
                               ],
                             ),
                           )),
-                          CSImg(name: 'cs_cards_un_btn', width: 44, height: 44),
                         ],
-                      ),
-                    ),
-                  )
-                ],
-              ),
-              SizedBox(height: 7.8),
-              Row(
-                children: [
-                  SizedBox(width: 16.w),
-                  ParticleButton(
-                    onTap: (){
-                       if (!_show_animation){
-                         CSScratchUpdateNotificationService.sendToDomandNumberNotification(1);
-                       }
-                    },
-                    child: Container(
-                      width: 262.w,
-                      height: 52,
-                      decoration: BoxDecoration(
-                          image: CSDImg('cs_green_btn_bg')
-                      ),
-                      child: Center(
-                        child: CSStrokeText(text: 'REVEAL ALL', size: 24, color: '#FFFFFF'.color(), weight: FontWeight.w900, skWidth: 2, skColor: '#5C2F02'.color()),
                       ),
                     ),
                   ),
@@ -1355,11 +1797,12 @@ class _CSScratchCardVCState extends State<CSScratchCardVC> with SingleTickerProv
                   ParticleButton(
                     onTap: (){
                       Navigator.pop(context);
+                      cs_event_fire('cash_page', {'page_from' : 'detail'});
                       CashTabController.switchTo(2);
                     },
                     child: Container(
-                      width: 52,
-                      height: 52,
+                      width: 60,
+                      height: 60,
                       decoration: BoxDecoration(
                           image: CSDImg('cs_cash_btn')
                       ),
@@ -1371,13 +1814,15 @@ class _CSScratchCardVCState extends State<CSScratchCardVC> with SingleTickerProv
                       ),
                     ),
                   ),
-                  SizedBox(width: 16.w),
+                  SizedBox(width: 16.w)
                 ],
-              )
+              ),
             ],
           ),
+          Positioned(left: 120.w,top: 62,child: CSImg(name: 'cs_cards_un_btn', width: 44, height: 44)),
           Positioned(
             left: 48.w,
+            top: 55,
             child: Container(
               width: 44,
               height: 20,
@@ -1715,13 +2160,13 @@ class _CSCardNavBarWidgetState extends State<CSCardNavBarWidget> with SingleTick
                   children: [
                     SizedBox(width: 16.w),
                     ParticleButton(child: CSImg(name: 'cs_home_icon', width: 36, height: 36), onTap: (){
-                      // Navigator.pop(context);
-                      context.tipShow2(CSGuideNew6Dialog());
+                      Navigator.pop(context);
                     }),
                     SizedBox(width: 8.w),
                     ParticleButton(
                       onTap: (){
                         Navigator.pop(context);
+                        cs_event_fire('cash_page', {'page_from' : 'detail'});
                         CashTabController.switchTo(2);
                       },
                       child: Container(
@@ -1813,6 +2258,7 @@ class _CSCardNavBarWidgetState extends State<CSCardNavBarWidget> with SingleTick
   }
 }
 
+
 class GradientCircleProgress extends StatelessWidget {
   final double progress; // 0.0 ~ 1.0
 
@@ -1847,30 +2293,36 @@ class _GradientCirclePainter extends CustomPainter {
 
     final rect = Rect.fromCircle(center: center, radius: radius);
 
-    final gradient = SweepGradient(
-      startAngle: -pi / 2,
-      endAngle: 3 * pi / 2,
-      colors: const [
-        Color(0xFFFFAC00),
-        Color(0xFFE46700),
-      ],
-    );
+    final p = progress.clamp(0.0, 1.0);
+    final sweepAngle = 2 * pi * p;
 
-    final paint = Paint()
-      ..shader = gradient.createShader(rect)
+    /// =========================
+    /// 关键：先画“完整渐变圆环底层”
+    /// =========================
+    final gradientPaint = Paint()
+      ..shader = const SweepGradient(
+        startAngle: -pi / 2,
+        endAngle: 3 * pi / 2,
+        colors: [
+          Color(0xFFFFAC00),
+          Color(0xFFFFAC00),
+          Color(0xFFE46700),
+          Color(0xFFE46700),
+          Color(0xFFFFAC00),
+          Color(0xFFFFAC00),
+        ],
+      ).createShader(rect)
       ..style = PaintingStyle.stroke
       ..strokeWidth = strokeWidth
       ..strokeCap = StrokeCap.round;
 
-    final sweepAngle = 2 * pi * progress.clamp(0.0, 1.0);
+    /// =========================
+    /// 只裁剪“进度部分”
+    /// =========================
+    final path = Path()
+      ..addArc(rect, -pi / 2, sweepAngle);
 
-    canvas.drawArc(
-      rect,
-      -pi / 2,
-      sweepAngle,
-      false,
-      paint,
-    );
+    canvas.drawPath(path, gradientPaint);
   }
 
   @override
@@ -1918,7 +2370,7 @@ class _CSBubbleButtonState extends State<CSBubbleButton> with SingleTickerProvid
 
   bool _showPop = true;
 
-  double _pptReward = CSNumberHelpers().getPrizeWithBubbledollarsNum();
+  double _pptReward = (CSLocalProvider.instance.cs_dollar_number >= CSNumberHelpers().gameModel!.card_range.first && CSLocalProvider.instance.cs_card_quicken_num < 20) ? CSNumberHelpers().getPointWithQuickenDouble() :CSNumberHelpers().getPrizeWithBubbledollarsNum();
   late double maxW, maxH;
   late double screenWidth;
   late double screenHeight;
@@ -1994,12 +2446,12 @@ class _CSBubbleButtonState extends State<CSBubbleButton> with SingleTickerProvid
           child: Container(
             width: _iconSize,
             height: _iconSize,
-            decoration: BoxDecoration(image: CSDImg('cs_dolas_bubble')),
+            decoration: BoxDecoration(image: CSDImg((CSLocalProvider.instance.cs_dollar_number >= CSNumberHelpers().gameModel!.card_range.first && CSLocalProvider.instance.cs_card_quicken_num < 20) ? 'cs_quu_bubble' : 'cs_dolas_bubble')),
             child: Column(
               children: [
                 Spacer(),
                 CSStrokeText(
-                  text: '\$${_pptReward.toStringAsFixed(2)}',
+                  text: '${(CSLocalProvider.instance.cs_dollar_number >= CSNumberHelpers().gameModel!.card_range.first && CSLocalProvider.instance.cs_card_quicken_num < 20) ? 'X' : '\$'}${_pptReward.toStringAsFixed(2)}',
                   size: 14,
                   color: '#FBF544'.color(),
                   weight: FontWeight.w700,
@@ -2016,13 +2468,17 @@ class _CSBubbleButtonState extends State<CSBubbleButton> with SingleTickerProvid
   }
 
   void _openPopPT() {
-    cs_event_fire('bubble_c', {});
-    CSCardAds().cs_showAd(context, 'pppuz_bubble_int', onCacheResponse: (onCacheResponse) {
+    cs_event_fire('float_c', {});
+    CSCardAds().cs_showAd(context, 'pppuz_bubble_rv', onCacheResponse: (onCacheResponse) {
       _hidePoPT();
     }, adDidClosed: (adDidClosed) async {
-      await CSLocalProvider.instance.updatedouble(
-          CSLocalProvider.instance.cs_dolas_numberName, CSLocalProvider.instance.cs_dollar_number + _pptReward
-      );
+      if ((CSLocalProvider.instance.cs_dollar_number >= CSNumberHelpers().gameModel!.card_range.first && CSLocalProvider.instance.cs_card_quicken_num < 20)){
+        await CSLocalProvider.instance.updatedouble(
+            CSLocalProvider.instance.cs_card_quicken_numName, CSLocalProvider.instance.cs_card_quicken_num + _pptReward);
+      } else {
+        await CSLocalProvider.instance.updatedouble(
+            CSLocalProvider.instance.cs_dolas_numberName, CSLocalProvider.instance.cs_dollar_number + _pptReward);
+      }
       playbgMUsic();
       _hidePoPT();
       setTxProgress();
@@ -2040,12 +2496,13 @@ class _CSBubbleButtonState extends State<CSBubbleButton> with SingleTickerProvid
   }
 
   void _hidePoPT() {
-    _pptReward = CSNumberHelpers().getPrizeWithBubbledollarsNum();
+    _pptReward = (CSLocalProvider.instance.cs_dollar_number >= CSNumberHelpers().gameModel!.card_range.first && CSLocalProvider.instance.cs_card_quicken_num < 20) ? CSNumberHelpers().getPointWithQuickenDouble() :CSNumberHelpers().getPrizeWithBubbledollarsNum();
     if (mounted) {
       setState(() {
         _showPop = false;
       });
     }
+    showRankDialog();
     Future.delayed(const Duration(seconds: 5), () {
       if (!mounted) return;
       if (mounted) {
@@ -2054,6 +2511,15 @@ class _CSBubbleButtonState extends State<CSBubbleButton> with SingleTickerProvid
         });
       }
     });
+  }
+
+  // 是否显示排行榜
+  void showRankDialog() {
+    if (CSLocalProvider.instance.cs_card_quicken_num >= 20 && CSLocalProvider.instance.cs_first_show_rank == false){
+      CSLocalProvider.instance.updateBool(CSLocalProvider.instance.cs_first_show_rankName, true);
+      // 显示排行榜
+      context.tipShow(CSRankDialog());
+    }
   }
 
 
@@ -2086,5 +2552,76 @@ class _CSBubbleButtonState extends State<CSBubbleButton> with SingleTickerProvid
         }
       });
     };
+  }
+}
+
+class ShakeContainer extends StatefulWidget {
+  final Widget child;
+
+  /// 外部开关
+  final bool enableShake;
+
+  const ShakeContainer({
+    super.key,
+    required this.child,
+    this.enableShake = true,
+  });
+
+  @override
+  State<ShakeContainer> createState() => _ShakeContainerState();
+}
+
+class _ShakeContainerState extends State<ShakeContainer>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 350),
+    );
+
+    if (widget.enableShake) {
+      _controller.repeat();
+    }
+  }
+
+  @override
+  void didUpdateWidget(covariant ShakeContainer oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    if (widget.enableShake && !_controller.isAnimating) {
+      _controller.repeat();
+    } else if (!widget.enableShake && _controller.isAnimating) {
+      _controller.stop();
+    }
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  double get _angle {
+    /// -25° ~ +25°
+    return sin(_controller.value * 2 * pi) * (15 * pi / 180);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedBuilder(
+      animation: _controller,
+      child: widget.child,
+      builder: (context, child) {
+        return Transform.rotate(
+          angle: widget.enableShake ? _angle : 0,
+          child: child,
+        );
+      },
+    );
   }
 }

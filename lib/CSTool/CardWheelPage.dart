@@ -31,7 +31,7 @@ class _CardWheelPageState extends State<CardWheelPage>
   void initState() {
     super.initState();
     _controller = AnimationController(
-      duration: Duration(milliseconds: 1000),
+      duration: Duration(milliseconds: 4000),
       vsync: this,
     );
 

@@ -1,21 +1,21 @@
 {
   "project_info": {
-    "project_number": "340165238624",
-    "project_id": "gp-21735",
-    "storage_bucket": "gp-21735.firebasestorage.app"
+    "project_number": "586871617067",
+    "project_id": "gp-168",
+    "storage_bucket": "gp-168.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:340165238624:android:93cc65b1a64f1cefaac805",
+        "mobilesdk_app_id": "1:586871617067:android:1ed5ea8429c5ee23d51c6e",
         "android_client_info": {
-          "package_name": "com.example.cashscratchgo2"
+          "package_name": "com.scratchcard.earngo.pro"
         }
       },
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyDDGyR6SdZEwBeju-sHYQ2eWX9H1h3gi24"
+          "current_key": "AIzaSyDM6nMv2EgFOOra8gBaIxOU50Hy426glGE"
         }
       ],
       "services": {

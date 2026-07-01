@@ -46,9 +46,6 @@ class CSAudioUtils {
 
   /// 播放背景音乐，循环播放
   Future<void> playBGM({double volume = 0.6}) async {
-    if (!CSLocalProvider.instance.cs_bg_music) {
-      return;
-    }
     if(_bgmPlayer.state == PlayerState.stopped){
       await _bgmPlayer.setReleaseMode(ReleaseMode.loop);
       await _bgmPlayer.setVolume(volume);
@@ -81,20 +78,20 @@ class CSAudioUtils {
     _bgmPlaying = false;
   }
 
-  Future<void> playAward1Audio()async{
-    playTempAudio("cs_award1".mp3files());
+  Future<void> playBigwinAudio()async{
+    playTempAudio("cs_bigwin".mp3files());
   }
 
-  Future<void> playAward2Audio()async{
-    playTempAudio("cs_award2".mp3files());
+  Future<void> playCashAudio()async{
+    playTempAudio("cs_cash".mp3files());
   }
 
-  Future<void> playAward3Audio()async{
-    playTempAudio("cs_award3".mp3files());
+  Future<void> playGuaAudio()async{
+    playTempAudio("cs_gua".mp3files());
   }
 
-  Future<void> playUnAwardAudio()async{
-    playTempAudio("cs_un_award".mp3files());
+  Future<void> playWheelAudio()async{
+    playTempAudio("cs_wheel".mp3files());
   }
 
   Future<void> playchouAudio()async{
@@ -105,12 +102,12 @@ class CSAudioUtils {
     playTempAudio("".mp3files());
   }
 
-  Future<void> playGuakaAudio()async{
-    playTempAudio("cs_gua1".mp3files());
+  Future<void> playkkAudio()async{
+    playTempAudio("".mp3files());
   }
 
   Future<void> playDolasAudio()async{
-    playTempAudio("cs_dolas".mp3files());
+    playTempAudio("".mp3files());
   }
 
   Future<void> playShaiziAudio()async{

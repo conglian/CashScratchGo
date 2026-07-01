@@ -4,6 +4,7 @@ import 'dart:ui';
 import 'package:cashscratchgo/CSBasic/CSTabBar.dart';
 import 'package:cashscratchgo/CSDialog/CSGuideDialog.dart';
 import 'package:cashscratchgo/CSTool/CSNumberHelpers.dart';
+import 'package:cashscratchgo/CSTool/CSTBAEventTool.dart';
 import 'package:cashscratchgo/CSTool/cs_GradientNumber.dart';
 import 'package:cashscratchgo/CSTool/cs_GradientText.dart';
 import 'package:cashscratchgo/CSTool/cs_extension_help.dart';
@@ -70,6 +71,7 @@ class _CSHomeListVCState extends State<CSHomeListVC> with SingleTickerProviderSt
   @override
   void initState() {
     super.initState();
+    cs_event_fire('home_page', {});
     WidgetsBinding.instance.addPostFrameCallback((_) {
       oldGuideWidget();
       CSGuideManager.showStep(context);
@@ -82,6 +84,7 @@ class _CSHomeListVCState extends State<CSHomeListVC> with SingleTickerProviderSt
     });
     _setStarTime();
     startTimer();
+    CSLocalProvider.instance.updateBool(CSLocalProvider.instance.cs_first_show_homeName, true);
   }
   // 老用户流程
   void oldGuideWidget(){
@@ -112,7 +115,7 @@ class _CSHomeListVCState extends State<CSHomeListVC> with SingleTickerProviderSt
         final now = DateTime.now();
         final elapsed = now.difference(_startTime1!);
         if (elapsed < const Duration(minutes: 3)) {
-          _remainingDuration0 = const Duration(minutes: 3) - elapsed;
+          _remainingDuration1 = const Duration(minutes: 3) - elapsed;
         } else {
           _remainingDuration1 = Duration.zero;
           CSLocalProvider.instance.updateString(CSLocalProvider.instance.cs_scrach_end_time_1Name, '');
@@ -556,6 +559,7 @@ class _CSNavBarWidgetState extends State<CSNavBarWidget> with SingleTickerProvid
                     SizedBox(width: 8.w),
                     ParticleButton(
                       onTap: (){
+                        cs_event_fire('cash_page', {'page_from' : 'home'});
                         CashTabController.switchTo(2);
                       },
                       child: Container(
@@ -639,8 +643,7 @@ class _CSNavBarWidgetState extends State<CSNavBarWidget> with SingleTickerProvid
                     )),
                     Spacer(),
                     ParticleButton(child: CSImg(name: 'cs_setting_icon', width: 32, height: 32), onTap: (){
-                       // context.tipShow(CSSettingDialog());
-                       context.tipShow(CSLastTipsDialog());
+                       context.tipShow(CSSettingDialog());
                     }),
                     SizedBox(width: 16.w)
                   ],

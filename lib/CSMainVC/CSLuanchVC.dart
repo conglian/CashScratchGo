@@ -9,6 +9,7 @@ import '../CSBasic/CSTabBar.dart';
 import '../CSTool/CSNoticeHelp.dart';
 import '../CSTool/CSTBAEventTool.dart';
 import '../CSTool/cs_LocalProvider.dart';
+import '../CSTool/cs_ad_manger.dart';
 import '../CSTool/cs_extension_help.dart';
 import '../CSTool/cs_img.dart';
 import '../CSTool/cs_stroke_text.dart';
@@ -45,18 +46,18 @@ class CSLaunchState extends State<CSLaunch>
   void cs_getUserCloakConfig() async {
     try {
       var responseData = await CSRequestHelpers().getCloak();
-      print('pigwalletspine Config Result: $responseData');
+      print('cashscratchGo Config Result: $responseData');
       cs_event_fire("cloak_req", {});
       cs_event_fire("cloak_suc", {
-        "cloak_user": responseData.toString() == "freshen" ? 1 : 0,
+        "cloak_user": responseData.toString() == "impolite" ? 1 : 0,
       });
       final SharedPreferences prefs = await SharedPreferences.getInstance();
       if (prefs.getBool('sp_install_status') == null){
         prefs.setBool('sp_install_status', true);
       }
-      CSLocalProvider.instance.updateBool(CSLocalProvider.instance.cs_cloak_statusName, responseData.toString() == "freshen" ? true : false);
+      CSLocalProvider.instance.updateBool(CSLocalProvider.instance.cs_cloak_statusName, responseData.toString() == "impolite" ? true : false);
     } catch (e) {
-      print('pigwalletspine Request Error: $e');
+      print('cashscratchGo Request Error: $e');
       Future.delayed(Duration(seconds: 1), () {
         cs_getUserCloakConfig();
       });
@@ -118,7 +119,19 @@ class CSLaunchState extends State<CSLaunch>
               SizedBox(height: 12.h),
               SJGradientProgressBar(
                 onCompleted: () {
-                  pushToGuide();
+                  if (CSLocalProvider.instance.cs_first_show_home == false){
+                    pushToGuide();
+                  } else {
+                    if (!CSCardAds().is_showAd){
+                      CSCardAds().cs_showAd(context, 'rakwt_launch_cold',showDialog: false, onCacheResponse: (onCacheResponse){
+                        pushToGuide();
+                      }, adDidClosed: (adDidClosed){
+                        pushToGuide();
+                      });
+                    } else {
+                      pushToGuide();
+                    }
+                  }
                 },
               ),
               SizedBox(height: 120.h),

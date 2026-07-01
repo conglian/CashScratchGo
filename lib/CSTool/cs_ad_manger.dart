@@ -12,6 +12,7 @@ import 'package:thinkup_sdk/at_rewarded.dart';
 import 'package:thinkup_sdk/at_rewarded_response.dart';
 import '../CSDialog/CSDialog.dart';
 import '../CSModel/CSAdModel.dart';
+import 'CSAudioUtils.dart';
 import 'CSFKManger.dart';
 import 'CSTBAEventTool.dart';
 import 'cs_LocalProvider.dart';
@@ -191,7 +192,7 @@ class CSCardAds {
     bool defaultMode = _CSPigAdModel!.nwkls_switch;
     "$runtimeType ad service request to show [$quizAdPlaceID], ad type is $adType, use mode #$defaultMode"
         .log();
-    cs_event_fire('nskdh_ad_chance', {"ad_pos_id": placeID});
+    cs_event_fire('ad_chance', {"ad_pos_id": placeID});
 
     if (defaultMode == false) {
       _showA(adType, placeID,onCacheResponse, context: context, showDialog: showDialog);
@@ -234,7 +235,7 @@ class CSCardAds {
 
     "$runtimeType prepare to show ad [A],type=$adType but no caches find!!".log();
     cs_event_fire(
-      "nskdh_ad_impression_fail",
+      "ad_impression_fail",
       {"ad_pos_id": placeID, "reason": 'notPrepared'},
     );
 
@@ -392,12 +393,12 @@ class CSCardAds {
     double ecpms = extMap['publisher_revenue'] ?? 0.0;
     String adunit_format = extMap['adunit_format'] ?? '';
     cs_ad_fire({
-      "strange": ecpms * 1000000,
-      "shiv": extMap["network_name"],
-      "pothole": 'topon_sdk',
-      "pharmacy": extMap['adunit_id'],
-      "lenin": quizAdPlaceID,
-      "buckskin": adunit_format.contains('Rewarded') ? 'rv' : 'int',
+      "vaduz": ecpms * 1000000,
+      "guru": extMap["network_name"],
+      "phenyl": 'topon_sdk',
+      "nauseate": extMap['adunit_id'],
+      "ambition": quizAdPlaceID,
+      "canister": adunit_format.contains('Rewarded') ? 'rv' : 'int',
     });
     adRevenues(ecpms);
     // to sdk
@@ -415,12 +416,14 @@ class CSCardAds {
   showfaildDiolog(BuildContext context) async {
     // 无网络
     bool isConnected = await NetworkUtils.isConnected();
-    if (isConnected) {
-      print("有网加载失败");
-      context.tipShow(CSAdLoadingDialog());
-    } else {
-      context.tipShow(CSNotWifiDialog());
-      print("设备无网络连接");
+    if (CSLocalProvider.instance.cs_new_guide_end == true){
+      if (isConnected) {
+        print("有网加载失败");
+        context.tipShow(CSAdLoadingDialog());
+      } else {
+        context.tipShow(CSNotWifiDialog());
+        print("设备无网络连接");
+      }
     }
   }
 
@@ -434,7 +437,7 @@ class CSCardAds {
       cs_event_fire(
         "cash_ad_detail",
         {
-          "ad_from": CSLocalProvider.instance.cs_ad_show_number ?? "",
+          "ad": CSLocalProvider.instance.cs_ad_show_number ?? "",
         },
       );
     }
@@ -663,6 +666,7 @@ extension AdServiceExtension on CSCardAds {
         case RewardedStatus.rewardedVideoDidStartPlaying:
           adImpression(value.extraMap);
           _adDidDisplayed(adID: value.placementID, ad_network: value.extraMap['network_name']);
+          CSLocalProvider.instance.updateint(CSLocalProvider.instance.cs_qunm_ad_indexName, CSLocalProvider.instance.cs_qunm_ad_index + 1);
           setTxProgress();
           break;
       // ad video start end
@@ -788,7 +792,7 @@ extension AdServiceExtension on CSCardAds {
     "$runtimeType ad did load success [${_ads[index].source}] type = ${_ads[index].type} id = ${_ads[index].ad_identifer} ecpm = ${_ads[index].ecpm} network = ${_ads[index].networkName}"
         .log();
     cs_event_fire(
-      "nskdh_ad_return",
+      "ad_return",
       {
         "ad_code_id": _ads[index].ad_identifer,
         "ad_format": _ads[index].type == "reward" ? "rv" : "int",
@@ -806,7 +810,7 @@ extension AdServiceExtension on CSCardAds {
       return;
     }
     cs_event_fire(
-      "nskdh_ad_return_fail",
+      "ad_return_fail",
       {
         "ad_code_id": quizAdPlaceID ?? "",
         "ad_format": _ads[index].getTypeToServer(),
@@ -822,9 +826,9 @@ extension AdServiceExtension on CSCardAds {
 
   Future<void>
   _adDidDisplayed({required String adID,required String ad_network}) async {
-    // if (CSLocalProvider.instance.cs_bg_music){
-    //   PSAudioUtils().pauseBGM();
-    // }
+    if (CSLocalProvider.instance.cs_bg_music){
+      CSAudioUtils().pauseBGM();
+    }
     int index = _ads.indexWhere((test) => test.ad_identifer == adID);
     if (index == -1) {
       "$runtimeType ad did display but cant find in ads data from id = $adID"
@@ -896,9 +900,9 @@ extension AdServiceExtension on CSCardAds {
   }
 
   Future<void> _adDidHidden({required String adId}) async {
-    // if (CSLocalProvider.instance.cs_bg_music){
-    //   PSAudioUtils().playBGM();
-    // }
+    if (CSLocalProvider.instance.cs_bg_music){
+      CSAudioUtils().playBGM();
+    }
     is_showAd = false;
     // 保存上次关闭广告时间仅限激励
     _savedTime = DateTime.now();
@@ -911,7 +915,7 @@ extension AdServiceExtension on CSCardAds {
     "$runtimeType ad did hidden success id = $adId".log();
     _ads[index].status = 0;
     cs_event_fire(
-      "nskdh_ad_imp_close",
+      "ad_close",
       {
         "ad_pos_id": quizAdPlaceID ?? "none",
         "msg": "impsus",

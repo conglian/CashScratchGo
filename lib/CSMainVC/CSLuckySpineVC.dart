@@ -4,9 +4,12 @@ import 'dart:ui';
 import 'package:cashscratchgo/CSDialog/CSDialog.dart';
 import 'package:cashscratchgo/CSDialog/CSGuideDialog.dart';
 import 'package:cashscratchgo/CSMainVC/CSCashListVC.dart';
+import 'package:cashscratchgo/CSTool/CSAudioUtils.dart';
 import 'package:cashscratchgo/CSTool/CSNumberHelpers.dart';
+import 'package:cashscratchgo/CSTool/CSTBAEventTool.dart';
 import 'package:cashscratchgo/CSTool/CardWheelPage.dart';
 import 'package:cashscratchgo/CSTool/cs_GradientText.dart';
+import 'package:cashscratchgo/CSTool/cs_ad_manger.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
@@ -152,7 +155,7 @@ class _CSLuckySpineVCState extends State<CSLuckySpineVC> with SingleTickerProvid
   }
   // 2=$20 1=加速卡 3=$50 4=$20 5=加速卡 6=$80 7=$100 8=$50
   void tapWheel(){
-    int awards = CSNumberHelpers().getWheelLuckyIndex();
+    cs_event_fire('wheel_page_c', {});
     if (is_tap_wheel== false) {
       if (CSLocalProvider.instance.cs_wheel_number <= 0){
         // 次数不足
@@ -161,52 +164,86 @@ class _CSLuckySpineVCState extends State<CSLuckySpineVC> with SingleTickerProvid
           context.tipShow(CSWheelNotDialog());
         });
       } else {
-        setTxProgress();
-        // 2=20 3=50 6=80 7=100
-        int row = 2;
-        if (awards == 20){
-          row = 2;
-        } else if (awards == 50){
-          row = 3;
-        } else if (awards == 80){
-          row = 6;
-        } else if (awards == 100){
-          row = 7;
+        if (CSNumberHelpers().checkProbability()){
+          CSCardAds().cs_showAd(context, CSLocalProvider.instance.cs_old_guide == false ? 'rakwt_signin_spin_int' : 'rakw_spin_int', onCacheResponse: (onCacheResponse){}, adDidClosed: (adDidClosed){
+            wheelSpin();
+          });
         } else {
-          row = 2;
-          awards = 20;
+          wheelSpin();
         }
-        WheelStartCSNotificationService.sendToStartIndexNotification(row);
-        CSLocalProvider.instance.updateint(CSLocalProvider.instance.cs_wheel_numberName, CSLocalProvider.instance.cs_wheel_number - 1);
-        Future.delayed(Duration(seconds: 2),() async {
-          if (CSLocalProvider.instance.cs_wheel_number <= 0){
-            CSLuckyWheelNotificationService.sendToDomandNumberNotification(0);
-          }
-          is_tap_wheel = false;
-          if (CSLocalProvider.instance.cs_old_guide == false){
-            CSLocalProvider.instance.updateBool(CSLocalProvider.instance.cs_old_guideName, true);
-             int code = await context.tipShow(CSOldAwardDialog(award: 0.to2Double(awards)));
-             if (code >= 0){
-               txFirstShowDialog();
-             }
-          } else {
-            int code = await context.tipShow(CSBigwinDialog(award: 0.to2Double(awards), isGuide: false));
-            if (code >= 0){
-              txFirstShowDialog();
-            }
-          }
-        });
       }
     }
     is_tap_wheel = true;
   }
+
+  void wheelSpin(){
+    double awards = 0.to2Double(CSNumberHelpers().getWheelLuckyIndex());
+    if (CSLocalProvider.instance.cs_sound_music){
+      CSAudioUtils().playWheelAudio();
+    }
+    setTxProgress();
+    int row = 2;
+    // 2=20 3=50 6=80 7=100
+    if (CSLocalProvider.instance.cs_dollar_number >= CSNumberHelpers().gameModel!.card_range.first && CSLocalProvider.instance.cs_card_quicken_num < 20){
+      row = 5;
+      awards = 0;
+    } else {
+      if (awards == 20){
+        row = 2;
+      } else if (awards == 50){
+        row = 3;
+      } else if (awards == 80){
+        row = 6;
+      } else if (awards == 100){
+        row = 7;
+      } else {
+        row = 2;
+        awards = 20;
+      }
+    }
+    WheelStartCSNotificationService.sendToStartIndexNotification(row);
+    CSLocalProvider.instance.updateint(CSLocalProvider.instance.cs_wheel_numberName, CSLocalProvider.instance.cs_wheel_number - 1);
+    Future.delayed(Duration(seconds: 4),() async {
+      CSAudioUtils().stopAllTempAudio();
+      if (CSLocalProvider.instance.cs_wheel_number <= 0){
+        CSLuckyWheelNotificationService.sendToDomandNumberNotification(0);
+      }
+      is_tap_wheel = false;
+      if (CSLocalProvider.instance.cs_old_guide == false){
+        CSLocalProvider.instance.updateBool(CSLocalProvider.instance.cs_old_guideName, true);
+        int code = await context.tipShow(CSOldAwardDialog(award: 0.to2Double(awards)));
+        if (code >= 0){
+          txFirstShowDialog();
+        }
+      } else {
+        if (CSLocalProvider.instance.cs_dollar_number >= CSNumberHelpers().gameModel!.card_range.first && CSLocalProvider.instance.cs_card_quicken_num < 20) {
+          int code = await context.tipShow(CSAccelerationCardDialog(award: 0.to2Double(CSNumberHelpers().getPointWithQuickenDouble())));
+          if (code >= 0){
+            txFirstShowDialog();
+          }
+        } else {
+          int code = await context.tipShow(CSBigwinDialog(award: 0.to2Double(awards), isGuide: false, type: 6));
+          if (code >= 0){
+            txFirstShowDialog();
+          }
+        }
+      }
+    });
+  }
   
   // 判断是否发起提现
   void txFirstShowDialog(){
-    if (CSLocalProvider.instance.cs_dollar_number >= CSNumberHelpers().gameModel!.card_range.first && CSLocalProvider.instance.cs_first_show_cash == false){
-      CSLocalProvider.instance.updateBool(CSLocalProvider.instance.cs_first_show_cashName, true);
-      context.tipShow(CSLastTipsDialog());
-    }
+    Future.delayed(Duration(milliseconds: 100),(){
+      if (CSLocalProvider.instance.cs_dollar_number >= CSNumberHelpers().gameModel!.card_range.first && CSLocalProvider.instance.cs_first_show_cash == false){
+        CSLocalProvider.instance.updateBool(CSLocalProvider.instance.cs_first_show_cashName, true);
+        CSLocalProvider.instance.updateint(CSLocalProvider.instance.cs_qunm_ad_indexName, 0);
+        context.tipShow(CSLastTipsDialog());
+      } else if (CSLocalProvider.instance.cs_card_quicken_num >= 20 && CSLocalProvider.instance.cs_first_show_rank == false){
+        CSLocalProvider.instance.updateBool(CSLocalProvider.instance.cs_first_show_rankName, true);
+        // 显示排行榜
+        context.tipShow(CSRankDialog());
+      }
+    });
   }
   // 提现任务进度记录
   Future<void> setTxProgress() async {
