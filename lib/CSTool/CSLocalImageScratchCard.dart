@@ -347,8 +347,8 @@ class _CSLocalImageScratchCardState extends State<CSLocalImageScratchCard> with 
       left: position.dx - 15,
       top: position.dy - 15,
       child: SizedBox(
-        width: 40,
-        height: 40,
+        width: 60,
+        height: 60,
         child: Image.asset('cs_xing_icon'.image(), fit: BoxFit.contain),
       ),
     );

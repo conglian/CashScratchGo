@@ -64,9 +64,8 @@ Future<void> main() async {
   final localStorageProvider = CSLocalProvider.instance;
   await localStorageProvider.init();
   await trigger.init();
-  print('CSLocalProvider.instance.cs_dolas_number=${CSLocalProvider.instance.cs_dollar_number}');
   // 模拟排队完成
-  // CSLocalProvider.instance.updatedouble(CSLocalProvider.instance.cs_current_rankingName, 20);
+  // CSLocalProvider.instance.updatedouble(CSLocalProvider.instance.cs_card_quicken_numName, 1);
   // CSLocalProvider.instance.updatedouble(CSLocalProvider.instance.cs_pig_level_indexName, 0);
   // 2. 注入Provider，包裹MyApp
   runApp(

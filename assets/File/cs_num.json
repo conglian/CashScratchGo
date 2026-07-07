@@ -28,17 +28,17 @@
     },
     {
       "first_number": 300,
-      "point": 50,
+      "point": 30,
       "end_number": 500
     },
     {
       "first_number": 500,
-      "point": 80,
+      "point": 50,
       "end_number": 800
     },
     {
       "first_number": 800,
-      "point": 90,
+      "point": 80,
       "end_number": 1000
     }
   ],
@@ -188,7 +188,7 @@
   },
   "card_number": {
     "winup_number": 60,
-    "point": 20,
+    "point": 50,
     "prize": [
       {
         "first_number": 0,

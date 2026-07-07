@@ -108,7 +108,7 @@ class CSCardAds {
   // 是否显示广告中
   late bool is_showAd = false;
   // 测试打开，上线关闭
-  final bool skipAd = true;
+  final bool skipAd = false;
 
   Future<void> init({CSAdModel? inputAd}) async {
     _ads = [];
@@ -192,7 +192,7 @@ class CSCardAds {
     bool defaultMode = _CSPigAdModel!.nwkls_switch;
     "$runtimeType ad service request to show [$quizAdPlaceID], ad type is $adType, use mode #$defaultMode"
         .log();
-    cs_event_fire('ad_chance', {"ad_pos_id": placeID});
+    cs_event_fire('ad_chance', {"ad_pos_id": placeID, 'ad_format' : placeID.contains('int') ? 'int' : 'rv'});
 
     if (defaultMode == false) {
       _showA(adType, placeID,onCacheResponse, context: context, showDialog: showDialog);
@@ -918,7 +918,7 @@ extension AdServiceExtension on CSCardAds {
       "ad_close",
       {
         "ad_pos_id": quizAdPlaceID ?? "none",
-        "msg": "impsus",
+        "ad_source_client": _ads[index].source,
         "ad_format": _ads[index].getTypeToServer(),
         "ad_code_id": _ads[index].ad_identifer,
       },

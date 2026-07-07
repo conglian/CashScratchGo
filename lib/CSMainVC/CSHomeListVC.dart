@@ -553,9 +553,12 @@ class _CSNavBarWidgetState extends State<CSNavBarWidget> with SingleTickerProvid
                 Row(
                   children: [
                     SizedBox(width: 16.w),
-                    ParticleButton(child: CSImg(name: 'cs_h5_icon', width: 36, height: 36), onTap: (){
-
-                    }),
+                    // ParticleButton(child: CSImg(name: 'cs_h5_icon', width: 36, height: 36), onTap: (){
+                    //
+                    // }),
+                    // ParticleButton(child: SizedBox(width: 36, height: 36), onTap: (){
+                    //
+                    // }),
                     SizedBox(width: 8.w),
                     ParticleButton(
                       onTap: (){
@@ -644,6 +647,7 @@ class _CSNavBarWidgetState extends State<CSNavBarWidget> with SingleTickerProvid
                     Spacer(),
                     ParticleButton(child: CSImg(name: 'cs_setting_icon', width: 32, height: 32), onTap: (){
                        context.tipShow(CSSettingDialog());
+                      // context.tipShow(CSAccelerationCardDialog(award: 20,));
                     }),
                     SizedBox(width: 16.w)
                   ],

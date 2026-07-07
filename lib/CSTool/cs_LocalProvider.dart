@@ -575,7 +575,7 @@ class CSLocalProvider extends ChangeNotifier {
     if (key == CSLocalProvider.instance.cs_dolas_numberName && value > 0){
       trigger.check(CSLocalProvider.instance.cs_dollar_number.toInt(), onTrigger: (level) {
         print("触发 → 达到 $level");
-        cs_event_fire('cash_money_detail', {'money_from' : level});
+        cs_event_fire('cash_money_detail', {'money' : level});
       });
       await prefs.setBool(cs_show_dolas_aniName, true);
     }

@@ -30,18 +30,18 @@ android {
         targetSdkVersion(36)
     }
 
-//    signingConfigs {
-//        create("release") {
-//            storeFile = file("/Users/scracthjoy/Desktop/pigwalletssigns.jks")
-//            storePassword = "123456"
-//            keyAlias = "pigwalletssigns"
-//            keyPassword = "123456"
-//        }
-//    }
+    signingConfigs {
+        create("release") {
+            storeFile = file("/Users/scracthjoy/Desktop/cashscratchgosigin.jks")
+            storePassword = "123456"
+            keyAlias = "cashscratchgosigin"
+            keyPassword = "123456"
+        }
+    }
 
     buildTypes {
         getByName("release") {
-//            signingConfig = signingConfigs.getByName("release")
+            signingConfig = signingConfigs.getByName("release")
             isMinifyEnabled = true
             isShrinkResources = true
             proguardFiles(

@@ -227,11 +227,6 @@ class CSGuideNew2DialogState extends State<CSGuideNew2Dialog>
     /// 无限循环
     _controller.repeat(reverse: true);
 
-    Future.delayed(Duration(milliseconds: 1800),(){
-      setState(() {
-        show_an = false;
-      });
-    });
   }
 
   @override
@@ -363,12 +358,34 @@ class CSGuideNew2DialogState extends State<CSGuideNew2Dialog>
                 child: SizedBox(
                   width: 0.width(context),
                   height: 252.h,
-                  child: Lottie.asset(
-                    width: 180.w,
-                    height: 180.w,
-                    fit: BoxFit.fill,
-                    "cs_gua_guide.zip".files(),
-                    repeat: true,
+                  child: InkWell(
+                    onTap: (){
+                      setState(() {
+                        show_an = false;
+                      });
+                    },
+                    onTapCancel: (){
+                      setState(() {
+                        show_an = false;
+                      });
+                    },
+                    onTapDown: (down){
+                      setState(() {
+                        show_an = false;
+                      });
+                    },
+                    onTapUp: (up){
+                      setState(() {
+                        show_an = false;
+                      });
+                    },
+                    child: Lottie.asset(
+                      width: 180.w,
+                      height: 180.w,
+                      fit: BoxFit.fill,
+                      "cs_gua_guide.zip".files(),
+                      repeat: true,
+                    ),
                   ),
                 ),
               )),
@@ -1169,12 +1186,16 @@ class CSCashWinDialogState extends State<CSCashWinDialog>
               //   ],
               // ),
               ParticleButton(
-                onTap: () {
+                onTap: () async {
                   cs_event_fire('cashwin_pop_c', {'source_from' : getTypeName(), 'card_from' : 'no'});
                   Navigator.pop(context, 1);
-                  CSCardAds().cs_showAd(context, 'rakwt_card_rv', onCacheResponse: (onCacheResponse){}, adDidClosed: (adDidClosed) async {
-                   await CSLocalProvider.instance.updatedouble(CSLocalProvider.instance.cs_dolas_numberName, (widget.award * 2) + CSLocalProvider.instance.cs_dollar_number);
-                  });
+                  if (CSNumberHelpers().checkProbability()){
+                    CSCardAds().cs_showAd(context, 'rakwt_card_int', onCacheResponse: (onCacheResponse){}, adDidClosed: (adDidClosed) async {
+                      await CSLocalProvider.instance.updatedouble(CSLocalProvider.instance.cs_dolas_numberName, (widget.award * 1) + CSLocalProvider.instance.cs_dollar_number);
+                    });
+                  } else {
+                    await CSLocalProvider.instance.updatedouble(CSLocalProvider.instance.cs_dolas_numberName, (widget.award * 1) + CSLocalProvider.instance.cs_dollar_number);
+                  }
                 },
                 child: Container(
                   width: 252.w,
@@ -1185,7 +1206,7 @@ class CSCashWinDialogState extends State<CSCashWinDialog>
                   child: Center(
                     child: CSStrokeText(
                       text:
-                      'CLAIM\$${(widget.award * 2).toStringAsFixed(2)}',
+                      'CLAIM\$${(widget.award * 1).toStringAsFixed(2)}',
                       size: 24,
                       color: '#FFFFFF'.color(),
                       weight: FontWeight.w900,

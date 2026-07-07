@@ -83,7 +83,7 @@ class _CashBottomExampleState extends State<CashBottomExample> {
               PersistentBottomNavBarItem(
                 icon: Image.asset('cs_tabbar_cash_n'.image()),
                 inactiveIcon: Image.asset('cs_tabbar_cash_s'.image()),
-                title: 'LUCKY SPIN',
+                title: 'CASH',
                 activeColorPrimary: Colors.transparent,
                 inactiveColorPrimary: Colors.transparent,
               ),
@@ -198,12 +198,12 @@ class _CustomNavBarWidgetState extends State<CustomNavBarWidget>
             curve: Curves.easeOut,
             top: isSelected ? -8 : 14, // 👈 关键点
             child: AnimatedScale(
-              scale: isSelected ? 1.45 : 1.0,
+              scale: isSelected ? 1.35 : 1.0,
               duration: const Duration(milliseconds: 500),
               curve: Curves.elasticOut,
               child: SizedBox(
-                width: 44,
-                height: 44,
+                width: 50,
+                height: 50,
                 child: isSelected ? item.inactiveIcon : item.icon,
               ),
             ),

@@ -110,7 +110,7 @@ class _CSGradientStrokeTextPainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     final baseStyle = TextStyle(
       fontSize: fontSizes.toDouble(),
-      fontWeight: FontWeight.bold,
+      fontWeight: FontWeight.w900,
       fontFamily: text_fontName,
       color: Colors.white,
     );

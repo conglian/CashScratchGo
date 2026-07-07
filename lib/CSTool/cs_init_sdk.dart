@@ -91,7 +91,7 @@ class CSSDKHelpers {
   }
 
   _initAdjustSDk() async {
-    const String appToken1 = ''; // relsease
+    const String appToken1 = 'vnci7e1gq7sw'; // relsease
     var disId = await FlutterTbaInfo.instance.getDistinctId();
     'disId=$disId'.log();
     Adjust.addGlobalCallbackParameter('customer_user_id', disId);

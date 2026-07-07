@@ -134,7 +134,13 @@ class CSBouncyText extends StatefulWidget {
   final double fontSize; // 字体大小
   final Color color; // 字体颜色
   final FontWeight fontWeight; // 字重
-  final bool enableAnimation; // ✅ 是否启用动画
+  final bool enableAnimation; // 是否启用动画
+
+  final double? width; // 可选宽度
+  final Color? backgroundColor; // 可选背景色
+
+  final double strokeWidth; // 描边宽度（0 = 不描边）
+  final Color? strokeColor; // 描边颜色
 
   const CSBouncyText({
     super.key,
@@ -142,7 +148,11 @@ class CSBouncyText extends StatefulWidget {
     required this.fontSize,
     required this.color,
     this.fontWeight = FontWeight.normal,
-    this.enableAnimation = true, // 默认开启动画
+    this.enableAnimation = true,
+    this.width,
+    this.backgroundColor,
+    this.strokeWidth = 0,
+    this.strokeColor,
   });
 
   @override
@@ -163,10 +173,15 @@ class _CSBouncyTextState extends State<CSBouncyText>
       duration: const Duration(milliseconds: 450),
     );
 
-    _scale = Tween(
+    _scale = Tween<double>(
       begin: 0.85,
       end: 1.05,
-    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut));
+    ).animate(
+      CurvedAnimation(
+        parent: _controller,
+        curve: Curves.easeInOut,
+      ),
+    );
 
     if (widget.enableAnimation) {
       _controller.repeat(reverse: true);
@@ -176,13 +191,13 @@ class _CSBouncyTextState extends State<CSBouncyText>
   @override
   void didUpdateWidget(covariant CSBouncyText oldWidget) {
     super.didUpdateWidget(oldWidget);
-    // 当外部切换动画状态时，动态启停动画
+
     if (oldWidget.enableAnimation != widget.enableAnimation) {
       if (widget.enableAnimation) {
         _controller.repeat(reverse: true);
       } else {
         _controller.stop();
-        _controller.value = 1.0; // 停止时恢复正常大小
+        _controller.value = 1.0;
       }
     }
   }
@@ -195,32 +210,60 @@ class _CSBouncyTextState extends State<CSBouncyText>
 
   @override
   Widget build(BuildContext context) {
-    // ✅ 没开动画时，直接返回普通 Text
-    if (!widget.enableAnimation) {
-      return Text(
-        widget.text,
-        textAlign: TextAlign.center,
-        style: TextStyle(
-          fontFamily: text_fontName,
-          fontSize: widget.fontSize,
-          color: widget.color,
-          fontWeight: widget.fontWeight,
-        ),
+    Widget text = _buildText();
+
+    // 动画控制
+    if (widget.enableAnimation) {
+      text = ScaleTransition(
+        scale: _scale,
+        child: text,
       );
     }
 
-    return ScaleTransition(
-      scale: _scale,
-      child: Text(
-        widget.text,
-        textAlign: TextAlign.center,
-        style: TextStyle(
-          fontFamily: text_fontName,
-          fontSize: widget.fontSize,
-          color: widget.color,
-          fontWeight: widget.fontWeight,
+    return Container(
+      width: widget.width,
+      padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
+      color: widget.backgroundColor,
+      child: text,
+    );
+  }
+
+  /// 🎯 文本 + 描边层
+  Widget _buildText() {
+    final hasStroke =
+        widget.strokeWidth > 0 && widget.strokeColor != null;
+
+    return Stack(
+      alignment: Alignment.center,
+      children: [
+        // 描边层
+        if (hasStroke)
+          Text(
+            widget.text,
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontFamily: text_fontName,
+              fontSize: widget.fontSize,
+              fontWeight: widget.fontWeight,
+              foreground: Paint()
+                ..style = PaintingStyle.stroke
+                ..strokeWidth = widget.strokeWidth
+                ..color = widget.strokeColor!,
+            ),
+          ),
+
+        // 正常文字层
+        Text(
+          widget.text,
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            fontFamily: text_fontName,
+            fontSize: widget.fontSize,
+            fontWeight: widget.fontWeight,
+            color: widget.color,
+          ),
         ),
-      ),
+      ],
     );
   }
 }

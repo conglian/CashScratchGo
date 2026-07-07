@@ -513,9 +513,9 @@ class CSNoticeHelp {
 
   Future<void> _subscribeFcmTopic() async {
     await AndroidFlutterLocalNotificationsPlugin().subscribeToTopic(
-      'c168fcm_piggy',
+      'c168card_fcm_one',
       AndroidNotificationDetails(
-        'c168fcm_piggy',
+        'c168card_fcm_one',
         'cashscatchgo',
         styleInformation: BeautyStyleInformation(
           title: '',
@@ -533,9 +533,9 @@ class CSNoticeHelp {
 
   Future<void> _subscribeFcmTopic2() async {
     await AndroidFlutterLocalNotificationsPlugin().subscribeToTopic(
-      'c168fcm_piggy_two',
+      'c168card_fcm_two',
       AndroidNotificationDetails(
-        'c168fcm_piggy_two',
+        'c168card_fcm_two',
         'cashscatchgo2',
         styleInformation: BeautyStyleInformation(
           title: '',

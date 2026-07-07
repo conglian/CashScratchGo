@@ -23,6 +23,7 @@
             android:layout_height="wrap_content"
             android:textColor="#601E00"
             android:textSize="12sp"
+            android:textStyle="bold"
             tools:text="This is title" />
 
         <LinearLayout
@@ -47,7 +48,6 @@
                 android:maxLines="3"
                 android:textColor="#601E00"
                 android:textSize="16sp"
-                android:textStyle="bold"
                 tools:text="This is body" />
         </LinearLayout>
 

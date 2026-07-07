@@ -215,90 +215,120 @@ class _CSScratchCardVCState extends State<CSScratchCardVC> with SingleTickerProv
                 }
             ),
           ),
-          Positioned(left: (0.width(context) - 328.w) * 0.5,top: getcardcenterTop(),child: Container(
-            width: 328.w,
-            height: 48.h,
-            decoration: BoxDecoration(
-                image: CSDImg('cs_cards_top_bg')
-            ),
-            child: Stack(
-              children: [
-                Center(
-                  child: Container(
-                    width: 272.w,
-                    height: 24.h,
-                    decoration: BoxDecoration(
-                        color: '#4E0A0A'.color(),
-                        borderRadius: BorderRadius.circular(12.h)
-                    ),
-                    child:
-                    Consumer<CSLocalProvider>(
-                        builder: (context, provider, child) {
-                          return Stack(
-                            children: [
-                              Positioned(left: 2, top: 2,
-                                child: Container(
-                                  width: 268.w * (provider.cs_card_quicken_num / 20),
-                                  height: 20.h,
-                                  decoration: BoxDecoration(
-                                    color: '#F39F0E'.color(),
-                                    borderRadius: BorderRadius.circular(12.h),
+          Positioned(left: (0.width(context) - 328.w) * 0.5,top: getcardcenterTop(),child: Visibility(
+            visible: CSLocalProvider.instance.cs_dollar_number >= CSNumberHelpers().gameModel!.card_range.first && CSLocalProvider.instance.cs_card_quicken_num < 20,
+            child: Container(
+              width: 328.w,
+              height: 48.h,
+              decoration: BoxDecoration(
+                  image: CSDImg('cs_cards_top_bg')
+              ),
+              child: Stack(
+                children: [
+                  Positioned(left: 42.w, top: 12.h,
+                    child: Container(
+                      width: 180.w,
+                      height: 24.h,
+                      decoration: BoxDecoration(
+                          color: '#4E0A0A'.color(),
+                          borderRadius: BorderRadius.circular(0.h)
+                      ),
+                      child:
+                      Consumer<CSLocalProvider>(
+                          builder: (context, provider, child) {
+                            return Stack(
+                              children: [
+                                Positioned(left: 0, top: 2,
+                                  child: Container(
+                                    width: 180.w * (provider.cs_card_quicken_num / 20),
+                                    height: 20.h,
+                                    decoration: BoxDecoration(
+                                      color: '#F39F0E'.color(),
+                                      borderRadius: BorderRadius.circular(12.h),
+                                    ),
                                   ),
                                 ),
-                              ),
-                              Positioned(top: 4.h,left: 100.w,child: CSStrokeText(text: '${0.to2Double(provider.cs_card_quicken_num)}/20', size: 14, color: '#FFFFFF'.color(), weight: FontWeight.w900, skWidth: 1, skColor: '#4D2D15'.color()))
-                            ],
-                          );
-                        }
+                                Positioned(top: 4.h,left: 100.w,child: CSStrokeText(text: '${0.to2Double(provider.cs_card_quicken_num)}/20', size: 14, color: '#FFFFFF'.color(), weight: FontWeight.w900, skWidth: 1, skColor: '#4D2D15'.color()))
+                              ],
+                            );
+                          }
+                      ),
                     ),
                   ),
-                ),
-                Positioned(left: 6.w,top: 2.h,child: CSImg(name: 'cs_crad_s_bg', width: 40, height: 40,)),
-                Positioned(right: 6.w,top: 6.h,child: Container(
-                  width: 100.w,
-                  height: 36.h,
-                  decoration: BoxDecoration(
-                      image: CSDImg('cs_cash_list_${CSLocalProvider.instance.cs_account_seled_index}_s')
-                  ),
-                  child: Stack(
-                    children: [
-                      Container(
-                        width: 100.w,
-                        height: 36.h,
-                        decoration: BoxDecoration(
-                            color: '#000000'.color(opacity: 0.5),
-                            borderRadius: BorderRadius.circular(8)
-                        ),
-                        child: Row(
-                          children: [
-                            SizedBox(width: 2.w),
-                            CSImg(name: 'cs_lock_icons', width: 28, height: 28,),
-                            CSGradientStrokeText(text: '\$${0.to2Double(CSLocalProvider.instance.cs_dollar_number)}', gradientColors: ['#FFFFFF'.color(),'#FFF189'.color()], width: 70, height: 24, fontSize: 16, strokeWidth: 1, strokeColor: '#983300'.color())
-                          ],
-                        ),
-                      )
-                    ],
-                  ),
-                )),
-              ],
+                  Positioned(left: 6.w,top: 2.h,child: CSImg(name: 'cs_crad_s_bg', width: 40, height: 40,)),
+                  Positioned(right: 6.w,top: 6.h,child: Visibility(
+                    child: Container(
+                      width: 100.w,
+                      height: 36.h,
+                      decoration: BoxDecoration(
+                          image: CSDImg('cs_cash_list_${CSLocalProvider.instance.cs_account_seled_index}_s')
+                      ),
+                      child: Stack(
+                        children: [
+                          Container(
+                            width: 100.w,
+                            height: 36.h,
+                            decoration: BoxDecoration(
+                                color: '#000000'.color(opacity: 0.5),
+                                borderRadius: BorderRadius.circular(8)
+                            ),
+                            child: Row(
+                              children: [
+                                SizedBox(width: 2.w),
+                                CSImg(name: 'cs_lock_icons', width: 28, height: 28,),
+                                CSGradientStrokeText(text: '\$${0.to2Double(CSLocalProvider.instance.cs_dollar_number)}', gradientColors: ['#FFFFFF'.color(),'#FFF189'.color()], width: 70, height: 24, fontSize: 16, strokeWidth: 1, strokeColor: '#983300'.color())
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  )),
+                ],
+              ),
             ),
           ),),
+          /// 手指动画
+         Positioned(
+              left: 48.w,
+              bottom: 60.h,
+              child:
+              Consumer<CSLocalProvider>(
+                  builder: (context, provider, child) {
+                    return Visibility(
+                      visible: provider.cs_wheel_number > 0,
+                      child: ScaleTransition(
+                          scale: _scaleAnimation,
+                          child: CSImg(
+                            name: 'cs_shou_3',
+                            width: 72.w,
+                            height: 72.h,
+                          ),
+                        ),
+                    );
+                  }
+              ),
+         ),
           Positioned(child: CSBubbleButton()),
         ],
       ),
     );
   }
+
   double getcardcenterTop(){
     if (widget.type == 1){
-      return 226.h;
+      return 270.h;
     } else if (widget.type == 3){
-      return 232.h;
+      return 279.h;
+    } else if (widget.type == 4){
+      return 284.h;
     } else if (widget.type == 5){
-      return 232.h;
+      return 279.h;
     } else {
-      return 240.h;
+      return 291.h;
     }
   }
+
   Widget getScratchCardWidget(){
     if (widget.type == 0){
       if (card_award.isEmpty == true){
@@ -321,18 +351,18 @@ class _CSScratchCardVCState extends State<CSScratchCardVC> with SingleTickerProv
                 ),
                 child: Row(
                   children: [
-                    SizedBox(width: 10,),
+                    SizedBox(width: 8,),
                     Column(
                       mainAxisAlignment: .spaceAround,
                       children: [
-                        CSBouncyText(text: '\$${card_award[5][0]}', fontSize: 20, color: '#FFE733'.color(), fontWeight: FontWeight.w900, enableAnimation: card_award[0] == 0 && _show_animation),
-                        CSBouncyText(text: '\$${card_award[5][1]}', fontSize: 20, color: '#FFE733'.color(), fontWeight: FontWeight.w900, enableAnimation: card_award[0] == 1 && _show_animation),
-                        CSBouncyText(text: '\$${card_award[5][2]}', fontSize: 20, color: '#FFE733'.color(), fontWeight: FontWeight.w900, enableAnimation: card_award[0] == 2 && _show_animation),
+                        CSBouncyText(text: '\$${card_award[5][0]}', fontSize: 20, color: '#FFE733'.color(), fontWeight: FontWeight.w900, enableAnimation: card_award[0] == 0 && _show_animation, strokeWidth: 1, strokeColor: '#C50000'.color()),
+                        CSBouncyText(text: '\$${card_award[5][1]}', fontSize: 20, color: '#FFE733'.color(), fontWeight: FontWeight.w900, enableAnimation: card_award[0] == 1 && _show_animation, strokeWidth: 1, strokeColor: '#C50000'.color()),
+                        CSBouncyText(text: '\$${card_award[5][2]}', fontSize: 20, color: '#FFE733'.color(), fontWeight: FontWeight.w900, enableAnimation: card_award[0] == 2 && _show_animation, strokeWidth: 1, strokeColor: '#C50000'.color()),
                       ],
                     ),
-                    SizedBox(width: 20.h,),
+                    SizedBox(width: 12.h,),
                     SizedBox(
-                      width: 222.w,
+                      width: 228.w,
                       height: 240.h,
                       child: GridView.builder(
                         shrinkWrap: true,
@@ -344,7 +374,7 @@ class _CSScratchCardVCState extends State<CSScratchCardVC> with SingleTickerProv
                           childAspectRatio: 88.w / 88, // 宽高比
                         ),
                         itemCount: 9,
-                        padding: EdgeInsets.only(top: 10.h, left: 0.w), // 移除默认的padding// 最多显示10个
+                        padding: EdgeInsets.only(top: 2.h, left: 0.w), // 移除默认的padding// 最多显示10个
                         itemBuilder: (context, index) {
                           return SizedBox(
                               child: Stack(
@@ -358,7 +388,7 @@ class _CSScratchCardVCState extends State<CSScratchCardVC> with SingleTickerProv
                                           Column(
                                             children: [
                                               CSBouncyImage(imagePath: 'cs_tx_quu', width: 50, height: 50, enableAnimation: _show_animation),
-                                              Padding(padding: EdgeInsetsGeometry.only(left: 8.w),child: CSBouncyText(text: '${0.to2Double(card_award[7])}', fontSize: 16, color: '#FFE365'.color())),
+                                              Padding(padding: EdgeInsetsGeometry.only(left: 8.w),child: CSBouncyText(text: 'X${0.to2Double(card_award[7])}', fontSize: 16, color: '#FFE365'.color(),fontWeight: FontWeight.w900,strokeColor: '#983300'.color(),strokeWidth: 1)),
                                             ],
                                           ),
                                         if (card_award[3][index] != -1 && card_award[3][index] != -2)
@@ -472,9 +502,9 @@ class _CSScratchCardVCState extends State<CSScratchCardVC> with SingleTickerProv
                   // 刷新下一张
                   CSScratchUpdateNotificationService.sendToDomandNumberNotification(0);
 
-                  setState(() {
+                  // setState(() {
                     _show_animation = false;
-                  });
+                  // });
                 });
               },),
             )
@@ -507,15 +537,15 @@ class _CSScratchCardVCState extends State<CSScratchCardVC> with SingleTickerProv
                     Row(
                       mainAxisAlignment: .spaceEvenly,
                       children: [
-                        CSBouncyText(text: '${card_award[3][0]}', fontSize: 36, color: '#FFF1A9'.color(), fontWeight: FontWeight.w900, enableAnimation: card_award[3][0] == card_award[4] && _show_animation),
-                        CSBouncyText(text: '${card_award[3][1]}', fontSize: 36, color: '#FFF1A9'.color(), fontWeight: FontWeight.w900, enableAnimation: card_award[3][1] == card_award[4] && _show_animation),
-                        CSBouncyText(text: '${card_award[3][2]}', fontSize: 36, color: '#FFF1A9'.color(), fontWeight: FontWeight.w900, enableAnimation: card_award[3][2] == card_award[4] && _show_animation),
+                        CSBouncyText(text: '${card_award[3][0]}', fontSize: 36, color: '#FFF1A9'.color(), fontWeight: FontWeight.w900, enableAnimation: card_award[3][0] == card_award[4] && _show_animation, strokeWidth: 1, strokeColor: '#000000'.color()),
+                        CSBouncyText(text: '${card_award[3][1]}', fontSize: 36, color: '#FFF1A9'.color(), fontWeight: FontWeight.w900, enableAnimation: card_award[3][1] == card_award[4] && _show_animation, strokeWidth: 1, strokeColor: '#000000'.color()),
+                        CSBouncyText(text: '${card_award[3][2]}', fontSize: 36, color: '#FFF1A9'.color(), fontWeight: FontWeight.w900, enableAnimation: card_award[3][2] == card_award[4] && _show_animation, strokeWidth: 1, strokeColor: '#000000'.color()),
                       ],
                     ),
                     SizedBox(height: 0.h),
                     SizedBox(
                       width: 328.w,
-                      height: 225.h,
+                      height: 220.h,
                       child: GridView.builder(
                         shrinkWrap: true,
                         physics: const NeverScrollableScrollPhysics(),
@@ -523,14 +553,15 @@ class _CSScratchCardVCState extends State<CSScratchCardVC> with SingleTickerProv
                           crossAxisCount: 4, // 一行5个
                           mainAxisSpacing: 0, // 垂直间距
                           crossAxisSpacing: 0, // 水平间距
-                          childAspectRatio: (328 / 4.0).w / 75.h, // 宽高比
+                          childAspectRatio: (328 / 4.0).w / (216.h / 3), // 宽高比
                         ),
                         itemCount: 12,
-                        padding: EdgeInsets.only(top: 12.h, left: 18.w), // 移除默认的padding// 最多显示10个
+                        padding: EdgeInsets.only(top: 16.h, left: 0.w), // 移除默认的padding// 最多显示10个
                         itemBuilder: (context, index) {
-                          return SizedBox(
+                          return Container(
+                              color: Colors.transparent,
                               width: (328 / 4.0).w,
-                              height: 75.h,
+                              height: 216.h / 3.0,
                               child: Stack(
                                 clipBehavior: .none,
                                 children: [
@@ -545,18 +576,18 @@ class _CSScratchCardVCState extends State<CSScratchCardVC> with SingleTickerProv
                                   Column(
                                     children: [
                                       if (card_award[6][index] == -1)
-                                        CSAnimatedImageMove(imageUrl: 'cs_key_icon', isAnimationEnabled: _show_animation, ws: 55, hs: 48, targetKey: targetKey),
+                                        CSAnimatedImageMove(imageUrl: 'cs_key_icon', isAnimationEnabled: _show_animation, ws: 55, hs: 50, targetKey: targetKey),
                                       if (card_award[6][index] == -2)
                                         Column(
                                           children: [
-                                            CSBouncyImage(imagePath: 'cs_tx_quu', width: 45, height: 45, enableAnimation: _show_animation),
-                                            CSBouncyText(text: '${card_award[8]}', fontSize: 15, color: '#FFF1A9'.color(), fontWeight: FontWeight.w700, enableAnimation: _show_animation)
+                                            CSBouncyImage(imagePath: 'cs_tx_quu', width: 40, height: 40, enableAnimation: _show_animation),
+                                            CSBouncyText(text: 'X${card_award[8]}', fontSize: 15, color: '#FFF1A9'.color(), fontWeight: FontWeight.w900, enableAnimation: _show_animation, strokeWidth: 1, strokeColor: '#000000'.color())
                                           ],
                                         ),
                                       if (card_award[6][index] != -1 && card_award[6][index] != -2)
-                                        Padding(padding: EdgeInsetsGeometry.only(left: 8.w, top: 2.h),child: CSBouncyText(text: '${card_award[6][index]}', fontSize: 32, color: '#FFF1A9'.color(), fontWeight: FontWeight.w900, enableAnimation: _show_animation && index == card_award[0])),
+                                        Padding(padding: EdgeInsetsGeometry.only(left: 8.w, top: 0.h),child: SizedBox(width:55, height: 40, child:CSBouncyText(text: '${card_award[6][index]}', fontSize: 28, color: '#FFF1A9'.color(), fontWeight: FontWeight.w900, enableAnimation: _show_animation && index == card_award[0], strokeWidth: 1, strokeColor: '#000000'.color()))),
                                       if (card_award[6][index] != -1 && card_award[6][index] != -2)
-                                        CSStrokeText(text: '\$${card_award[5][index]}', size: 16, color: '#FFDD1F'.color(), weight: FontWeight.w900, skWidth: 1, skColor: '#000000'.color())
+                                        SizedBox(width: (328 / 4.0).w, height: 20,child: CSStrokeText(text: '\$${card_award[5][index]}', size: 16, color: '#FFDD1F'.color(), weight: FontWeight.w900, skWidth: 1, skColor: '#000000'.color(), align: .center,))
                                     ],
                                   )
                                 ],
@@ -666,9 +697,9 @@ class _CSScratchCardVCState extends State<CSScratchCardVC> with SingleTickerProv
                   // 刷新下一张
                   CSScratchUpdateNotificationService.sendToDomandNumberNotification(0);
 
-                  setState(() {
+                  // setState(() {
                     _show_animation = false;
-                  });
+                  // });
                 });
               },),
             )
@@ -816,7 +847,7 @@ class _CSScratchCardVCState extends State<CSScratchCardVC> with SingleTickerProv
                                     Column(
                                       children: [
                                         SizedBox(height: 50.h),
-                                        CSStrokeText(text: '\$${card_award[7]}', size: 16, color: '#FFDD1F'.color(), weight: FontWeight.w900, skWidth: 1, skColor: '#000000'.color())
+                                        CSStrokeText(text: 'X${card_award[7]}', size: 16, color: '#FFDD1F'.color(), weight: FontWeight.w900, skWidth: 1, skColor: '#000000'.color())
                                       ],
                                     ),
                                   if (card_award[2][index] != -1 && card_award[2][index] != -2)
@@ -933,9 +964,9 @@ class _CSScratchCardVCState extends State<CSScratchCardVC> with SingleTickerProv
                   // 刷新下一张
                   CSScratchUpdateNotificationService.sendToDomandNumberNotification(0);
 
-                  setState(() {
+                  // setState(() {
                     _show_animation = false;
-                  });
+                  // });
                 });
               },),
             )
@@ -997,7 +1028,7 @@ class _CSScratchCardVCState extends State<CSScratchCardVC> with SingleTickerProv
                                     Column(
                                       children: [
                                         SizedBox(height: 52.h),
-                                        Padding(padding:  EdgeInsetsGeometry.only(left: 12.w),child: CSStrokeText(text: '${card_award[6]}', size: 16, color: '#FFDD1F'.color(), weight: FontWeight.w900, skWidth: 1, skColor: '#000000'.color()))
+                                        Padding(padding:  EdgeInsetsGeometry.only(left: 0.w),child: SizedBox(width: (328 / 4.0).w,height: 18,child: CSStrokeText(text: 'X${card_award[6]}', size: 16, color: '#FFDD1F'.color(), weight: FontWeight.w900, skWidth: 1, skColor: '#000000'.color(), align: .center)))
                                       ],
                                     ),
                                   if (card_award[2][index] == 1)
@@ -1014,7 +1045,7 @@ class _CSScratchCardVCState extends State<CSScratchCardVC> with SingleTickerProv
                                     Column(
                                     children: [
                                       SizedBox(height: 52.h),
-                                      Padding(padding:  EdgeInsetsGeometry.only(left: 8.w),child: CSStrokeText(text: '\$${card_award[3][index]}', size: 16, color: '#FFDD1F'.color(), weight: FontWeight.w900, skWidth: 1, skColor: '#000000'.color()))
+                                      Padding(padding:  EdgeInsetsGeometry.only(left: 0.w),child: SizedBox(width: (328 / 4.0).w,height: 18,child: CSStrokeText(text: '\$${card_award[3][index]}', size: 16, color: '#FFDD1F'.color(), weight: FontWeight.w900, skWidth: 1, skColor: '#000000'.color(),align: .center,)))
                                     ],
                                   )
                                 ],
@@ -1123,9 +1154,9 @@ class _CSScratchCardVCState extends State<CSScratchCardVC> with SingleTickerProv
                   // 刷新下一张
                   CSScratchUpdateNotificationService.sendToDomandNumberNotification(0);
 
-                  setState(() {
+                  // setState(() {
                     _show_animation = false;
-                  });
+                  // });
                 });
               },),
             )
@@ -1189,7 +1220,7 @@ class _CSScratchCardVCState extends State<CSScratchCardVC> with SingleTickerProv
                                     Column(
                                       children: [
                                         SizedBox(height: 50.h),
-                                        Padding(padding: EdgeInsetsGeometry.only(left: 12.w),child: CSStrokeText(text: '${card_award[6]}', size: 16, color: '#FFDD1F'.color(), weight: FontWeight.w900, skWidth: 1, skColor: '#000000'.color()))
+                                        Padding(padding: EdgeInsetsGeometry.only(left: 12.w),child: CSStrokeText(text: 'X${card_award[6]}', size: 16, color: '#FFDD1F'.color(), weight: FontWeight.w900, skWidth: 1, skColor: '#000000'.color()))
                                       ],
                                     ),
                                   if (card_award[2][index] == 0)
@@ -1305,9 +1336,9 @@ class _CSScratchCardVCState extends State<CSScratchCardVC> with SingleTickerProv
                   // 刷新下一张
                   CSScratchUpdateNotificationService.sendToDomandNumberNotification(0);
 
-                  setState(() {
+                  // setState(() {
                     _show_animation = false;
-                  });
+                  // });
                 });
               },),
             )
@@ -1369,7 +1400,7 @@ class _CSScratchCardVCState extends State<CSScratchCardVC> with SingleTickerProv
                                     Column(
                                       children: [
                                         SizedBox(height: 50.h),
-                                        Padding(padding: EdgeInsetsGeometry.only(left: 12.w),child: CSStrokeText(text: '${card_award[7]}', size: 14, color: '#FFDD1F'.color(), weight: FontWeight.w900, skWidth: 1, skColor: '#000000'.color()))
+                                        Padding(padding: EdgeInsetsGeometry.only(left: 12.w),child: CSStrokeText(text: 'X${card_award[7]}', size: 14, color: '#FFDD1F'.color(), weight: FontWeight.w900, skWidth: 1, skColor: '#000000'.color()))
                                       ],
                                     ),
                                   if (card_award[2][index] == -1)
@@ -1487,9 +1518,9 @@ class _CSScratchCardVCState extends State<CSScratchCardVC> with SingleTickerProv
                   // 刷新下一张
                   CSScratchUpdateNotificationService.sendToDomandNumberNotification(0);
 
-                  setState(() {
+                  // setState(() {
                     _show_animation = false;
-                  });
+                  // });
                 });
               },),
             )
@@ -1505,7 +1536,7 @@ class _CSScratchCardVCState extends State<CSScratchCardVC> with SingleTickerProv
   Future<void> showTXPopDialog() async {
     await CSLocalProvider.instance.updateint(CSLocalProvider.instance.cs_Level_inedxName, CSLocalProvider.instance.cs_Level_inedx + 1);
     setTxProgress();
-    if (CSLocalProvider.instance.cs_scratch_gua_index == CSLocalProvider.instance.card_push_number && CSLocalProvider.instance.cs_account_id.isEmpty){
+    if (CSLocalProvider.instance.cs_scratch_gua_index == 3 && CSLocalProvider.instance.cs_account_id.isEmpty){
       int code = await context.tipShow(CSCardTipsDialog());
     } else if (CSLocalProvider.instance.cs_account_id.isNotEmpty && CSLocalProvider.instance.cs_dollar_number / CSNumberHelpers().gameModel!.card_range.first >= 0.8 && CSLocalProvider.instance.cs_dolas_80_end == false){
       await CSLocalProvider.instance.updateBool(CSLocalProvider.instance.cs_dolas_80_endName, true);
@@ -1572,7 +1603,7 @@ class _CSScratchCardVCState extends State<CSScratchCardVC> with SingleTickerProv
   Future<void> showBoxGuide() async {
     if (CSLocalProvider.instance.cs_scratch_box_index >= 5 && CSLocalProvider.instance.cs_show_box_guide == false) {
       CSLocalProvider.instance.updateBool(CSLocalProvider.instance.cs_show_box_guideName, true);
-      int code = await context.tipShow(CSBoxGuideDialog());
+      int code = await context.tipShow2(CSBoxGuideDialog());
       if (code >= 0){
         showRankDialog();
       }
@@ -2366,7 +2397,7 @@ class _CSBubbleButtonState extends State<CSBubbleButton> with SingleTickerProvid
   double _dx = 50; // 每秒移动多少 px
   double _dy = 80;
 
-  double _iconSize = 60;
+  double _iconSize = 75;
 
   bool _showPop = true;
 
@@ -2450,14 +2481,7 @@ class _CSBubbleButtonState extends State<CSBubbleButton> with SingleTickerProvid
             child: Column(
               children: [
                 Spacer(),
-                CSStrokeText(
-                  text: '${(CSLocalProvider.instance.cs_dollar_number >= CSNumberHelpers().gameModel!.card_range.first && CSLocalProvider.instance.cs_card_quicken_num < 20) ? 'X' : '\$'}${_pptReward.toStringAsFixed(2)}',
-                  size: 14,
-                  color: '#FBF544'.color(),
-                  weight: FontWeight.w700,
-                  skWidth: 1,
-                  skColor: '#804D00'.color(),
-                ),
+                CSGradientStrokeText(text: '${(CSLocalProvider.instance.cs_dollar_number >= CSNumberHelpers().gameModel!.card_range.first && CSLocalProvider.instance.cs_card_quicken_num < 20) ? 'X' : '\$'}${_pptReward.toStringAsFixed(2)}', gradientColors: ['#FFFFFF'.color(),'#FFF189'.color()], width: 50, height: 20, fontSize: 18, strokeWidth: 1, strokeColor: '#983300'.color()),
                 SizedBox(height: 8),
               ],
             ),
@@ -2623,5 +2647,50 @@ class _ShakeContainerState extends State<ShakeContainer>
         );
       },
     );
+  }
+}
+
+class MultiHoleMaskPainter extends CustomPainter {
+  final List<Rect> holes;
+  final double radius;
+
+  MultiHoleMaskPainter({
+    required this.holes,
+    this.radius = 12,
+  });
+
+  @override
+  void paint(Canvas canvas, Size size) {
+
+    // ⭐ 关键：开启离屏缓冲
+    canvas.saveLayer(Offset.zero & size, Paint());
+
+    // 1️⃣ 画半透明黑色遮罩
+    final maskPaint = Paint()
+      ..color = Colors.black.withOpacity(0.8);
+
+    canvas.drawRect(Offset.zero & size, maskPaint);
+
+    // 2️⃣ 抠洞
+    final clearPaint = Paint()
+      ..blendMode = BlendMode.clear;
+
+    for (final hole in holes) {
+      canvas.drawRRect(
+        RRect.fromRectAndRadius(
+          hole,
+          Radius.circular(radius),
+        ),
+        clearPaint,
+      );
+    }
+
+    // ⭐ 关键：结束 layer
+    canvas.restore();
+  }
+
+  @override
+  bool shouldRepaint(covariant MultiHoleMaskPainter oldDelegate) {
+    return oldDelegate.holes != holes;
   }
 }

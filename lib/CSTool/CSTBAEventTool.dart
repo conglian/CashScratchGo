@@ -56,11 +56,11 @@ class CSRequestHelpers {
   static String cloak_Url =
       "https://fancy.scratchcardearngopro.com/sault/commute";
 
-  static String tba_event_Url =
-      "https://test-mark.scratchcardearngopro.com/molten/pimp/girt";
-
   // static String tba_event_Url =
-  //     "https://mark.scratchcardearngopro.com/brant/schooner/highland";
+  //     "https://test-mark.scratchcardearngopro.com/molten/pimp/girt";
+
+  static String tba_event_Url =
+      "https://mark.scratchcardearngopro.com/brant/schooner/highland";
 
   final Map<String, String> normalHeader = {
     'Content-Type': 'application/json',

@@ -88,32 +88,31 @@ class CSNumberHelpers {
     // 找到 value 所在的区间
     int range = 0;
     for (var item in gameModel!.intad_point) {
-      if (CSLocalProvider.instance.cs_dolas_old_number >= item.first_number * dolasbeishu() && CSLocalProvider.instance.cs_dolas_old_number <= item.end_number * dolasbeishu()) {
+      if (CSLocalProvider.instance.cs_dollar_number >= item.first_number * dolasbeishu() && CSLocalProvider.instance.cs_dollar_number <= item.end_number * dolasbeishu()) {
         range = item.point;
         break;
       }
     }
-
+    'range=$range'.log();
     if (range <= 0.0) {
       return false;
     }
 
     double point = range.toDouble() ?? 0.0;
-     'range=$range'.log();
     // 随机概率判断
     double rand = Random().nextDouble() * 100; // 0.0 ~ 1.0
     'rand=$rand'.log();
     return rand <= point;
   }
 
-  /// 获取钻石或者金砖奖励值
+  /// 获取宝箱奖励值
   double getPrizeWithBoxNum() {
     List<FloatPrize> model = gameModel!.box_prize;
     for (var item in model) {
       int start = item.first_number;
       int end = item.end_number;
 
-      if (CSLocalProvider.instance.cs_dolas_old_number >= start && CSLocalProvider.instance.cs_dolas_old_number < end) {
+      if (CSLocalProvider.instance.cs_dollar_number >= start && CSLocalProvider.instance.cs_dollar_number < end) {
         double min = item.prize.first;
         double max = item.prize.last;
         return 0.to2Double(_randomBetween(min, max));
@@ -136,7 +135,7 @@ class CSNumberHelpers {
       int start = item.first_number;
       int end = item.end_number;
 
-      if (CSLocalProvider.instance.cs_dolas_old_number >= start && CSLocalProvider.instance.cs_dolas_old_number < end) {
+      if (CSLocalProvider.instance.cs_dollar_number >= start && CSLocalProvider.instance.cs_dollar_number < end) {
         double min = item.prize.first;
         double max = item.prize.last;
         return 0.to2Double(_randomBetween(min, max));
@@ -189,7 +188,7 @@ class CSNumberHelpers {
       int start = item.first_number;
       int end = item.end_number;
 
-      if (CSLocalProvider.instance.cs_dolas_old_number >= start && CSLocalProvider.instance.cs_dolas_old_number < end) {
+      if (CSLocalProvider.instance.cs_dollar_number >= start && CSLocalProvider.instance.cs_dollar_number < end) {
         double min = item.prize.first;
         double max = item.prize.last;
         return 0.to2Double(_randomBetween(min, max));
@@ -212,7 +211,7 @@ class CSNumberHelpers {
     for (var item in gameModel!.big_win) {
       int start = item.first_number;
       int end = item.end_number;
-      if (CSLocalProvider.instance.cs_dolas_old_number >= start && CSLocalProvider.instance.cs_dolas_old_number < end) {
+      if (CSLocalProvider.instance.cs_dollar_number >= start && CSLocalProvider.instance.cs_dollar_number < end) {
         return item.win_number;
       }
     }
@@ -278,7 +277,7 @@ class CSNumberHelpers {
       int start = item.first_number;
       int end = item.end_number;
 
-      if (CSLocalProvider.instance.cs_dolas_old_number >= start && CSLocalProvider.instance.cs_dolas_old_number < end) {
+      if (CSLocalProvider.instance.cs_dollar_number >= start && CSLocalProvider.instance.cs_dollar_number < end) {
 
         final Random _random = Random();
 
@@ -286,7 +285,7 @@ class CSNumberHelpers {
         int point = _random.nextInt(101);
 
         // 判断是否大于等于 75
-        bool isPass = point >= item.point;
+        bool isPass = point <= item.point;
 
         return isPass;
       }
@@ -297,7 +296,7 @@ class CSNumberHelpers {
     // 生成 0~100 随机数
     int point = _random.nextInt(101);
     // 判断是否大于等于 75
-    bool isPass = point >= gameModel!.key_out.last.point;
+    bool isPass = point <= gameModel!.key_out.last.point;
     return isPass;
   }
 
@@ -453,8 +452,8 @@ class CSNumberHelpers {
     int award_index = isPass ? Random().nextInt(12) : -1;
 
     bool quicken = getPointWithQuicken();
-    if (CSLocalProvider.instance.cs_dolas_old_number <= 0 ||
-        CSLocalProvider.instance.cs_dolas_old_number == 0) {
+    if (CSLocalProvider.instance.cs_dollar_number <= 0 ||
+        CSLocalProvider.instance.cs_dollar_number == 0) {
       award_index = 1;
     }
 
@@ -594,7 +593,7 @@ class CSNumberHelpers {
       award_bei = 1;
     }
 
-    if (CSLocalProvider.instance.cs_dolas_old_number <= 0) {
+    if (CSLocalProvider.instance.cs_dollar_number <= 0) {
       isPass = true;
       award_num = 3;
       award_bei = 1;
@@ -722,12 +721,12 @@ class CSNumberHelpers {
     } else if (point <= gameModel!.card_77hot.point_77) {
       isPass = true;
       award_bei = 2;
-    } else if (point <= gameModel!.card_77hot.point_7) {
+    } else  {
       isPass = true;
       award_bei = 1;
     }
 
-    if (CSLocalProvider.instance.cs_dolas_old_number <= 0) {
+    if (CSLocalProvider.instance.cs_dollar_number <= 0) {
       isPass = true;
       award_bei = 1;
     }
@@ -1062,7 +1061,7 @@ class CSNumberHelpers {
     }
 
     if (isPass2) {
-      total *= 8;
+      total *= 1;
     }
 
     end.add(data2);

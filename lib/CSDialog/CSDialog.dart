@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'dart:math';
-
+import 'package:app_settings/app_settings.dart';
 import 'package:cashscratchgo/CSBasic/CSTabBar.dart';
 import 'package:cashscratchgo/CSTool/CSNumberHelpers.dart';
 import 'package:cashscratchgo/CSTool/cs_GradientText.dart';
@@ -140,6 +140,9 @@ class CSWheelNotDialogState extends State<CSWheelNotDialog>
                           onTap: (){
                             cs_event_fire('wheel_not_key_c', {});
                             Navigator.pop(context, 0);
+                            if (Navigator.canPop(context)){
+                              Navigator.pop(context, 0);
+                            }
                             // 外部跳转挂卡详情页
                             if (CSLocalProvider.instance.cs_scrach_end_number_0 < 10){
                               CashTabController.switchTo(0);
@@ -900,7 +903,7 @@ class CSTipsCenterDialogState extends State<CSTipsCenterDialog>
   @override
   void initState() {
     super.initState();
-
+    cs_event_fire('confirm_account_toast', {});
     /// 平移动画
     _controller = AnimationController(
       vsync: this,
@@ -1199,6 +1202,8 @@ class CSUserCardDialogState extends State<CSUserCardDialog> with SingleTickerPro
   late AnimationController _controller;
   late Animation<double> _scaleAnimation;
 
+  double card_num = CSNumberHelpers().getPointWithQuickenDouble();
+
   @override
   void initState() {
     super.initState();
@@ -1261,7 +1266,7 @@ class CSUserCardDialogState extends State<CSUserCardDialog> with SingleTickerPro
                     ),
                   ),
                   SizedBox(height: 8.h),
-                  CSGradientStrokeText(text: 'x1', gradientColors: ['#FFFFFF'.color(), '#FFF189'.color()], width: 120, height: 48, fontSize: 36, strokeWidth: 1, strokeColor: '#983300'.color()),
+                  CSGradientStrokeText(text: 'x$card_num', gradientColors: ['#FFFFFF'.color(), '#FFF189'.color()], width: 120, height: 48, fontSize: 36, strokeWidth: 1, strokeColor: '#983300'.color()),
                   SizedBox(height: 16.h),
                   Container(
                     width: 328.w,
@@ -1367,7 +1372,11 @@ class CSUserCardDialogState extends State<CSUserCardDialog> with SingleTickerPro
                     ),
                   ), onTap: (){
                     cs_event_fire('speed_card_pop_c', {});
+                    CSLocalProvider.instance.updatedouble(CSLocalProvider.instance.cs_card_quicken_numName, CSLocalProvider.instance.cs_card_quicken_num + card_num);
                     Navigator.pop(context, 0);
+                    if (Navigator.canPop(context)){
+                      Navigator.pop(context, 0);
+                    }
                     // 外部跳转挂卡详情页
                     if (CSLocalProvider.instance.cs_scrach_end_number_0 < 10){
                       CashTabController.switchTo(0);
@@ -2290,9 +2299,9 @@ class CSAccelerationCardDialogState extends State<CSAccelerationCardDialog> with
                     ),
                     child: Stack(
                       children: [
-                        Center(
+                        Positioned(left: 42.w, bottom: 12.h,
                           child: Container(
-                            width: 272.w,
+                            width: 180.w,
                             height: 24.h,
                             decoration: BoxDecoration(
                                 color: '#4E0A0A'.color(),
@@ -2300,17 +2309,17 @@ class CSAccelerationCardDialogState extends State<CSAccelerationCardDialog> with
                             ),
                             child: Stack(
                               children: [
-                                Positioned(left: 2, top: 2,
+                                Positioned(left: 0, top: 2,
                                   child: Container(
-                                    width: 268.w * CSLocalProvider.instance.cs_card_quicken_num / 20,
+                                    width: 180.w * CSLocalProvider.instance.cs_card_quicken_num / 20,
                                     height: 20.h,
                                     decoration: BoxDecoration(
                                       color: '#F39F0E'.color(),
-                                      borderRadius: BorderRadius.circular(12.h),
+                                      borderRadius: BorderRadius.circular(0.h),
                                     ),
                                   ),
                                 ),
-                                Positioned(top: 4.h,left: 128.w,child: CSStrokeText(text: '${0.to2Double(CSLocalProvider.instance.cs_card_quicken_num)}/20', size: 14, color: '#FFFFFF'.color(), weight: FontWeight.w900, skWidth: 1, skColor: '#4D2D15'.color()))
+                                Positioned(top: 4.h,left: 68.w,child: CSStrokeText(text: '${0.to2Double(CSLocalProvider.instance.cs_card_quicken_num)}/20', size: 14, color: '#FFFFFF'.color(), weight: FontWeight.w900, skWidth: 1, skColor: '#4D2D15'.color()))
                               ],
                             ),
                           ),
@@ -4489,19 +4498,21 @@ class CSBigWinLevelDialogState extends State<CSBigWinLevelDialog>
                               ],
                             ),
                           ),),
-                          Positioned(left: 28.w,bottom: 12.h,
+                          Positioned(left: 42.w,bottom: 12.h,
+                            width: 180.w,
+                            height: 24.h,
                             child: Container(
-                              width: 272.w,
+                              width: 180.w,
                               height: 24.h,
                               decoration: BoxDecoration(
                                   color: '#4E0A0A'.color(),
-                                  borderRadius: BorderRadius.circular(12.h)
+                                  borderRadius: BorderRadius.circular(0.h)
                               ),
                               child: Stack(
                                 children: [
-                                  Positioned(left: 2, top: 2,
+                                  Positioned(left: 0, top: 2,
                                     child: Container(
-                                      width: 268.w * (CSLocalProvider.instance.cs_card_quicken_num / 20),
+                                      width: 180.w * (CSLocalProvider.instance.cs_card_quicken_num / 20),
                                       height: 20.h,
                                       decoration: BoxDecoration(
                                         color: '#F39F0E'.color(),
@@ -4509,7 +4520,7 @@ class CSBigWinLevelDialogState extends State<CSBigWinLevelDialog>
                                       ),
                                     ),
                                   ),
-                                  Positioned(top: 4.h,left: 90.w,child: CSStrokeText(text: '${0.to2Double(CSLocalProvider.instance.cs_card_quicken_num)}/20', size: 14, color: '#FFFFFF'.color(), weight: FontWeight.w900, skWidth: 1, skColor: '#4D2D15'.color()))
+                                  Positioned(top: 4.h,left: 68.w,child: CSStrokeText(text: '${0.to2Double(CSLocalProvider.instance.cs_card_quicken_num)}/20', size: 14, color: '#FFFFFF'.color(), weight: FontWeight.w900, skWidth: 1, skColor: '#4D2D15'.color()))
                                 ],
                               ),
                             ),
@@ -4533,7 +4544,8 @@ class CSBigWinLevelDialogState extends State<CSBigWinLevelDialog>
                                   child: Row(
                                     children: [
                                       SizedBox(width: 2.w),
-                                      CSImg(name: 'cs_lock_icons', width: 28, height: 28,)
+                                      CSImg(name: 'cs_lock_icons', width: 28, height: 28,),
+                                      CSGradientStrokeText(text: '\$${0.to2Double(CSLocalProvider.instance.cs_dollar_number)}', gradientColors: ['#FFFFFF'.color(),'#FFF189'.color()], width: 70, height: 24, fontSize: 16, strokeWidth: 1, strokeColor: '#983300'.color())
                                     ],
                                   ),
                                 )
@@ -4543,36 +4555,41 @@ class CSBigWinLevelDialogState extends State<CSBigWinLevelDialog>
                         ],
                       ),
                     ),
-                    ScaleTransition(
-                      scale: _scaleAnimation,
+                    SizedBox(height: 150.h),
+                    Center(
                       child: Container(
-                        width: 304, height: 192,
+                        width: 300,
+                        height: 196,
                         decoration: BoxDecoration(
-                            image: CSDImg('cs_bigwins_top')
+                          image: CSDImg('cs_cash_win_center')
+                        ),
+                        child: Column(
+                          children: [
+                            SizedBox(height: 60),
+                            Row(
+                              mainAxisAlignment: .center,
+                              children: [
+                                CSImg(name: 'cs_lev_1', width: 88, height: 88),
+                                SizedBox(width: 8.w),
+                                CSImg(name: 'cs_bigwins_add', width: 72, height: 72),
+                                SizedBox(width: 8.w),
+                                CSImg(name: 'cs_bigwins_card', width: 88, height: 88),
+                              ],
+                            ),
+                            SizedBox(height: 8.h),
+                            Row(
+                              mainAxisAlignment: .center,
+                              children: [
+                                CSGradientStrokeText(text: '\$${0.to2Double(widget.award)}', gradientColors: ['#FFFFFF'.color(), '#FFF189'.color()], width: 100, height: 24, fontSize: 20, strokeWidth: 1, strokeColor: '#983300'.color()),
+                                SizedBox(width: 84),
+                                CSGradientStrokeText(text: 'x${widget.qunm_award}', gradientColors: ['#FFFFFF'.color(), '#FFF189'.color()], width: 100, height: 24, fontSize: 20, strokeWidth: 1, strokeColor: '#983300'.color()),
+                              ],
+                            ),
+                          ],
                         ),
                       ),
                     ),
-                    SizedBox(height: 40.h),
-                    Row(
-                      mainAxisAlignment: .center,
-                      children: [
-                        CSImg(name: 'cs_lev_1', width: 88, height: 88),
-                        SizedBox(width: 16.w),
-                        CSImg(name: 'cs_bigwins_add', width: 72, height: 72),
-                        SizedBox(width: 16.w),
-                        CSImg(name: 'cs_bigwins_card', width: 88, height: 88),
-                      ],
-                    ),
-                    SizedBox(height: 8.h),
-                    Row(
-                      mainAxisAlignment: .center,
-                      children: [
-                        CSGradientStrokeText(text: '\$${0.to2Double(widget.award)}', gradientColors: ['#FFFFFF'.color(), '#FFF189'.color()], width: 100, height: 24, fontSize: 20, strokeWidth: 1, strokeColor: '#983300'.color()),
-                        SizedBox(width: 116.w),
-                        CSGradientStrokeText(text: 'x${widget.qunm_award}', gradientColors: ['#FFFFFF'.color(), '#FFF189'.color()], width: 100, height: 24, fontSize: 20, strokeWidth: 1, strokeColor: '#983300'.color()),
-                      ],
-                    ),
-                    SizedBox(height: 112.h),
+                    SizedBox(height: 100.h),
                     ParticleButton(
                       child: Container(
                           width: 252,
@@ -4623,6 +4640,16 @@ class CSBigWinLevelDialogState extends State<CSBigWinLevelDialog>
                     },)
                   ],
                 ),
+                Positioned(left: (0.width(context) - 304) * 0.5,top: 140.h,child:
+                ScaleTransition(
+                  scale: _scaleAnimation,
+                  child: Container(
+                    width: 304, height: 192,
+                    decoration: BoxDecoration(
+                        image: CSDImg('cs_bigwins_top')
+                    ),
+                  ),
+                ),)
               ],
             )
         )
@@ -4716,6 +4743,7 @@ class CSCashwindoubleDialogState extends State<CSCashwindoubleDialog>
               children: [
                 Column(
                   mainAxisAlignment: .center,
+                  crossAxisAlignment: .center,
                   children: [
                     Container(
                       width: 328.w,
@@ -4749,19 +4777,19 @@ class CSCashwindoubleDialogState extends State<CSCashwindoubleDialog>
                               ],
                             ),
                           ),),
-                          Positioned(left: 28.w,bottom: 12.h,
+                          Positioned(left: 42.w,bottom: 12.h,
                             child: Container(
-                              width: 272.w,
+                              width: 180.w,
                               height: 24.h,
                               decoration: BoxDecoration(
                                   color: '#4E0A0A'.color(),
-                                  borderRadius: BorderRadius.circular(12.h)
+                                  borderRadius: BorderRadius.circular(0.h)
                               ),
                               child: Stack(
                                 children: [
-                                  Positioned(left: 2, top: 2,
+                                  Positioned(left: 0, top: 2,
                                     child: Container(
-                                      width: 268.w * (CSLocalProvider.instance.cs_card_quicken_num / 20),
+                                      width: 180.w * (CSLocalProvider.instance.cs_card_quicken_num / 20),
                                       height: 20.h,
                                       decoration: BoxDecoration(
                                         color: '#F39F0E'.color(),
@@ -4769,7 +4797,7 @@ class CSCashwindoubleDialogState extends State<CSCashwindoubleDialog>
                                       ),
                                     ),
                                   ),
-                                  Positioned(top: 4.h,left: 90.w,child: CSStrokeText(text: '${0.to2Double(CSLocalProvider.instance.cs_card_quicken_num)}/20', size: 14, color: '#FFFFFF'.color(), weight: FontWeight.w900, skWidth: 1, skColor: '#4D2D15'.color()))
+                                  Positioned(top: 4.h,left: 68.w,child: CSStrokeText(text: '${0.to2Double(CSLocalProvider.instance.cs_card_quicken_num)}/20', size: 14, color: '#FFFFFF'.color(), weight: FontWeight.w900, skWidth: 1, skColor: '#4D2D15'.color()))
                                 ],
                               ),
                             ),
@@ -4793,7 +4821,8 @@ class CSCashwindoubleDialogState extends State<CSCashwindoubleDialog>
                                   child: Row(
                                     children: [
                                       SizedBox(width: 2.w),
-                                      CSImg(name: 'cs_lock_icons', width: 28, height: 28,)
+                                      CSImg(name: 'cs_lock_icons', width: 28, height: 28,),
+                                      CSGradientStrokeText(text: '\$${0.to2Double(CSLocalProvider.instance.cs_dollar_number)}', gradientColors: ['#FFFFFF'.color(),'#FFF189'.color()], width: 70, height: 24, fontSize: 16, strokeWidth: 1, strokeColor: '#983300'.color())
                                     ],
                                   ),
                                 )
@@ -4803,36 +4832,43 @@ class CSCashwindoubleDialogState extends State<CSCashwindoubleDialog>
                         ],
                       ),
                     ),
-                    ScaleTransition(
-                      scale: _scaleAnimation,
+                    SizedBox(height: 100.h),
+                    Center(
                       child: Container(
-                        width: 304, height: 173,
+                        width: 300,
+                        height: 196,
                         decoration: BoxDecoration(
-                            image: CSDImg('cs_cash_win_icon')
+                          image: CSDImg('cs_cash_win_center')
+                        ),
+                        child: Column(
+                          mainAxisAlignment: .center,
+                          crossAxisAlignment: .center,
+                          children: [
+                            SizedBox(height: 30),
+                            Row(
+                              mainAxisAlignment: .center,
+                              children: [
+                                CSImg(name: 'cs_lev_1', width: 88, height: 88),
+                                SizedBox(width: 8.w),
+                                CSImg(name: 'cs_bigwins_add', width: 72, height: 72),
+                                SizedBox(width: 8.w),
+                                CSImg(name: 'cs_bigwins_card', width: 88, height: 88),
+                              ],
+                            ),
+                            SizedBox(height: 8.h),
+                            Row(
+                              mainAxisAlignment: .center,
+                              children: [
+                                CSGradientStrokeText(text: '\$${widget.award}', gradientColors: ['#FFFFFF'.color(), '#FFF189'.color()], width: 100, height: 24, fontSize: 20, strokeWidth: 1, strokeColor: '#983300'.color()),
+                                SizedBox(width: 80),
+                                CSGradientStrokeText(text: 'x${0.to2Double(widget.qunm_award)}', gradientColors: ['#FFFFFF'.color(), '#FFF189'.color()], width: 100, height: 24, fontSize: 20, strokeWidth: 1, strokeColor: '#983300'.color()),
+                              ],
+                            ),
+                          ],
                         ),
                       ),
                     ),
-                    SizedBox(height: 40.h),
-                    Row(
-                      mainAxisAlignment: .center,
-                      children: [
-                        CSImg(name: 'cs_lev_1', width: 88, height: 88),
-                        SizedBox(width: 16.w),
-                        CSImg(name: 'cs_bigwins_add', width: 72, height: 72),
-                        SizedBox(width: 16.w),
-                        CSImg(name: 'cs_bigwins_card', width: 88, height: 88),
-                      ],
-                    ),
-                    SizedBox(height: 8.h),
-                    Row(
-                      mainAxisAlignment: .center,
-                      children: [
-                        CSGradientStrokeText(text: '\$${widget.award}', gradientColors: ['#FFFFFF'.color(), '#FFF189'.color()], width: 100, height: 24, fontSize: 20, strokeWidth: 1, strokeColor: '#983300'.color()),
-                        SizedBox(width: 116.w),
-                        CSGradientStrokeText(text: 'x${0.to2Double(widget.qunm_award)}', gradientColors: ['#FFFFFF'.color(), '#FFF189'.color()], width: 100, height: 24, fontSize: 20, strokeWidth: 1, strokeColor: '#983300'.color()),
-                      ],
-                    ),
-                    SizedBox(height: 112.h),
+                    SizedBox(height: 105.h),
                     ParticleButton(
                       child: Container(
                           width: 252,
@@ -4844,18 +4880,21 @@ class CSCashwindoubleDialogState extends State<CSCashwindoubleDialog>
                             mainAxisAlignment: .center,
                             children: [
                               CSStrokeText(text: 'CLAIM', size: 24, color: '#FFFFFF'.color(), weight: FontWeight.w900, skWidth: 2, skColor: '#025C10'.color()),
-                              SizedBox(width: 8.w),
-                              CSImg(name: 'cs_ad_icon', width: 24, height: 24)
                             ],
                           )
                       ),
                       onTap: () {
                         cs_event_fire('cashwin_pop_c', {'source_from' : getTypeName(), 'card_from' : 'yes'});
                         Navigator.pop(context, 1);
-                        CSCardAds().cs_showAd(context, 'rakwt_boost_rv', onCacheResponse: (onCacheResponse){}, adDidClosed: (adDidClosed){
+                        if (CSNumberHelpers().checkProbability()){
+                          CSCardAds().cs_showAd(context, 'rakwt_boost_int', onCacheResponse: (onCacheResponse){}, adDidClosed: (adDidClosed){
+                            CSLocalProvider.instance.updatedouble(CSLocalProvider.instance.cs_dolas_numberName, CSLocalProvider.instance.cs_dollar_number + widget.award);
+                            CSLocalProvider.instance.updatedouble(CSLocalProvider.instance.cs_card_quicken_numName, CSLocalProvider.instance.cs_card_quicken_num + widget.qunm_award);
+                          });
+                        } else {
                           CSLocalProvider.instance.updatedouble(CSLocalProvider.instance.cs_dolas_numberName, CSLocalProvider.instance.cs_dollar_number + widget.award);
                           CSLocalProvider.instance.updatedouble(CSLocalProvider.instance.cs_card_quicken_numName, CSLocalProvider.instance.cs_card_quicken_num + widget.qunm_award);
-                        });
+                        }
                       },
                     ),
                     // SizedBox(height: 20),
@@ -4864,6 +4903,16 @@ class CSCashwindoubleDialogState extends State<CSCashwindoubleDialog>
                     // },)
                   ],
                 ),
+                Positioned(top: 200.h,left: (0.width(context) - 360) * 0.5,child:
+                ScaleTransition(
+                  scale: _scaleAnimation,
+                  child: Container(
+                    width: 360, height: 168,
+                    decoration: BoxDecoration(
+                        image: CSDImg('cs_cash_win_title')
+                    ),
+                  ),
+                ),)
               ],
             )
         )
@@ -5049,7 +5098,7 @@ class CSSettingDialogState extends State<CSSettingDialog>
                                 MaterialPageRoute(
                                   builder: (builder) {
                                     return CSWebkitview(
-                                      url: "https://sites.google.com/view/piggywallet-pp/home",
+                                      url: "https://sites.google.com/view/cash-scratch-go-ppolicy/home",
                                       title: 'Privacy Policy',
                                     );
                                   },
@@ -5080,8 +5129,8 @@ class CSSettingDialogState extends State<CSSettingDialog>
                                 MaterialPageRoute(
                                   builder: (builder) {
                                     return CSWebkitview(
-                                      url: "https://sites.google.com/view/piggywallet-pp/home",
-                                      title: 'Privacy Policy',
+                                      url: "https://sites.google.com/view/cash-scratch-go-tterms/home",
+                                      title: 'User Timer',
                                     );
                                   },
                                 ),
@@ -5406,6 +5455,9 @@ class CSNoticeOpenDialogState extends State<CSNoticeOpenDialog>
                           ),
                         ), onTap: (){
                           Navigator.pop(context, 0);
+                          AppSettings.openAppSettings(
+                            type: AppSettingsType.notification,
+                          );
                         }),
                       ],
                     ),
@@ -5872,6 +5924,9 @@ class CSNotCashDialogState extends State<CSNotCashDialog>
                       ), onTap: (){
                         Navigator.pop(context, 0);
                         cs_event_fire('cash_not_pop_c', {});
+                        if (Navigator.canPop(context)){
+                          Navigator.pop(context, 0);
+                        }
                         // 外部跳转挂卡详情页
                         if (CSLocalProvider.instance.cs_scrach_end_number_0 < 10){
                           CashTabController.switchTo(0);
