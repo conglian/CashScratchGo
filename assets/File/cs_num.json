@@ -84,16 +84,16 @@
     {
       "first_number": 600,
       "prize": [
-        5,
-        10
+        10,
+        20
       ],
       "end_number": 800
     },
     {
       "first_number": 800,
       "prize": [
-        1,
-        5
+        10,
+        20
       ],
       "end_number": 1000
     }
@@ -117,34 +117,34 @@
     },
     {
       "first_number": 600,
-      "point": 10,
+      "point": 30,
       "end_number": 800
     },
     {
       "first_number": 800,
-      "point": 5,
+      "point": 80,
       "end_number": 1000
     }
   ],
   "speedcard_out": [
     {
       "first_number": 0,
-      "point": 50,
+      "point": 80,
       "end_number": 5
     },
     {
       "first_number": 5,
-      "point": 30,
+      "point": 80,
       "end_number": 10
     },
     {
       "first_number": 10,
-      "point": 20,
+      "point": 80,
       "end_number": 15
     },
     {
       "first_number": 15,
-      "point": 5,
+      "point": 80,
       "end_number": 20
     }
   ],
@@ -188,7 +188,7 @@
   },
   "card_number": {
     "winup_number": 60,
-    "point": 50,
+    "point": 60,
     "prize": [
       {
         "first_number": 0,
@@ -272,8 +272,8 @@
   },
   "card_77hot": {
     "winup_number": 80,
-    "point_nowin": 50,
-    "point_7": 30,
+    "point_nowin": 30,
+    "point_7": 50,
     "point_77": 20,
     "prize": [
       {
@@ -312,7 +312,7 @@
   },
   "card_emoji": {
     "winup_number": 90,
-    "point_face": 40,
+    "point_face": 50,
     "prize": [
       {
         "first_number": 0,
@@ -390,7 +390,7 @@
   "wtd_task": [
     {
       "type": "card",
-      "num": 20
+      "num": 10
     },
     {
       "type": "wheel",
@@ -504,8 +504,8 @@
       "first_number": 19,
       "type": 1,
       "prize": [
-        0.01,
-        0.05
+        0.1,
+        0.5
       ],
       "end_number": 20
     }

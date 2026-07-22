@@ -31,6 +31,7 @@ CSAdModellist _$CSAdModellistFromJson(Map<String, dynamic> json) =>
       ..bamussgh = json['bamussgh'] as String
       ..cspsfdfm = json['cspsfdfm'] as String
       ..gbhayrnf = (json['gbhayrnf'] as num).toInt()
+      ..esljgmwn = (json['esljgmwn'] as num).toInt()
       ..ecpm = (json['ecpm'] as num?)?.toDouble();
 
 Map<String, dynamic> _$CSAdModellistToJson(CSAdModellist instance) =>
@@ -39,5 +40,6 @@ Map<String, dynamic> _$CSAdModellistToJson(CSAdModellist instance) =>
       'bamussgh': instance.bamussgh,
       'cspsfdfm': instance.cspsfdfm,
       'gbhayrnf': instance.gbhayrnf,
+      'esljgmwn': instance.esljgmwn,
       'ecpm': instance.ecpm,
     };

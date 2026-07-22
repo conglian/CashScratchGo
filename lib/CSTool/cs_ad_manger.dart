@@ -27,7 +27,8 @@ Map<String, dynamic> cs_defaultAdConfig = {
       "prnospnz": "n1hc77c1997skd",
       "bamussgh": "topon",
       "cspsfdfm": "interstitial",
-      "gbhayrnf": 3000
+      "gbhayrnf": 3000,
+      "esljgmwn": 3
     }
   ],
   "nwkls_rv": [
@@ -35,7 +36,8 @@ Map<String, dynamic> cs_defaultAdConfig = {
       "prnospnz": "n1hc77c19984sv",
       "bamussgh": "topon",
       "cspsfdfm": "reward",
-      "gbhayrnf": 3000
+      "gbhayrnf": 3000,
+      "esljgmwn": 3
     }
   ]
 };
@@ -109,6 +111,10 @@ class CSCardAds {
   late bool is_showAd = false;
   // 测试打开，上线关闭
   final bool skipAd = false;
+  // 开屏串行index
+  int int_index = 0;
+  // 开屏串行index
+  int rv_index = 0;
 
   Future<void> init({CSAdModel? inputAd}) async {
     _ads = [];
@@ -471,11 +477,60 @@ extension AdServiceExtension on CSCardAds {
   }
 
   void _requestAd({List<int>? defaultIndex}) async {
-    for (int i = 0; i < _ads.length; i++) {
-      if (defaultIndex != null && !defaultIndex.contains(i)) {
-        continue;
+
+    if (cs_PigAdModel!.nwkls_int.first.esljgmwn == cs_PigAdModel!.nwkls_int.last.esljgmwn){
+
+      for (int i = 0; i < cs_PigAdModel!.nwkls_int.length; i++) {
+        // if (defaultIndex != null && !defaultIndex.contains(i)) {
+        //   continue;
+        // }
+        CSPigAdModel ad = _ads[i];
+        int status = ad.status;
+        String type = ad.type;
+        String source = ad.source;
+        String adID = ad.ad_identifer;
+
+        if (status == 0) {
+          if (type == "interstitial") {
+            if (source == "max") {
+              AppLovinMAX.loadInterstitial(adID);
+            } else if (source == "topon") {
+              ATInterstitialManager.loadInterstitialAd(
+                placementID: adID,
+                extraMap: {},
+              );
+            }
+          } else if (type == "reward") {
+            if (source == "max") {
+              AppLovinMAX.loadRewardedAd(adID);
+            } else {
+              ATRewardedManager.loadRewardedVideo(
+                placementID: adID,
+                extraMap: {},
+              );
+            }
+          }
+          "$runtimeType ad requesting [start],status1 int = $status, type is $type, source is $source, id is $adID"
+              .log();
+          cs_event_fire(
+            "ad_request",
+            {
+              "ad_code_id": adID,
+              "ad_format": type,
+              "ad_source_client": source,
+            },
+          );
+        } else if (status == 1) {
+          "$runtimeType ad requesting [requesting] status = $status, type is $type, source is $source, id is $adID"
+              .log();
+        } else {
+          "$runtimeType ad requesting [requested] status = $status, type is $type, source is $source, id is $adID"
+              .log();
+        }
       }
-      CSPigAdModel ad = _ads[i];
+    } else {
+      // 串行 -插屏
+      CSPigAdModel ad = _ads[int_index];
       int status = ad.status;
       String type = ad.type;
       String source = ad.source;
@@ -501,34 +556,332 @@ extension AdServiceExtension on CSCardAds {
             );
           }
         }
-        "$runtimeType ad requesting [start],status = $status, type is $type, source is $source, id is $adID"
+        "$runtimeType ad requesting [start],status2 = $status, type is $type, source is $source, id is $adID"
             .log();
+        cs_event_fire('ad_request', {'ad_source_client' : source, 'ad_format' : type, 'ad_code_id' : adID});
+
       } else if (status == 1) {
+        int_index += 1;
+        if (int_index >= cs_PigAdModel!.nwkls_int.length){
+          int_index = 0;
+        }
         "$runtimeType ad requesting [requesting] status = $status, type is $type, source is $source, id is $adID"
             .log();
       } else {
+        int_index += 1;
+        if (int_index >= cs_PigAdModel!.nwkls_int.length){
+          int_index = 0;
+        }
         "$runtimeType ad requesting [requested] status = $status, type is $type, source is $source, id is $adID"
             .log();
       }
-      cs_event_fire(
-        "ad_request",
-        {
-          "ad_code_id": adID,
-          "ad_format": type,
-          "ad_source_client": source,
-        },
-      );
+    }
+
+
+
+    if (cs_PigAdModel!.nwkls_rv.first.esljgmwn == cs_PigAdModel!.nwkls_rv.last.esljgmwn){
+
+      for (int i = 0; i < cs_PigAdModel!.nwkls_rv.length; i++) {
+        // if (defaultIndex != null && !defaultIndex.contains(i)) {
+        //   continue;
+        // }
+        CSPigAdModel ad = _ads[i + cs_PigAdModel!.nwkls_int.length];
+        int status = ad.status;
+        String type = ad.type;
+        String source = ad.source;
+        String adID = ad.ad_identifer;
+
+        if (status == 0) {
+          if (type == "interstitial") {
+            if (source == "max") {
+              AppLovinMAX.loadInterstitial(adID);
+            } else if (source == "topon") {
+              ATInterstitialManager.loadInterstitialAd(
+                placementID: adID,
+                extraMap: {},
+              );
+            }
+          } else if (type == "reward") {
+            if (source == "max") {
+              AppLovinMAX.loadRewardedAd(adID);
+            } else {
+              ATRewardedManager.loadRewardedVideo(
+                placementID: adID,
+                extraMap: {},
+              );
+            }
+          }
+          "$runtimeType ad requesting [start],status1 rv = $status, type is $type, source is $source, id is $adID"
+              .log();
+          cs_event_fire(
+            "ad_request",
+            {
+              "ad_code_id": adID,
+              "ad_format": type,
+              "ad_source_client": source,
+            },
+          );
+        } else if (status == 1) {
+          "$runtimeType ad requesting [requesting] status = $status, type is $type, source is $source, id is $adID"
+              .log();
+        } else {
+          "$runtimeType ad requesting [requested] status = $status, type is $type, source is $source, id is $adID"
+              .log();
+        }
+      }
+    } else {
+      // 串行 -激励
+      CSPigAdModel ad = _ads[rv_index + cs_PigAdModel!.nwkls_int.length];
+      int status = ad.status;
+      String type = ad.type;
+      String source = ad.source;
+      String adID = ad.ad_identifer;
+
+      if (status == 0) {
+        if (type == "interstitial") {
+          if (source == "max") {
+            AppLovinMAX.loadInterstitial(adID);
+          } else if (source == "topon") {
+            ATInterstitialManager.loadInterstitialAd(
+              placementID: adID,
+              extraMap: {},
+            );
+          }
+        } else if (type == "reward") {
+          if (source == "max") {
+            AppLovinMAX.loadRewardedAd(adID);
+          } else {
+            ATRewardedManager.loadRewardedVideo(
+              placementID: adID,
+              extraMap: {},
+            );
+          }
+        }
+        "$runtimeType ad requesting [start],status2 = $status, type is $type, source is $source, id is $adID"
+            .log();
+        cs_event_fire('ad_request', {'ad_source_client' : source, 'ad_format' : type, 'ad_code_id' : adID});
+
+      } else if (status == 1) {
+        rv_index += 1;
+        if (rv_index >= cs_PigAdModel!.nwkls_rv.length){
+          rv_index = 0;
+        }
+        "$runtimeType ad requesting [requesting] status = $status, type is $type, source is $source, id is $adID"
+            .log();
+      } else {
+        rv_index += 1;
+        if (rv_index >= cs_PigAdModel!.nwkls_rv.length){
+          rv_index = 0;
+        }
+        "$runtimeType ad requesting [requested] status = $status, type is $type, source is $source, id is $adID"
+            .log();
+      }
+    }
+
+  }
+
+  // 冷启动后调用单独的场景-插屏
+  void requesIntAd(List<int>? defaultIndex){
+
+    // 插屏请求
+    if (cs_PigAdModel!.nwkls_int.first.esljgmwn == cs_PigAdModel!.nwkls_int.last.esljgmwn){
+      // 并行请求
+      for (int i = 0; i < cs_PigAdModel!.nwkls_int.length; i++) {
+        // if (defaultIndex != null && !defaultIndex.contains(i)) {
+        //   continue;
+        // }
+        CSPigAdModel ad = _ads[i];
+        int status = ad.status;
+        String type = ad.type;
+        String source = ad.source;
+        String adID = ad.ad_identifer;
+
+        if (status == 0) {
+          if (type == "interstitial") {
+            if (source == "max") {
+              AppLovinMAX.loadInterstitial(adID);
+            } else if (source == "topon") {
+              ATInterstitialManager.loadInterstitialAd(
+                placementID: adID,
+                extraMap: {},
+              );
+            }
+          } else if (type == "reward") {
+            if (source == "max") {
+              AppLovinMAX.loadRewardedAd(adID);
+            } else {
+              ATRewardedManager.loadRewardedVideo(
+                placementID: adID,
+                extraMap: {},
+              );
+            }
+          }
+          "$runtimeType ad requesting [start],status3 = $status, type is $type, source is $source, id is $adID"
+              .log();
+          cs_event_fire('ad_request', {'ad_source_client' : source, 'ad_format' : type, 'ad_code_id' : adID});
+        } else if (status == 1) {
+          "$runtimeType ad requesting [requesting] status = $status, type is $type, source is $source, id is $adID"
+              .log();
+        } else {
+          "$runtimeType ad requesting [requested] status = $status, type is $type, source is $source, id is $adID"
+              .log();
+        }
+      }
+    } else {
+      // 串行
+      CSPigAdModel ad = _ads[int_index];
+      int status = ad.status;
+      String type = ad.type;
+      String source = ad.source;
+      String adID = ad.ad_identifer;
+
+      if (status == 0) {
+        if (type == "interstitial") {
+          if (source == "max") {
+            AppLovinMAX.loadInterstitial(adID);
+          } else if (source == "topon") {
+            ATInterstitialManager.loadInterstitialAd(
+              placementID: adID,
+              extraMap: {},
+            );
+          }
+        } else if (type == "reward") {
+          if (source == "max") {
+            AppLovinMAX.loadRewardedAd(adID);
+          } else {
+            ATRewardedManager.loadRewardedVideo(
+              placementID: adID,
+              extraMap: {},
+            );
+          }
+        }
+        "$runtimeType ad requesting [start],status3 = $status, type is $type, source is $source, id is $adID"
+            .log();
+        cs_event_fire('ad_request', {'ad_source_client' : source, 'ad_format' : type, 'ad_code_id' : adID});
+      } else if (status == 1) {
+        int_index += 1;
+        if (int_index >= cs_PigAdModel!.nwkls_int.length){
+          int_index = 0;
+        }
+        "$runtimeType ad requesting [requesting] status = $status, type is $type, source is $source, id is $adID"
+            .log();
+      } else {
+        int_index += 1;
+        if (int_index >= cs_PigAdModel!.nwkls_int.length){
+          int_index = 0;
+        }
+        "$runtimeType ad requesting [requested] status = $status, type is $type, source is $source, id is $adID"
+            .log();
+      }
     }
   }
 
+  // 冷启动后调用单独的场景-激励
+  void requesRvAd(List<int>? defaultIndex){
+
+    // 开屏请求
+    if (cs_PigAdModel!.nwkls_rv.first.esljgmwn == cs_PigAdModel!.nwkls_rv.last.esljgmwn){
+      // 并行请求
+      for (int i = 0; i < cs_PigAdModel!.nwkls_rv.length; i++) {
+        // if (defaultIndex != null && !defaultIndex.contains(i)) {
+        //   continue;
+        // }
+        CSPigAdModel ad = _ads[i + cs_PigAdModel!.nwkls_int.length];
+        int status = ad.status;
+        String type = ad.type;
+        String source = ad.source;
+        String adID = ad.ad_identifer;
+
+        if (status == 0) {
+          if (type == "interstitial") {
+            if (source == "max") {
+              AppLovinMAX.loadInterstitial(adID);
+            } else if (source == "topon") {
+              ATInterstitialManager.loadInterstitialAd(
+                placementID: adID,
+                extraMap: {},
+              );
+            }
+          } else if (type == "reward") {
+            if (source == "max") {
+              AppLovinMAX.loadRewardedAd(adID);
+            } else {
+              ATRewardedManager.loadRewardedVideo(
+                placementID: adID,
+                extraMap: {},
+              );
+            }
+          }
+          "$runtimeType ad requesting [start],status3 = $status, type is $type, source is $source, id is $adID"
+              .log();
+          cs_event_fire('ad_request', {'ad_source_client' : source, 'ad_format' : type, 'ad_code_id' : adID});
+        } else if (status == 1) {
+          "$runtimeType ad requesting [requesting] status = $status, type is $type, source is $source, id is $adID"
+              .log();
+        } else {
+          "$runtimeType ad requesting [requested] status = $status, type is $type, source is $source, id is $adID"
+              .log();
+        }
+      }
+    } else {
+      // 串行
+      CSPigAdModel ad = _ads[rv_index + cs_PigAdModel!.nwkls_int.length];
+      int status = ad.status;
+      String type = ad.type;
+      String source = ad.source;
+      String adID = ad.ad_identifer;
+
+      if (status == 0) {
+        if (type == "interstitial") {
+          if (source == "max") {
+            AppLovinMAX.loadInterstitial(adID);
+          } else if (source == "topon") {
+            ATInterstitialManager.loadInterstitialAd(
+              placementID: adID,
+              extraMap: {},
+            );
+          }
+        } else if (type == "reward") {
+          if (source == "max") {
+            AppLovinMAX.loadRewardedAd(adID);
+          } else {
+            ATRewardedManager.loadRewardedVideo(
+              placementID: adID,
+              extraMap: {},
+            );
+          }
+        }
+        "$runtimeType ad requesting [start],status3 = $status, type is $type, source is $source, id is $adID"
+            .log();
+        cs_event_fire('ad_request', {'ad_source_client' : source, 'ad_format' : type, 'ad_code_id' : adID});
+      } else if (status == 1) {
+        rv_index += 1;
+        if (rv_index >= cs_PigAdModel!.nwkls_rv.length){
+          rv_index = 0;
+        }
+        "$runtimeType ad requesting [requesting] status = $status, type is $type, source is $source, id is $adID"
+            .log();
+      } else {
+        rv_index += 1;
+        if (rv_index >= cs_PigAdModel!.nwkls_rv.length){
+          rv_index = 0;
+        }
+        "$runtimeType ad requesting [requested] status = $status, type is $type, source is $source, id is $adID"
+            .log();
+      }
+    }
+  }
+
+
   bool _prepareRequest() {
-    if (_CSPigAdModel == null) {
+    if (cs_PigAdModel == null) {
       "$runtimeType request ad start,but ad model empty...".log();
       return false;
     }
-
-    addAds(_CSPigAdModel!.nwkls_int);
-    addAds(_CSPigAdModel!.nwkls_rv);
+    cs_PigAdModel!.sortInterstitialByEcnsjofn();
+    cs_PigAdModel!.sortRewardByEcnsjofn();
+    addAds(cs_PigAdModel!.nwkls_int);
+    addAds(cs_PigAdModel!.nwkls_rv);
     if (_ads.isEmpty) {
       "$runtimeType request ad start,but datasource model empty...".log();
       return false;
@@ -791,6 +1144,23 @@ extension AdServiceExtension on CSCardAds {
     _ads[index].sdk = sdk;
     "$runtimeType ad did load success [${_ads[index].source}] type = ${_ads[index].type} id = ${_ads[index].ad_identifer} ecpm = ${_ads[index].ecpm} network = ${_ads[index].networkName}"
         .log();
+    // 缓存成功
+    if (cs_PigAdModel!.nwkls_int.first.esljgmwn != cs_PigAdModel!.nwkls_int.last.esljgmwn) {
+      if (int_index + 1 < cs_PigAdModel!.nwkls_int.length){
+        int_index += 1;
+        requesIntAd([index]);
+      }
+    } else {
+      requesIntAd([index]);
+    }
+    if (cs_PigAdModel!.nwkls_rv.first.esljgmwn != cs_PigAdModel!.nwkls_rv.last.esljgmwn) {
+      if (rv_index + 1 < cs_PigAdModel!.nwkls_rv.length){
+        rv_index += 1;
+        requesRvAd([index]);
+      }
+    } else {
+      requesRvAd([index]);
+    }
     cs_event_fire(
       "ad_return",
       {
@@ -818,10 +1188,43 @@ extension AdServiceExtension on CSCardAds {
         "reason": reason,
       },
     );
-    // 延迟1s请求下一条避免出现请求频繁报错
-    Future.delayed(Duration(seconds: 2),(){
-      _requestAd(defaultIndex: [index]);
-    });
+
+    if (cs_PigAdModel!.nwkls_int.first.esljgmwn != cs_PigAdModel!.nwkls_int.last.esljgmwn) {
+      //  请求失败请求下一个 插屏
+      if (int_index + 1 >= cs_PigAdModel!.nwkls_int.length){
+        int_index = 0;
+        Future.delayed(Duration(seconds: 2),(){
+          requesIntAd([index]);
+        });
+      } else {
+        int_index += 1;
+        Future.delayed(Duration(seconds: 2),(){
+          requesIntAd([index]);
+        });
+      }
+    } else if (cs_PigAdModel!.nwkls_int.first.esljgmwn == cs_PigAdModel!.nwkls_int.last.esljgmwn){
+      Future.delayed(Duration(seconds: 2),(){
+        requesIntAd([index]);
+      });
+    }
+    if (cs_PigAdModel!.nwkls_rv.first.esljgmwn != cs_PigAdModel!.nwkls_rv.last.esljgmwn) {
+      //  请求失败请求下一个 插屏
+      if (rv_index + 1 >= cs_PigAdModel!.nwkls_rv.length){
+        rv_index = 0;
+        Future.delayed(Duration(seconds: 2),(){
+          requesRvAd([index]);
+        });
+      } else {
+        rv_index += 1;
+        Future.delayed(Duration(seconds: 2),(){
+          requesRvAd([index]);
+        });
+      }
+    } else if (cs_PigAdModel!.nwkls_rv.first.esljgmwn == cs_PigAdModel!.nwkls_rv.last.esljgmwn){
+      Future.delayed(Duration(seconds: 2),(){
+        requesRvAd([index]);
+      });
+    }
   }
 
   Future<void>
@@ -965,7 +1368,42 @@ extension AdServiceExtension on CSCardAds {
     onAdClosed?.call(false);
     resetHandler();
 
-    _requestAd(defaultIndex: [index]);
+    if (cs_PigAdModel!.nwkls_int.first.esljgmwn != cs_PigAdModel!.nwkls_int.last.esljgmwn) {
+      //  请求失败请求下一个 插屏
+      if (int_index + 1 >= cs_PigAdModel!.nwkls_int.length){
+        int_index = 0;
+        Future.delayed(Duration(seconds: 2),(){
+          requesIntAd([index]);
+        });
+      } else {
+        int_index += 1;
+        Future.delayed(Duration(seconds: 2),(){
+          requesIntAd([index]);
+        });
+      }
+    } else if (cs_PigAdModel!.nwkls_int.first.esljgmwn == cs_PigAdModel!.nwkls_int.last.esljgmwn){
+      Future.delayed(Duration(seconds: 2),(){
+        requesIntAd([index]);
+      });
+    }
+    if (cs_PigAdModel!.nwkls_rv.first.esljgmwn != cs_PigAdModel!.nwkls_rv.last.esljgmwn) {
+      //  请求失败请求下一个 插屏
+      if (rv_index + 1 >= cs_PigAdModel!.nwkls_rv.length){
+        rv_index = 0;
+        Future.delayed(Duration(seconds: 2),(){
+          requesRvAd([index]);
+        });
+      } else {
+        rv_index += 1;
+        Future.delayed(Duration(seconds: 2),(){
+          requesRvAd([index]);
+        });
+      }
+    } else if (cs_PigAdModel!.nwkls_rv.first.esljgmwn == cs_PigAdModel!.nwkls_rv.last.esljgmwn){
+      Future.delayed(Duration(seconds: 2),(){
+        requesRvAd([index]);
+      });
+    }
   }
 
   bool findTag(List<CSAdModellist> data, String adID) {
@@ -1013,3 +1451,5 @@ class NetworkUtils {
     return Connectivity().onConnectivityChanged;
   }
 }
+
+

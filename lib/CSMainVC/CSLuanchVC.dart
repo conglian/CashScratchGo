@@ -123,7 +123,7 @@ class CSLaunchState extends State<CSLaunch>
                     pushToGuide();
                   } else {
                     if (!CSCardAds().is_showAd){
-                      CSCardAds().cs_showAd(context, 'rakwt_launch_cold',showDialog: false, onCacheResponse: (onCacheResponse){
+                      CSCardAds().cs_showAd(context, 'rakwt_launch_cold_int',showDialog: false, onCacheResponse: (onCacheResponse){
                         pushToGuide();
                       }, adDidClosed: (adDidClosed){
                         pushToGuide();
@@ -175,7 +175,7 @@ class _SJGradientProgressBarState extends State<SJGradientProgressBar>
     super.initState();
 
     _controller = AnimationController(
-      duration: const Duration(seconds: kDebugMode ? 3 : 12),
+      duration: const Duration(seconds: kDebugMode ? 13 : 12),
       vsync: this,
     );
 

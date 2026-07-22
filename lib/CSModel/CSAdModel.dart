@@ -11,6 +11,29 @@ class CSAdModel {
   late List<CSAdModellist> nwkls_rv = [];
   CSAdModel();
 
+  /// ===============================
+  /// 插屏广告排序
+  /// 根据 ecnsjofn 从大到小排序
+  /// ===============================
+  void sortInterstitialByEcnsjofn() {
+
+    nwkls_int.sort(
+          (a, b) => b.esljgmwn.compareTo(a.esljgmwn),
+    );
+
+  }
+  /// ===============================
+  /// 激励广告排序
+  /// 根据 ecnsjofn 从大到小排序
+  /// ===============================
+  void sortRewardByEcnsjofn() {
+
+    nwkls_rv.sort(
+          (a, b) => b.esljgmwn.compareTo(a.esljgmwn),
+    );
+
+  }
+
   // 工厂构造函数，用于反序列化
   factory CSAdModel.fromJson(Map<String, dynamic> json) => _$CSAdModelFromJson(json);
 
@@ -28,6 +51,8 @@ class CSAdModellist {
   late String cspsfdfm = "";
   //
   late int gbhayrnf = 0;
+  //
+  late int esljgmwn = 0;
   //
   late double? ecpm = 0;
 

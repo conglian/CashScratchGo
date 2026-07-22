@@ -639,7 +639,7 @@ class CSNoticeHelp {
         // 执行前台逻辑
         cs_session_fire();
         if (!CSCardAds().is_showAd){
-          CSCardAds().cs_showAd(homeKey.currentState!.context, 'rakwt_launch_hot',showDialog: false, onCacheResponse: (onCacheResponse){
+          CSCardAds().cs_showAd(homeKey.currentState!.context, 'rakwt_launch_hot_int',showDialog: false, onCacheResponse: (onCacheResponse){
           }, adDidClosed: (adDidClosed){
           });
         }

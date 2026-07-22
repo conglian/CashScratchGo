@@ -176,12 +176,11 @@ class CSSDKHelpers {
       if (nwkls_ad_config != ''){
         try {
           Map<String, dynamic> jsonMap = json.decode(nwkls_ad_config);
-
-          CSCardAds().cs_PigAdModel = CSAdModel.fromJson(jsonMap);
-          if (CSCardAds().init_suc == true){
-            CSCardAds().init(inputAd: CSCardAds().cs_PigAdModel);
-          }
           "app firebase remoteconfig nwkls_ad_config data $jsonMap".log();
+          CSCardAds().cs_PigAdModel = CSAdModel.fromJson(jsonMap);
+          // if (CSCardAds().init_suc == true){
+          //   CSCardAds().init(inputAd: CSCardAds().cs_PigAdModel);
+          // }
         } catch (error) {
           print("app firebase remoteconfig nwkls_ad_config error ${error}");
         }
